@@ -1,10 +1,9 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 
 export default class Database extends React.Component {
 
@@ -35,36 +34,38 @@ export default class Database extends React.Component {
   render() {
     const taskList = this.state.data.map((item, index) => {
       return(
-        <Card style={{width:"30%", display:"inline-block", marginRight:10}}>
-        <CardContent>
-          {item["deviceManufacturer"] ? (
-            <Chip label={item["deviceManufacturer"]} style={{marginRight:5}} />
-            ) : ""}
-          {item["deviceCategory"] ? (
-            <Chip label={item["deviceCategory"]} style={{marginRight:5}}/>
-            ) : ""}
-          
-          <Typography variant="h5" component="h2" style={{marginTop:10}}>
-            {item["deviceName"]}
-          </Typography>
-          <Typography color="textSecondary">
-            {item["deviceModel"]}
-          </Typography>
-          <Typography variant="body2" component="p">
-            {item["faultDescription"]}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small" variant="contained" color="primary">Öffnen</Button>
-        </CardActions>
-      </Card>
+          <ListItem button>
+            <ListItemText 
+              primary={item.deviceName}
+              primaryTypographyProps={{variant:"h3"}}
+              secondary={
+                <React.Fragment>
+                  {item.deviceCategory ? (<Chip 
+                  label={item.deviceCategory}
+                  color="secondary"
+                  style={{margin:5}}
+                  />): ""}
+                  {item.deviceManufacturer ? (
+                  <Chip 
+                  label={item.deviceManufacturer}
+                  color="secondary"
+                  style={{margin:5}}
+                  />) : ""}
+                </React.Fragment>
+              }
+              secondaryTypographyProps={{component:"span"}}
+            />
+          </ListItem>
       );
     });
     
     return(
       <React.Fragment>
         <h2>Database</h2>
+        <List component="ul" aria-label="main mailbox folders">
         {taskList}
+        </List>
+        
       </React.Fragment>
       
     );
