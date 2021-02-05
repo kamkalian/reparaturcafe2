@@ -133,10 +133,6 @@ export default class NewTaskFormular extends React.Component {
         )
     }
 
-    handleGenderChange = (event) =>{
-        this.setState({gender: event.target.value})
-    }
-
     checkNameCompleted = () => {
         if(this.state.lastName !== "" || this.state.firstName !== ""){
             this.setState({nameError: false});
@@ -213,15 +209,6 @@ export default class NewTaskFormular extends React.Component {
                     this.checkStepCompleted();
                 });
                 return false;
-            case 'street':
-                this.setState({street: event.target.value})
-                return false;
-            case 'houseNumber':
-                this.setState({houseNumber: event.target.value})
-                return false;
-            case 'postCode':
-                this.setState({postCode: event.target.value})
-                return false;
             case 'prefixNumber':
                 this.setState({prefixNumber: event.target.value})
                 return false;
@@ -273,18 +260,11 @@ export default class NewTaskFormular extends React.Component {
                     </Grid>
                     <Grid item xs={12}>
                         <ContactForm 
-                        gender={this.state.gender}
-                        handleGenderChange={this.handleGenderChange}
                         firstName={this.state.firstName}
                         lastName={this.state.lastName}
-                        street={this.state.street}
-                        houseNumber={this.state.houseNumber}
-                        postCode={this.state.postCode}
                         prefixNumber={this.state.prefixNumber}
                         phone={this.state.phone}
                         email={this.state.email}
-                        openCategory={this.state.openCategory}
-                        openManufacturer={this.state.openManufacturer}
                         handleTextInputChange={this.handleTextInputChange}
                         nameError={this.state.nameError}
                         telEmailError={this.state.telEmailError}
