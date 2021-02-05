@@ -183,7 +183,7 @@ export default class NewTaskFormular extends React.Component {
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
 
-        if(this.checkDevNameCompleted){
+        if(this.checkDevNameCompleted()){
             array[1] = true;
             this.setState({stepReleased: array, devNameError: false}, function(){this.checkFormCompleted()});
         }else{
