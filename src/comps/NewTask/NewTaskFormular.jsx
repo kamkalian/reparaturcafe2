@@ -107,12 +107,14 @@ export default class NewTaskFormular extends React.Component {
         this.setState({
             activeStep: step
         });
+        this.checkStepCompleted();
     };
 
     handleNext = () => {
         this.setState({
             activeStep: this.state.activeStep + 1
         });
+        this.checkStepCompleted();
     }
 
     handleBack = () => {
@@ -122,6 +124,7 @@ export default class NewTaskFormular extends React.Component {
                     activeStep: this.state.activeStep - 1
                 }
             )
+            this.checkStepCompleted();
         }
     }
 
@@ -218,39 +221,39 @@ export default class NewTaskFormular extends React.Component {
     handleTextInputChange = (event) => {
         switch(event.currentTarget.id) {
             case 'firstName':
-                this.setState({firstName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({firstName: event.target.value}, function() {
+                    this.checkNameCompleted();
                 });
                 return false;
             case 'lastName':
-                this.setState({lastName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({lastName: event.target.value}, function() {
+                    this.checkNameCompleted();
                 });
                 return false;
             case 'prefixNumber':
                 this.setState({prefixNumber: event.target.value})
                 return false;
             case 'phone':
-                this.setState({phone: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({phone: event.target.value}, function() {
+                    this.checkTelOrEmailCompleted();
                 });
                 return false;
             case 'email':
-                this.setState({email: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({email: event.target.value}, function() {
+                    this.checkTelOrEmailCompleted();
                 });
                 return false;
             case 'devName':
-                this.setState({devName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({devName: event.target.value}, function() {
+                    this.checkDevNameCompleted();
                 });
                 return false;
             case 'devModel':
                 this.setState({devModel: event.target.value})
                 return false;
             case 'faultDescription':
-                this.setState({faultDescription: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({faultDescription: event.target.value}, function() {
+                    this.checkFaultDescriptionCompleted();
                 });
                 return false;
             default:
