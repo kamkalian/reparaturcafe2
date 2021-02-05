@@ -80,7 +80,7 @@ export default class SelectionDialog extends React.Component {
                     autoFocus
                     margin="dense"
                     id={"selection" + this.props.selectionTitle}
-                    label="Suche"
+                    label="Suche / Eingabe"
                     type="search"
                     fullWidth
                     value={this.state.searchString}
