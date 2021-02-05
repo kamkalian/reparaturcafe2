@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import List from '@material-ui/core/List';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
 
 
 export default class SelectionDialog extends React.Component {
@@ -85,6 +87,13 @@ export default class SelectionDialog extends React.Component {
                     fullWidth
                     value={this.state.searchString}
                     onChange={this.handleSearchChange}
+                    InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon />
+                          </InputAdornment>
+                        ),
+                      }}
                 />
                 <List component="nav" aria-label="main mailbox folders">
                     {listItems}
