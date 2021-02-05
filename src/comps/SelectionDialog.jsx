@@ -68,6 +68,8 @@ export default class SelectionDialog extends React.Component {
 
         return(
             <Dialog 
+            fullWidth
+            maxWidth="md"
             open={this.props.openSelection} 
             onClose={this.props.handleClose} 
             aria-labelledby="selection-dialog"
