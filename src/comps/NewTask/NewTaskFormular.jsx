@@ -53,6 +53,7 @@ export default class NewTaskFormular extends React.Component {
             error:false,
             tskID: "",
             tskToke: "",
+            newsletter: false,
         }
     }
 
@@ -403,6 +404,20 @@ export default class NewTaskFormular extends React.Component {
                         />
                     </Grid>
                     <Grid item xs={12}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    value={this.state.newsletter}
+                                    checked={this.state.newsletter}
+                                    onChange={this.handleNewsletterChange}
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                                />
+                            }
+                            label="Aktiviere dieses Häckchen, wenn die AWO Oberlar dir einen Newsletter per Email schicken darf."
+                            style={{paddingRight:10, borderRadius:5, marginLeft:0}}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
                         <div 
                         className={!this.state.formLocked ? 'checked-box' : 'important-box'}
                         style={{padding:10, borderRadius:5}}>
@@ -492,6 +507,14 @@ export default class NewTaskFormular extends React.Component {
     handleDataProtectionChange = (event) => {
         this.setState({
             dataProtection: event.currentTarget.checked,
+        }, function () {
+            this.checkStepCompleted();
+        });
+    }
+
+    handleNewsletterChange = (event) => {
+        this.setState({
+            newsletter: event.currentTarget.checked,
         }, function () {
             this.checkStepCompleted();
         });
