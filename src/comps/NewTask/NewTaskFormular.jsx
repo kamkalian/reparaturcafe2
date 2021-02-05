@@ -151,6 +151,24 @@ export default class NewTaskFormular extends React.Component {
         return false;
     }
 
+    checkDevNameCompleted = () => {
+        if(this.state.devName !==""){
+            this.setState({devNameError: false});
+            return true;
+        }
+        this.setState({devNameError: true});
+        return false;
+    }
+
+    checkFaultDescriptionCompleted = () => {
+        if(this.state.faultDescription.length > 49){
+            this.setState({faultDescriptionError: false});
+            return true;
+        }
+        this.setState({faultDescriptionError: true});
+        return false;
+    }
+
     checkStepCompleted = () => {
         var array = [...this.state.stepReleased];
 
@@ -162,7 +180,7 @@ export default class NewTaskFormular extends React.Component {
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
 
-        if(this.state.devName !==""){
+        if(this.checkDevNameCompleted){
             array[1] = true;
             this.setState({stepReleased: array, devNameError: false}, function(){this.checkFormCompleted()});
         }else{
@@ -170,12 +188,12 @@ export default class NewTaskFormular extends React.Component {
             this.setState({stepReleased: array, devNameError: true}, function(){this.checkFormCompleted()});
         }
 
-        if(this.state.faultDescription.length > 50){
+        if(this.checkFaultDescriptionCompleted()){
             array[2] = true;
-            this.setState({stepReleased: array, faultDescriptionError: false}, function(){this.checkFormCompleted()});
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }else{
             array[2] = false;
-            this.setState({stepReleased: array, faultDescriptionError: true}, function(){this.checkFormCompleted()});
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
 
         if(this.state.dataProtection){
