@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Divider from '@material-ui/core/Divider';
 
 
 export default class NewTaskFormular extends React.Component {
@@ -574,6 +575,13 @@ export default class NewTaskFormular extends React.Component {
                             </Grid>
                             <Typography component="p">
                                 {this.state.email ? "Alle Infos wurden auch an folgende Email geschickt: " + this.state.email : ""} 
+                            </Typography>
+                            <Divider style={{margin:20}}/>
+                            <Typography component="p" variant="h5">
+                                Wie geht es weiter?
+                            </Typography>
+                            <Typography component="p">
+                                Unsere Ehrenamtlerinnen und Ehrenamtler schauen sich alle Daten zu deinem Gerät an. Dabei versuchen wir Reparaturlösungen zu finden und melden uns dann in den nächsten Tagen bei dir.
                             </Typography>
                         </div>
                     )
