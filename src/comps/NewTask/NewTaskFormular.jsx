@@ -16,6 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
+import FileUpload from '../FileUpload';
+
 
 export default class NewTaskFormular extends React.Component {
     constructor(props){
@@ -52,6 +54,7 @@ export default class NewTaskFormular extends React.Component {
             error:false,
             tskID: "",
             tskToke: "",
+            files: [],
         }
     }
 
@@ -123,6 +126,12 @@ export default class NewTaskFormular extends React.Component {
                 }
             )
         }
+    }
+
+    handleDropzoneChange = (files) => {
+        this.setState({
+            files: files
+        })
     }
 
     handleReset(){
@@ -257,7 +266,7 @@ export default class NewTaskFormular extends React.Component {
     }
 
     getSteps() {
-        return ['Kontaktdaten', 'Gerätedaten', 'Fehlerbeschreibung', 'Prüfen und Abschicken'];
+        return ['Kontaktdaten', 'Gerätedaten', 'Fehlerbeschreibung', "Fotos", 'Prüfen und Abschicken'];
     }
 
     getStepContent(step) {
@@ -336,6 +345,15 @@ export default class NewTaskFormular extends React.Component {
                 </React.Fragment>
             );
             case 3:
+                return (
+                    <Grid item xs={12}>
+                        <FileUpload
+                        files={this.state.files}
+                        handleDropzoneChange={this.handleDropzoneChange}
+                        />
+                    </Grid>
+                )
+            case 4:
             return (
                 <React.Fragment>
                     <Grid item xs={12}>
