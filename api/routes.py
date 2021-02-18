@@ -79,7 +79,7 @@ def new_task():
 
 @app.route('/tasks', methods=['POST'])
 def tasks():
-    tasks = Task.query.all()
+    tasks = Task.query.order_by(Task.tsk_id.desc()).all()
 
     task_list = []
     for d in tasks:

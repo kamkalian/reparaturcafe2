@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Divider from '@material-ui/core/Divider';
 
 import FileUpload from '../FileUpload';
 
@@ -55,6 +56,7 @@ export default class NewTaskFormular extends React.Component {
             tskID: "",
             tskToke: "",
             files: [],
+            newsletter: false,
         }
     }
 
@@ -110,12 +112,14 @@ export default class NewTaskFormular extends React.Component {
         this.setState({
             activeStep: step
         });
+        this.checkStepCompleted();
     };
 
     handleNext = () => {
         this.setState({
             activeStep: this.state.activeStep + 1
         });
+        this.checkStepCompleted();
     }
 
     handleBack = () => {
@@ -125,6 +129,7 @@ export default class NewTaskFormular extends React.Component {
                     activeStep: this.state.activeStep - 1
                 }
             )
+            this.checkStepCompleted();
         }
     }
 
@@ -140,10 +145,6 @@ export default class NewTaskFormular extends React.Component {
                 activeStep: 0
             }
         )
-    }
-
-    handleGenderChange = (event) =>{
-        this.setState({gender: event.target.value})
     }
 
     checkNameCompleted = () => {
@@ -164,6 +165,24 @@ export default class NewTaskFormular extends React.Component {
         return false;
     }
 
+    checkDevNameCompleted = () => {
+        if(this.state.devName !==""){
+            this.setState({devNameError: false});
+            return true;
+        }
+        this.setState({devNameError: true});
+        return false;
+    }
+
+    checkFaultDescriptionCompleted = () => {
+        if(this.state.faultDescription.length > 49){
+            this.setState({faultDescriptionError: false});
+            return true;
+        }
+        this.setState({faultDescriptionError: true});
+        return false;
+    }
+
     checkStepCompleted = () => {
         var array = [...this.state.stepReleased];
 
@@ -175,7 +194,7 @@ export default class NewTaskFormular extends React.Component {
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
 
-        if(this.state.devName !==""){
+        if(this.checkDevNameCompleted()){
             array[1] = true;
             this.setState({stepReleased: array, devNameError: false}, function(){this.checkFormCompleted()});
         }else{
@@ -183,12 +202,12 @@ export default class NewTaskFormular extends React.Component {
             this.setState({stepReleased: array, devNameError: true}, function(){this.checkFormCompleted()});
         }
 
-        if(this.state.faultDescription.length > 50){
+        if(this.checkFaultDescriptionCompleted()){
             array[2] = true;
-            this.setState({stepReleased: array, faultDescriptionError: false}, function(){this.checkFormCompleted()});
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }else{
             array[2] = false;
-            this.setState({stepReleased: array, faultDescriptionError: true}, function(){this.checkFormCompleted()});
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
 
         if(this.state.dataProtection){
@@ -213,48 +232,39 @@ export default class NewTaskFormular extends React.Component {
     handleTextInputChange = (event) => {
         switch(event.currentTarget.id) {
             case 'firstName':
-                this.setState({firstName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({firstName: event.target.value}, function() {
+                    this.checkNameCompleted();
                 });
                 return false;
             case 'lastName':
-                this.setState({lastName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({lastName: event.target.value}, function() {
+                    this.checkNameCompleted();
                 });
-                return false;
-            case 'street':
-                this.setState({street: event.target.value})
-                return false;
-            case 'houseNumber':
-                this.setState({houseNumber: event.target.value})
-                return false;
-            case 'postCode':
-                this.setState({postCode: event.target.value})
                 return false;
             case 'prefixNumber':
                 this.setState({prefixNumber: event.target.value})
                 return false;
             case 'phone':
-                this.setState({phone: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({phone: event.target.value}, function() {
+                    this.checkTelOrEmailCompleted();
                 });
                 return false;
             case 'email':
-                this.setState({email: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({email: event.target.value}, function() {
+                    this.checkTelOrEmailCompleted();
                 });
                 return false;
             case 'devName':
-                this.setState({devName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({devName: event.target.value}, function() {
+                    this.checkDevNameCompleted();
                 });
                 return false;
             case 'devModel':
                 this.setState({devModel: event.target.value})
                 return false;
             case 'faultDescription':
-                this.setState({faultDescription: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({faultDescription: event.target.value}, function() {
+                    this.checkFaultDescriptionCompleted();
                 });
                 return false;
             default:
@@ -282,18 +292,11 @@ export default class NewTaskFormular extends React.Component {
                     </Grid>
                     <Grid item xs={12}>
                         <ContactForm 
-                        gender={this.state.gender}
-                        handleGenderChange={this.handleGenderChange}
                         firstName={this.state.firstName}
                         lastName={this.state.lastName}
-                        street={this.state.street}
-                        houseNumber={this.state.houseNumber}
-                        postCode={this.state.postCode}
                         prefixNumber={this.state.prefixNumber}
                         phone={this.state.phone}
                         email={this.state.email}
-                        openCategory={this.state.openCategory}
-                        openManufacturer={this.state.openManufacturer}
                         handleTextInputChange={this.handleTextInputChange}
                         nameError={this.state.nameError}
                         telEmailError={this.state.telEmailError}
@@ -419,6 +422,20 @@ export default class NewTaskFormular extends React.Component {
                         />
                     </Grid>
                     <Grid item xs={12}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    value={this.state.newsletter}
+                                    checked={this.state.newsletter}
+                                    onChange={this.handleNewsletterChange}
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                                />
+                            }
+                            label="Aktiviere dieses Häckchen, wenn die AWO Oberlar dir einen Newsletter per Email schicken darf."
+                            style={{paddingRight:10, borderRadius:5, marginLeft:0}}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
                         <div 
                         className={!this.state.formLocked ? 'checked-box' : 'important-box'}
                         style={{padding:10, borderRadius:5}}>
@@ -513,6 +530,14 @@ export default class NewTaskFormular extends React.Component {
         });
     }
 
+    handleNewsletterChange = (event) => {
+        this.setState({
+            newsletter: event.currentTarget.checked,
+        }, function () {
+            this.checkStepCompleted();
+        });
+    }
+
     render(){    
         const steps = this.getSteps();
         return(
@@ -591,6 +616,13 @@ export default class NewTaskFormular extends React.Component {
                             </Grid>
                             <Typography component="p">
                                 {this.state.email ? "Alle Infos wurden auch an folgende Email geschickt: " + this.state.email : ""} 
+                            </Typography>
+                            <Divider style={{margin:20}}/>
+                            <Typography component="p" variant="h5">
+                                Wie geht es weiter?
+                            </Typography>
+                            <Typography component="p">
+                                Unsere Ehrenamtlerinnen und Ehrenamtler schauen sich alle Daten zu deinem Gerät an. Dabei versuchen wir Reparaturlösungen zu finden und melden uns dann in den nächsten Tagen bei dir.
                             </Typography>
                         </div>
                     )
