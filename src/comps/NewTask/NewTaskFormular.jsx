@@ -131,7 +131,7 @@ export default class NewTaskFormular extends React.Component {
     handleUploadInputChange = (event) => {
         console.log(event.target.value)
         const fd = new FormData();
-        fd.append('file', event.target.value);
+        fd.append('file', event.target.files[0]);
         fetch('/upload_image', {
             method: 'POST',
             body: fd
