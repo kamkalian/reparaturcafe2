@@ -128,10 +128,22 @@ export default class NewTaskFormular extends React.Component {
         }
     }
 
-    handleDropzoneChange = (files) => {
-        this.setState({
-            files: files
+    handleUploadInputChange = (event) => {
+        console.log(event.target.value)
+        const fd = new FormData();
+        fd.append('file', event.target.value);
+        fetch('/upload_image', {
+            method: 'POST',
+            body: fd
         })
+        .then(res => res.json())
+        .then(json => console.log(json))
+        .catch(err => console.error(err));
+        
+        this.setState({
+            files: this.state.files.concat(event.target.value)
+        })
+        
     }
 
     handleReset(){
@@ -349,7 +361,7 @@ export default class NewTaskFormular extends React.Component {
                     <Grid item xs={12}>
                         <FileUpload
                         files={this.state.files}
-                        handleDropzoneChange={this.handleDropzoneChange}
+                        handleUploadInputChange={this.handleUploadInputChange}
                         />
                     </Grid>
                 )
