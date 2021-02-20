@@ -84,7 +84,6 @@ def tasks():
     task_list = []
     for d in tasks:
 
-
         dev_name = ""
         dev_manufacturer = ""
         dev_model = ""
@@ -94,9 +93,6 @@ def tasks():
             dev_manufacturer = d.device.dev_mnf_name
             dev_model = d.device.dev_model
             dev_category = d.device.dev_category
-
-        
-        
 
         task_list.append(
             {
@@ -110,5 +106,4 @@ def tasks():
             }
         )
         
-    
     return jsonify(task_list)
