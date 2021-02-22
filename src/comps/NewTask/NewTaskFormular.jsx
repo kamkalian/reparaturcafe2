@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import FileUpload from '../FileUpload';
+import Attachments from '../Attachments';
 
 
 export default class NewTaskFormular extends React.Component {
@@ -137,13 +137,13 @@ export default class NewTaskFormular extends React.Component {
             body: fd
         })
         .then(res => res.json())
-        .then(json => console.log(json))
-        .catch(err => console.error(err));
-        
-        this.setState({
-            files: this.state.files.concat(event.target.value)
-        })
-        
+        .then(
+            (result) => {
+                this.setState({
+                    files: this.state.files.concat(result.filename)
+                })
+            })
+        .catch(err => console.error(err)); 
     }
 
     handleReset(){
@@ -359,7 +359,7 @@ export default class NewTaskFormular extends React.Component {
             case 3:
                 return (
                     <Grid item xs={12}>
-                        <FileUpload
+                        <Attachments
                         files={this.state.files}
                         handleUploadInputChange={this.handleUploadInputChange}
                         />
