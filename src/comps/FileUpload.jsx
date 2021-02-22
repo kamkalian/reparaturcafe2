@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 
 export default class FileUpload extends React.Component {
     render(){
-        console.log(this.props.files);
         return (
             <Button
             variant="contained"
