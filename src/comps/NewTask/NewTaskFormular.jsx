@@ -17,7 +17,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Divider from '@material-ui/core/Divider';
 
-import FileUpload from '../FileUpload';
+import Attachments from '../Attachments';
 
 
 export default class NewTaskFormular extends React.Component {
@@ -133,10 +133,38 @@ export default class NewTaskFormular extends React.Component {
         }
     }
 
-    handleDropzoneChange = (files) => {
-        this.setState({
-            files: files
+    handleUploadInputChange = (event) => {
+        console.log(event.target.value)
+        const fd = new FormData();
+        fd.append('file', event.target.files[0]);
+        fetch('/upload_image', {
+            method: 'POST',
+            body: fd
         })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({
+                    files: this.state.files.concat(result.filename)
+                }, function() {
+                    this.checkStepCompleted();
+                });
+            })
+        .catch(err => console.error(err)); 
+    }
+
+    handleDeleteAttachmentButton = (file, event) => {
+        var array = [...this.state.files];
+        var index = this.state.files.indexOf(file);
+        if (index !== -1){
+            array.splice(index, 1);
+        }
+        this.setState({
+            files: array
+        }, function(){
+            this.checkStepCompleted();
+        });
+        
     }
 
     handleReset(){
@@ -210,11 +238,19 @@ export default class NewTaskFormular extends React.Component {
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
 
-        if(this.state.dataProtection){
+        if(this.state.files.length > 0){
             array[3] = true;
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }else{
             array[3] = false;
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
+        }
+
+        if(this.state.dataProtection){
+            array[4] = true;
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
+        }else{
+            array[4] = false;
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
     }
@@ -224,7 +260,7 @@ export default class NewTaskFormular extends React.Component {
             this.state.stepReleased[0] &&
             this.state.stepReleased[1] &&
             this.state.stepReleased[2] &&
-            this.state.stepReleased[3]
+            this.state.stepReleased[4]
         ) this.setState({formLocked:false});
         else this.setState({formLocked:true});
     }
@@ -350,9 +386,10 @@ export default class NewTaskFormular extends React.Component {
             case 3:
                 return (
                     <Grid item xs={12}>
-                        <FileUpload
+                        <Attachments
                         files={this.state.files}
-                        handleDropzoneChange={this.handleDropzoneChange}
+                        handleUploadInputChange={this.handleUploadInputChange}
+                        handleDeleteAttachmentButton={this.handleDeleteAttachmentButton}
                         />
                     </Grid>
                 )
@@ -447,7 +484,7 @@ export default class NewTaskFormular extends React.Component {
                                     <li><Typography>Es fehlt noch die Gerätebezeichnung.</Typography></li>) : ""}
                                 {!this.state.stepReleased[2] ? (
                                     <li><Typography>Gebe bei der Fehlerbeschreibung mindestens 50 Zeichen ein.</Typography></li>) : ""}
-                                {!this.state.stepReleased[3] ? (
+                                {!this.state.stepReleased[4] ? (
                                     <li><Typography>Bestätigung zur Datenschutzerklärung fehlt.</Typography></li>) : ""}
                                 
                                 </ul>

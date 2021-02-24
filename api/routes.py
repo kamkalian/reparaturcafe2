@@ -1,6 +1,8 @@
 import time
+import os
 from api import app
 from flask import request, jsonify, url_for
+from werkzeug.utils import secure_filename
 from models import Task, Customer, Device
 from api import db
 from datetime import datetime
@@ -84,7 +86,6 @@ def tasks():
     task_list = []
     for d in tasks:
 
-
         dev_name = ""
         dev_manufacturer = ""
         dev_model = ""
@@ -94,9 +95,6 @@ def tasks():
             dev_manufacturer = d.device.dev_mnf_name
             dev_model = d.device.dev_model
             dev_category = d.device.dev_category
-
-        
-        
 
         task_list.append(
             {
@@ -110,5 +108,27 @@ def tasks():
             }
         )
         
-    
     return jsonify(task_list)
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+
+
+@app.route('/upload_image', methods=['POST'])
+def upload_image():
+    if 'file' not in request.files:
+        return {"error":"Kein file gefunden"}
+
+
+    file = request.files['file']
+    if file.filename == '':
+        return {"error":"keine Datei angegeben!"}
+    
+    if file and allowed_file(file.filename):
+        # filename = secure_filename(file.filename)
+        filename = secrets.token_urlsafe(32) + "." + file.filename.split(".")[-1]
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return {"ok":1, "filename":filename}
+
+    return {"ok":1}

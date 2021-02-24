@@ -1,17 +1,22 @@
 import React from 'react';
-import {DropzoneArea} from 'material-ui-dropzone'
+import Button from '@material-ui/core/Button';
 
 
 export default class FileUpload extends React.Component {
     render(){
-        console.log(this.props.files);
         return (
-            <DropzoneArea
-                fileObjects={this.props.files}
-                onChange={this.props.handleDropzoneChange.bind(this)}
-                acceptedFiles={[".png"]}
-                dropzoneText="Klicke hier um Fotos hochzuladen."
+            <Button
+            variant="contained"
+            component="label"
+            color="primary"
+            >
+            + Foto hochladen
+            <input
+                type="file"
+                hidden
+                onChange={this.props.handleUploadInputChange}
             />
+            </Button>
         );
     }
 
