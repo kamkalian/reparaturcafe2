@@ -3,7 +3,7 @@ import os
 from api import app
 from flask import request, jsonify, url_for
 from werkzeug.utils import secure_filename
-from models import Task, Customer, Device
+from models import Task, Customer, Device, Image
 from api import db
 from datetime import datetime
 import secrets
@@ -75,6 +75,13 @@ def new_task():
 
     db.session.add(new_task) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
+
+    # Files anlegen
+    files = post_json["files"]
+    for filename in files:
+        new_file = Image(img_filename=filename, img_tsk_id=new_task.tsk_id)
+        db.session.add(new_file) # pylint: disable=maybe-no-member
+        db.session.commit() # pylint: disable=maybe-no-member
 
     return {'tsk_id':new_task.tsk_id, 'tsk_token': token}
 

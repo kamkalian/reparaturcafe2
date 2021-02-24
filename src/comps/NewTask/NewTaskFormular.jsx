@@ -83,6 +83,7 @@ export default class NewTaskFormular extends React.Component {
                 electricalMechanical: this.state.electricalMechanical,
                 accessories: this.state.accessories,
                 faultDescription: this.state.faultDescription,
+                files: this.state.files,
             })
         })
         .then(res => res.json())
