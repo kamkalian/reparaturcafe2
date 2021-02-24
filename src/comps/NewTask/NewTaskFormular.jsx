@@ -85,6 +85,7 @@ export default class NewTaskFormular extends React.Component {
                 electricalMechanical: this.state.electricalMechanical,
                 accessories: this.state.accessories,
                 faultDescription: this.state.faultDescription,
+                files: this.state.files,
             })
         })
         .then(res => res.json())
@@ -385,13 +386,19 @@ export default class NewTaskFormular extends React.Component {
             );
             case 3:
                 return (
+                    <React.Fragment>
                     <Grid item xs={12}>
+                        <Typography>Mit einem Foto kannst du uns eventuell zeigen wo das Problem liegt. Wenn möglich lade gerne mehrere Fotos von deinem Gerät hoch. </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        
                         <Attachments
                         files={this.state.files}
                         handleUploadInputChange={this.handleUploadInputChange}
                         handleDeleteAttachmentButton={this.handleDeleteAttachmentButton}
                         />
                     </Grid>
+                    </React.Fragment>
                 )
             case 4:
             return (
