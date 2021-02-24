@@ -41,7 +41,7 @@ class Attachments extends React.Component {
                         <img src={"./images/" + tile} alt={tile} />
                         <GridListTileBar                       
                         actionIcon={
-                            <IconButton color="secondary">
+                            <IconButton color="secondary" onClick={this.props.handleDeleteAttachmentButton.bind(this, tile)}>
                                 <DeleteIcon />
                             </IconButton>
                         }

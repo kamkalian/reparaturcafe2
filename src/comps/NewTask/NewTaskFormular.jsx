@@ -146,6 +146,17 @@ export default class NewTaskFormular extends React.Component {
         .catch(err => console.error(err)); 
     }
 
+    handleDeleteAttachmentButton = (file, event) => {
+        var array = [...this.state.files];
+        var index = this.state.files.indexOf(file);
+        if (index !== -1){
+            array.splice(index, 1);
+        }
+        this.setState({
+            files: array
+        })
+    }
+
     handleReset(){
         this.setState(
             {
@@ -362,6 +373,7 @@ export default class NewTaskFormular extends React.Component {
                         <Attachments
                         files={this.state.files}
                         handleUploadInputChange={this.handleUploadInputChange}
+                        handleDeleteAttachmentButton={this.handleDeleteAttachmentButton}
                         />
                     </Grid>
                 )
