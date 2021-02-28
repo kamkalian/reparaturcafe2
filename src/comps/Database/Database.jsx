@@ -62,10 +62,13 @@ export default class Database extends React.Component {
     return(
       <React.Fragment>
         <h2>Database</h2>
-        <List component="ul" aria-label="main mailbox folders">
-        {taskList}
-        </List>
-        
+        <Grid container>
+          <Grid item xs={12} sm={6} lg={4} border={2}>
+          <List component="ul" aria-label="main mailbox folders">
+            {taskList}
+            </List>
+          </Grid>
+        </Grid>
       </React.Fragment>
       
     );
