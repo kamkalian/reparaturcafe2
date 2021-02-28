@@ -1,8 +1,8 @@
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Grid from '@material-ui/core/Grid';
+import MagneticSign from './MagneticSign';
 
 
 export default class Database extends React.Component {
@@ -34,27 +34,12 @@ export default class Database extends React.Component {
   render() {
     const taskList = this.state.data.map((item, index) => {
       return(
-          <ListItem button>
-            <ListItemText 
-              primary={item.deviceName}
-              primaryTypographyProps={{variant:"h3"}}
-              secondary={
-                <React.Fragment>
-                  {item.deviceCategory ? (<Chip 
-                  label={item.deviceCategory}
-                  color="secondary"
-                  style={{margin:5}}
-                  />): ""}
-                  {item.deviceManufacturer ? (
-                  <Chip 
-                  label={item.deviceManufacturer}
-                  color="secondary"
-                  style={{margin:5}}
-                  />) : ""}
-                </React.Fragment>
-              }
-              secondaryTypographyProps={{component:"span"}}
-            />
+          <ListItem button className="task-sign" border={1}>
+            <MagneticSign 
+            taskId={item.id}
+            deviceName={item.deviceName}
+            deviceManufacturer={item.deviceManufacturer}
+            deviceCategory={item.deviceCategory}/>
           </ListItem>
       );
     });
