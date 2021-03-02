@@ -91,6 +91,7 @@ def tasks():
     tasks = Task.query.order_by(Task.tsk_id.desc()).limit(50).all()
 
     task_list = []
+    category_list = []
     for d in tasks:
 
         dev_name = ""
@@ -102,6 +103,9 @@ def tasks():
             dev_manufacturer = d.device.dev_mnf_name
             dev_model = d.device.dev_model
             dev_category = d.device.dev_category
+        
+            if dev_category not in category_list:
+                category_list.append(dev_category)
 
         task_list.append(
             {
@@ -115,7 +119,7 @@ def tasks():
             }
         )
         
-    return jsonify(task_list)
+    return jsonify({'task_list':task_list, 'category_list':category_list})
 
 
 def allowed_file(filename):
