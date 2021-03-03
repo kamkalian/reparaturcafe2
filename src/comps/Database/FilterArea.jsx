@@ -10,23 +10,31 @@ import SelectionDialog from '../SelectionDialog';
 export default class FilterArea extends React.Component {
     render(){
         return(
-            <React.Fragment>
-            <SelectionField 
-            selectionId="selectFieldCategory"
-            handleOpen={this.props.handleOpen}
-            selectedName={this.props.filterCategory}
-            handleSelectedDelete={this.props.handleSelectedDelete}
-            buttonLabel="+ Gerätekategorie"
-            stateName="filterCategory"/>
-            <SelectionDialog 
-            handleClose={this.props.handleClose}
-            selectionList={this.props.categories}
-            handleSelectionClick={this.props.handleSelectionClick}
-            openSelection={this.props.openCategory}
-            selectionTitle="Gerätekategorie auswählen"
-            stateName="filterCategory"
-            />
-            </React.Fragment>
+            <Grid container>
+                <Grid item xs={4}>
+                    <SelectionField 
+                    selectionId="selectFieldCategory"
+                    handleOpen={this.props.handleOpen}
+                    selectedName={this.props.filterCategory}
+                    handleSelectedDelete={this.props.handleSelectedDelete}
+                    buttonLabel="+ Gerätekategorie"
+                    stateName="filterCategory"/>
+                    <SelectionDialog 
+                    handleClose={this.props.handleClose}
+                    selectionList={this.props.categories}
+                    handleSelectionClick={this.props.handleSelectionClick}
+                    openSelection={this.props.openCategory}
+                    selectionTitle="Gerätekategorie auswählen"
+                    stateName="filterCategory"
+                    />
+                </Grid>
+                <Grid item xs={4}>
+
+                </Grid>
+                <Grid item xs={4}>
+                    
+                </Grid>
+            </Grid>
         );
     }
 }
