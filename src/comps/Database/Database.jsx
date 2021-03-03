@@ -115,7 +115,7 @@ export default class Database extends React.Component {
             categories={this.state.categories}
             />
           </Grid>
-          <Grid item xs={12} sm={6} lg={4} border={2}>
+          <Grid item xs={12} sm={12} lg={12} border={2}>
           <List component="ul" aria-label="main mailbox folders">
             {taskList}
             </List>
