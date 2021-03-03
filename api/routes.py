@@ -88,7 +88,17 @@ def new_task():
 
 @app.route('/tasks', methods=['POST'])
 def tasks():
-    tasks = Task.query.order_by(Task.tsk_id.desc()).limit(50).all()
+    post_json = request.get_json()
+
+    tasks = Task.query
+    if "filterCategory" in post_json:
+        filter_category = post_json["filterCategory"]
+        print(filter_category)
+        if filter_category != "":
+            if filter_category == "ohne Angabe":
+                filter_category = ""
+            tasks = tasks.join(Task.device, aliased=True).filter_by(dev_category=filter_category)
+    tasks = tasks.order_by(Task.tsk_id.desc()).limit(50).all()
 
     task_list = []
     category_list = []
