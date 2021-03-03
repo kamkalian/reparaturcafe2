@@ -27,6 +27,9 @@ export default class Database extends React.Component {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          filterCategory: this.state.filterCategory,
+        })
     })
     .then(response => response.json())
     .then(data => {
