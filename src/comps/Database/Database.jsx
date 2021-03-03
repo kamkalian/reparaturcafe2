@@ -58,7 +58,9 @@ export default class Database extends React.Component {
             this.setState({manufacturerName: ""})
             return false;
         case 'filterCategory':
-            this.setState({filterCategory: ""})
+            this.setState({filterCategory: ""}, function(){
+              this.apiCall();
+            })
             return false;
         default:
             return false;
@@ -79,7 +81,9 @@ export default class Database extends React.Component {
         case 'filterCategory':
             this.setState({
                 filterCategory: event.currentTarget.dataset.id,
-                openCategory: false})
+                openCategory: false}, function(){
+                  this.apiCall();
+                })
             return false;
         default:
             return false;
