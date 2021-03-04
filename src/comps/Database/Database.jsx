@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Grid from '@material-ui/core/Grid';
 import MagneticSign from './MagneticSign';
 import FilterArea from './FilterArea';
+import { Typography } from '@material-ui/core';
 
 
 export default class Database extends React.Component {
@@ -127,6 +128,11 @@ export default class Database extends React.Component {
             openManufacturer={this.state.openManufacturer}
             manufacturers={this.state.manufacturers}
             />
+          </Grid>
+          <Grid item xs="12">
+            <Typography>
+              Gefundene Geräte: {this.state.data.length}
+            </Typography>
           </Grid>
           <Grid item xs={12} sm={12} lg={12} border={2}>
           <List component="ul" aria-label="main mailbox folders">
