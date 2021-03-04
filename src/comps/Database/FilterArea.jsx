@@ -7,8 +7,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 export default class FilterArea extends React.Component {
     render(){
         return(
-            <Grid container spacing={3}>
-                <Grid item xs={4}>
+            <Grid container spacing={1}>
+                <Grid item xs={12} sm={6} lg={4}>
                     <SelectionField 
                     selectionId="selectFieldCategory"
                     handleOpen={this.props.handleOpen}
@@ -27,7 +27,7 @@ export default class FilterArea extends React.Component {
                     withCounts
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} lg={4}>
                 <SelectionField 
                     selectionId="selectFieldManufacturer"
                     handleOpen={this.props.handleOpen}
@@ -46,7 +46,7 @@ export default class FilterArea extends React.Component {
                     withCounts
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid xs={12} sm={6} lg={4}>
                     
                 </Grid>
             </Grid>
