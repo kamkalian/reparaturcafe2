@@ -13,6 +13,7 @@ export default class Database extends React.Component {
     this.state = {
       data: [],
       categories: [],
+      manufacturers: [],
       openCategory: false,
       openManufacturer: false,
       filterCategory: "",
@@ -29,16 +30,15 @@ export default class Database extends React.Component {
         },
         body: JSON.stringify({
           filterCategory: this.state.filterCategory,
+          filterManufacturer: this.state.filterManufacturer,
         })
     })
     .then(response => response.json())
     .then(data => {
       this.setState({ 
         data: data['task_list'],
-        categories: data['category_list']}, function(){
-          this.setState({
-            categories: this.state.categories.concat("ohne Angabe")
-          })
+        categories: data['category_list'],
+        manufacturers: data['manufacturer_list']
         })
     });
   }
@@ -58,7 +58,9 @@ export default class Database extends React.Component {
   handleFilterSelectedDelete = (statename, event) => {
     switch(statename) {
         case 'filterManufacturer':
-            this.setState({manufacturerName: ""})
+            this.setState({filterManufacturer: ""}, function(){
+              this.apiCall();
+            })
             return false;
         case 'filterCategory':
             this.setState({filterCategory: ""}, function(){
@@ -79,7 +81,9 @@ export default class Database extends React.Component {
         case 'filterManufacturer':
             this.setState({
                 filterManufacturer: event.currentTarget.dataset.id,
-                openManufacturer: false})
+                openManufacturer: false}, function(){
+                  this.apiCall();
+                })
             return false;
         case 'filterCategory':
             this.setState({
@@ -93,16 +97,15 @@ export default class Database extends React.Component {
     }
 }
 
-  render() {
-    console.log(this.state.categories);
+  render() {    
     const taskList = this.state.data.map((item, index) => {
       return(
-          <ListItem button className="task-sign" border={1}>
+          <ListItem button className="task-sign" border={1} key={index}>
             <MagneticSign 
             taskId={item.id}
             deviceName={item.deviceName}
-            deviceManufacturer={item.deviceManufacturer}
-            deviceCategory={item.deviceCategory}/>
+            deviceManufacturer={item.deviceManufacturer === "ohne Angabe" ? "" : item.deviceManufacturer}
+            deviceCategory={item.deviceCategory === "ohne Angabe" ? "" : item.deviceCategory}/>
           </ListItem>
       );
     });
@@ -120,6 +123,9 @@ export default class Database extends React.Component {
             filterCategory={this.state.filterCategory}
             openCategory={this.state.openCategory}
             categories={this.state.categories}
+            filterManufacturer={this.state.filterManufacturer}
+            openManufacturer={this.state.openManufacturer}
+            manufacturers={this.state.manufacturers}
             />
           </Grid>
           <Grid item xs={12} sm={12} lg={12} border={2}>
