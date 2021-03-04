@@ -122,9 +122,9 @@ def tasks():
         
             # Kategorien ermitteln und als Liste zusammenbauen
             category_exists = False
-            for category in category_list:
-                if dev_category == "":
+            if dev_category == "":
                     dev_category = "ohne Angabe"
+            for category in category_list:
                 if dev_category == category["name"]:
                     category["count"] += 1
                     category_exists = True
@@ -133,9 +133,9 @@ def tasks():
 
             # Hersteller ermitteln und als Liste zusammenbauen
             manufacturer_exists = False
-            for manufacturer in manufacturer_list:
-                if dev_manufacturer == "":
+            if dev_manufacturer == "" or dev_manufacturer == None:
                     dev_manufacturer = "ohne Angabe"
+            for manufacturer in manufacturer_list:
                 if dev_manufacturer == manufacturer["name"]:
                     manufacturer["count"] += 1
                     manufacturer_exists = True
