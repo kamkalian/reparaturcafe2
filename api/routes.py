@@ -114,8 +114,27 @@ def tasks():
             dev_model = d.device.dev_model
             dev_category = d.device.dev_category
         
-            if dev_category not in category_list:
-                category_list.append(dev_category)
+            # Kategorien ermitteln und als Liste zusammenbauen
+            category_exists = False
+            for category in category_list:
+                if dev_category == "":
+                    dev_category = "ohne Angabe"
+                if dev_category == category["name"]:
+                    category["count"] += 1
+                    category_exists = True
+            if category_exists == False:
+                category_list.append({"name": dev_category, "count": 1})
+
+            # Hersteller ermitteln und als Liste zusammenbauen
+            manufacturer_exists = False
+            for manufacturer in manufacturer_list:
+                if dev_manufacturer == "":
+                    dev_manufacturer = "ohne Angabe"
+                if dev_manufacturer == manufacturer["name"]:
+                    manufacturer["count"] += 1
+                    manufacturer_exists = True
+            if manufacturer_exists == False:
+                manufacturer_list.append({"name": dev_manufacturer, "count": 1})
 
         task_list.append(
             {
