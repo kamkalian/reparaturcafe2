@@ -93,15 +93,21 @@ def tasks():
     tasks = Task.query
     if "filterCategory" in post_json:
         filter_category = post_json["filterCategory"]
-        print(filter_category)
         if filter_category != "":
             if filter_category == "ohne Angabe":
                 filter_category = ""
             tasks = tasks.join(Task.device, aliased=True).filter_by(dev_category=filter_category)
-    tasks = tasks.order_by(Task.tsk_id.desc()).limit(50).all()
+    if "filterManufacturer" in post_json:
+        filter_manufacturer = post_json["filterManufacturer"]
+        if filter_manufacturer != "":
+            if filter_manufacturer == "ohne Angabe":
+                filter_manufacturer = ""
+            tasks = tasks.join(Task.device, aliased=True).filter_by(dev_mnf_name=filter_manufacturer)
+    tasks = tasks.order_by(Task.tsk_id.desc()).all()
 
     task_list = []
     category_list = []
+    manufacturer_list = []
     for d in tasks:
 
         dev_name = ""
@@ -147,8 +153,10 @@ def tasks():
                 "deviceCategory": dev_category,
             }
         )
-        
-    return jsonify({'task_list':task_list, 'category_list':category_list})
+    return jsonify({
+        'task_list':task_list,
+        'category_list':category_list,
+        'manufacturer_list':manufacturer_list})
 
 
 def allowed_file(filename):
