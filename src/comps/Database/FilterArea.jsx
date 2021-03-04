@@ -10,7 +10,7 @@ import SelectionDialog from '../SelectionDialog';
 export default class FilterArea extends React.Component {
     render(){
         return(
-            <Grid container>
+            <Grid container spacing={3}>
                 <Grid item xs={4}>
                     <SelectionField 
                     selectionId="selectFieldCategory"
@@ -29,7 +29,21 @@ export default class FilterArea extends React.Component {
                     />
                 </Grid>
                 <Grid item xs={4}>
-
+                <SelectionField 
+                    selectionId="selectFieldManufacturer"
+                    handleOpen={this.props.handleOpen}
+                    selectedName={this.props.filterManufacturer}
+                    handleSelectedDelete={this.props.handleSelectedDelete}
+                    buttonLabel="+ Hersteller"
+                    stateName="filterManufacturer"/>
+                    <SelectionDialog 
+                    handleClose={this.props.handleClose}
+                    selectionList={this.props.manufacturers}
+                    handleSelectionClick={this.props.handleSelectionClick}
+                    openSelection={this.props.openManufacturer}
+                    selectionTitle="Hersteller auswählen"
+                    stateName="filterManufacturer"
+                    />
                 </Grid>
                 <Grid item xs={4}>
                     
