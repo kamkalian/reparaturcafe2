@@ -1,11 +1,8 @@
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import TaskIdLabel from './TaskIdLabel';
 import SelectionField from '../SelectionField';
 import SelectionDialog from '../SelectionDialog';
-
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 export default class FilterArea extends React.Component {
     render(){
@@ -17,8 +14,9 @@ export default class FilterArea extends React.Component {
                     handleOpen={this.props.handleOpen}
                     selectedName={this.props.filterCategory}
                     handleSelectedDelete={this.props.handleSelectedDelete}
-                    buttonLabel="+ Gerätekategorie"
-                    stateName="filterCategory"/>
+                    buttonLabel="Gerätekategorie"
+                    stateName="filterCategory"
+                    startIcon={<FilterListIcon />}/>
                     <SelectionDialog 
                     handleClose={this.props.handleClose}
                     selectionList={this.props.categories}
@@ -26,6 +24,7 @@ export default class FilterArea extends React.Component {
                     openSelection={this.props.openCategory}
                     selectionTitle="Gerätekategorie auswählen"
                     stateName="filterCategory"
+                    withCounts
                     />
                 </Grid>
                 <Grid item xs={4}>
@@ -34,8 +33,9 @@ export default class FilterArea extends React.Component {
                     handleOpen={this.props.handleOpen}
                     selectedName={this.props.filterManufacturer}
                     handleSelectedDelete={this.props.handleSelectedDelete}
-                    buttonLabel="+ Hersteller"
-                    stateName="filterManufacturer"/>
+                    buttonLabel="Hersteller"
+                    stateName="filterManufacturer"
+                    startIcon={<FilterListIcon />}/>
                     <SelectionDialog 
                     handleClose={this.props.handleClose}
                     selectionList={this.props.manufacturers}
@@ -43,6 +43,7 @@ export default class FilterArea extends React.Component {
                     openSelection={this.props.openManufacturer}
                     selectionTitle="Hersteller auswählen"
                     stateName="filterManufacturer"
+                    withCounts
                     />
                 </Grid>
                 <Grid item xs={4}>

@@ -13,6 +13,7 @@ export default class SelectionField extends React.Component {
             fullWidth={true}
             onClick={this.props.handleOpen}
             style={{minHeight:"50px", justifyContent: "flex-start"}}
+            startIcon={this.props.startIcon}
             >
                 {this.props.buttonLabel}
             </Button>
