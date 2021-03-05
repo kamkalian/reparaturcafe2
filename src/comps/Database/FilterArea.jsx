@@ -3,6 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import SelectionField from '../SelectionField';
 import SelectionDialog from '../SelectionDialog';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import TextField from '@material-ui/core/TextField';
+
 
 export default class FilterArea extends React.Component {
     render(){
@@ -46,8 +48,14 @@ export default class FilterArea extends React.Component {
                     withCounts
                     />
                 </Grid>
-                <Grid xs={12} sm={6} lg={4}>
-                    
+                <Grid item xs={12} sm={12} lg={4}>
+                    <TextField
+                        value={this.props.filterText}
+                        onChange={this.props.handleFilterTextChange}
+                        id="standard-basic"
+                        label="ID / Bezeichnung"
+                        fullWidth
+                        InputProps={{type: 'search' }}/>
                 </Grid>
             </Grid>
         );

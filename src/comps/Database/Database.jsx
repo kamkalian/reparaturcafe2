@@ -19,6 +19,7 @@ export default class Database extends React.Component {
       openManufacturer: false,
       filterCategory: "",
       filterManufacturer: "",
+      filterText: "",
     }
   }
 
@@ -32,6 +33,7 @@ export default class Database extends React.Component {
         body: JSON.stringify({
           filterCategory: this.state.filterCategory,
           filterManufacturer: this.state.filterManufacturer,
+          filterText: this.state.filterText,
         })
     })
     .then(response => response.json())
@@ -96,8 +98,27 @@ export default class Database extends React.Component {
         default:
             return false;
     }
-}
+  }
 
+  handleFilterTextChange = (event) => {
+    this.setState({
+      filterText: event.currentTarget.value,
+      });
+  }
+/*
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(this.state.data.length, nextState.data.length);
+    if (this.state.data && nextState.data){
+      if (this.state.data.length !== nextState.data.length){
+        return true;
+      }else{
+        if (this.state.openCategory !== nextState.openCategory) return true;
+        if (this.state.openManufacturer !== nextState.openManufacturer) return true;
+        return false;
+      }
+    }
+  }
+*/
   render() {    
     const taskList = this.state.data.map((item, index) => {
       return(
@@ -127,6 +148,8 @@ export default class Database extends React.Component {
             filterManufacturer={this.state.filterManufacturer}
             openManufacturer={this.state.openManufacturer}
             manufacturers={this.state.manufacturers}
+            filterText={this.state.filterText}
+            handleFilterTextChange={this.handleFilterTextChange}
             />
           </Grid>
           <Grid item xs="12">
