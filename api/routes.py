@@ -8,6 +8,7 @@ from api import db
 from datetime import datetime
 import secrets
 import pyqrcode
+import hashlib
 
 
 @app.route('/api/time')
@@ -61,6 +62,10 @@ def new_task():
     # vom User geöffnet werden.
     token = secrets.token_urlsafe(32)
 
+    # Der Token soll so nicht in der Datenbank gespeichert werden,
+    # daher wir hier noch eine gehashete Version generiert.
+    hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
+
     # QR-Code generieren
     url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/' + token)
     url.svg( '../public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
@@ -70,7 +75,7 @@ def new_task():
         tsk_creation_date = datetime.now(),
         tsk_cus_id = cus_id,
         tsk_dev_id = dev_id,
-        tsk_token = token,
+        tsk_token = hash_token,
     )
 
     db.session.add(new_task) # pylint: disable=maybe-no-member
