@@ -11,11 +11,6 @@ import pyqrcode
 import hashlib
 
 
-@app.route('/api/time')
-def get_current_time():
-    return {'time1': time.time()}
-
-
 @app.route('/new_task', methods=['POST'])
 def new_task():
 
