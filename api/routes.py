@@ -67,7 +67,7 @@ def new_task():
     hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
 
     # QR-Code generieren
-    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/' + token)
+    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/task/' + token)
     url.svg( '../public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
 
     new_task = Task(
