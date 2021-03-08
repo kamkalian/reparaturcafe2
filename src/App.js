@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import './custom.css';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
+import FetchTask from './comps/FetchTask';
 
 
 function App() {
@@ -62,6 +63,12 @@ function App() {
             </Route>
             <Route path="/database">
               <Database></Database>
+            </Route>
+            <Route
+              path="/api/task/:id/:token"
+              render={(props) =>
+                <FetchTask {...props}/>
+              }>
             </Route>
             <Route path="/">
               <h1>Hallo.</h1>
