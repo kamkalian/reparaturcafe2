@@ -139,3 +139,19 @@ def upload_image():
         return {"ok":1, "filename":filename}
 
     return {"ok":1}
+
+@app.route('/api/task/<id>/<token>', methods=['POST', 'GET'])
+def task(id, token):
+    task = Task.query.filter_by(tsk_id=id).first()
+    if task:
+        hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
+        if hash_token == task.tsk_token:
+            task_data = {}
+            task_data['taskID'] = task.tsk_id
+            task_data['devName'] = task.device.dev_name
+            return {"state": "ok", "task_data": task_data}
+        else:
+            print("Token falsch!")
+    else:
+        return {"state": "error", "msg": "Task nicht gefunden!"}
+    return {"ok":1}
