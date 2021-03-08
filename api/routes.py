@@ -61,10 +61,6 @@ def new_task():
     # daher wir hier noch eine gehashete Version generiert.
     hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
 
-    # QR-Code generieren
-    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/task/' + token)
-    url.svg( '../public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
-
     new_task = Task(
         tsk_fault_description = post_json["faultDescription"],
         tsk_creation_date = datetime.now(),
@@ -75,6 +71,10 @@ def new_task():
 
     db.session.add(new_task) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
+
+    # QR-Code generieren
+    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/api/task/' + str(new_task.tsk_id) + '/' + token)
+    url.svg( '../public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
 
     # Files anlegen
     files = post_json["files"]
