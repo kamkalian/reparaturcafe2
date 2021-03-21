@@ -3,6 +3,7 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import NewTask from './comps/NewTask/NewTask';
 import Database from './comps/Database/Database';
+import QRCodeScanner from './comps/QRCodeScanner';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,6 +16,7 @@ import './custom.css';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import FetchTask from './comps/FetchTask';
+import CropFreeIcon from '@material-ui/icons/CropFree';
 
 
 function App() {
@@ -53,6 +55,15 @@ function App() {
                 Datenbank
               </Button>
             </Grid>
+            <Grid item>
+              <Button 
+                  component={Link} 
+                  to="/scan"
+                  color="inherit"
+                  startIcon={<CropFreeIcon />}>
+                  Scan
+                </Button>
+            </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
@@ -64,6 +75,13 @@ function App() {
             <Route path="/database">
               <Database></Database>
             </Route>
+            <Route path="/scan">
+              <h2>Scan QR-Code</h2>
+              <QRCodeScanner></QRCodeScanner>
+            </Route>
+            <Route path="/qr-code">
+              
+            </Route>
             <Route
               path="/api/task/:id/:token"
               render={(props) =>
@@ -71,7 +89,7 @@ function App() {
               }>
             </Route>
             <Route path="/">
-              <h1>Hallo.</h1>
+              <h2>Hallo.</h2>
               <p style={{marginTop:50}}>Trete ein. Du stehst mitten im digitalen ReparaturCafè, der AWO Oberlar. </p>
               <p style={{marginTop:50}}>Können wir dir bei einem defekten Gerät helfen? Dann klicke auf den Button und erzähl uns alles über dein Gerät.</p>
               <a href="/new_task">Formular</a>
