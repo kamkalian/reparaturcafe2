@@ -17,6 +17,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import FetchTask from './comps/FetchTask';
 import CropFreeIcon from '@material-ui/icons/CropFree';
+import QRCodeController from './comps/QRCodeController';
 
 
 function App() {
@@ -69,6 +70,12 @@ function App() {
       </AppBar>
       <Container>      
         <Switch>
+            <Route
+              path="/qrcode/:hashToken"
+              render={(props) =>
+                <QRCodeController {...props}/>
+              }>
+            </Route>
             <Route path="/new_task">
               <NewTask></NewTask>
             </Route>

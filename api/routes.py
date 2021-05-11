@@ -11,6 +11,11 @@ import pyqrcode
 import hashlib
 
 
+@app.route('/api/qrcode/<token>', methods=['POST', 'GET'])
+def get_current_time(token):
+    return jsonify({'time': time.time()})
+
+
 @app.route('/new_task', methods=['POST'])
 def new_task():
 
