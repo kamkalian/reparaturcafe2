@@ -31,27 +31,29 @@ export default class SelectionDialog extends React.Component {
             // Prüfen ob der Eintrag eventuell blockiert ist, weil er schon ausgewählt wurde.
             var blockedItem = false;
             var i;
+            const itemName = this.props.withCounts ? item["name"] : item;
             if(this.props.blockedList){
                 for(i=0; i < this.props.blockedList.length; i++){
-                    if(item === this.props.blockedList[i]){
+                    if(itemName === this.props.blockedList[i]){
                         blockedItem = true;
                         break;
                     }
                 }
             }
-
-            if(item.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1 && !blockedItem) return true;
+            if(itemName.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1 && !blockedItem) return true;
             return false;
         }, this).map((item, index) => {
+            const itemName = this.props.withCounts ? item["name"] : item;
+            const itemCount = this.props.withCounts ? item["count"] : 0;
             return (
                 <Chip 
                 key={index}
                 style={{margin:10, fontSize:20}}
-                data-id={item}
+                data-id={itemName}
                 data-statename={this.props.stateName}
                 color="primary" 
                 onClick={this.props.handleSelectionClick}
-                label={item}
+                label={itemName + (this.props.withCounts ? ( "(" + itemCount + ")") : "")}
                 icon={<AddCircleIcon />} />
                 );
         });
