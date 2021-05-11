@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import './custom.css';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
+import QRCodeController from './comps/QRCodeController';
 
 
 function App() {
@@ -57,6 +58,12 @@ function App() {
       </AppBar>
       <Container>      
         <Switch>
+            <Route
+              path="/qrcode/:hashToken"
+              render={(props) =>
+                <QRCodeController {...props}/>
+              }>
+            </Route>
             <Route path="/new_task">
               <NewTask></NewTask>
             </Route>
