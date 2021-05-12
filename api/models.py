@@ -10,7 +10,7 @@ class Task(db.Model):
     tsk_creation_date = db.Column(db.DateTime())
     tsk_state = db.Column(db.String(64), index=True, nullable=True)
     tsk_next_step = db.Column(db.String(64), index=True, nullable=True)
-    tsk_token = db.Column(db.String(255), nullable=False)
+    tsk_hash_token = db.Column(db.String(255), nullable=False)
 
     tsk_cus_id = db.Column(db.Integer(), db.ForeignKey("customer.cus_id"))
     tsk_dev_id = db.Column(db.Integer(), db.ForeignKey("device.dev_id"))
@@ -92,7 +92,7 @@ class User(db.Model):
     usr_name = db.Column(db.String(64), index=True, unique=True)
     usr_email = db.Column(db.String(255), index=True, unique=True)
     usr_email_confirmed_at = db.Column(db.DateTime(), nullable=True)
-    password_hash = db.Column(db.String(255))
+    usr_hash_token = db.Column(db.String(255), nullable=False)
     
     usr_phone = db.Column(db.String(64), index=True)
 

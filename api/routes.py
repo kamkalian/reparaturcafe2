@@ -191,7 +191,7 @@ def task(id, token):
     task = Task.query.filter_by(tsk_id=id).first()
     if task:
         hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
-        if hash_token == task.tsk_token:
+        if hash_token == task.tsk_hash_token:
             task_data = {}
             task_data['taskID'] = task.tsk_id
             task_data['devName'] = task.device.dev_name
