@@ -10,7 +10,10 @@ migrate = Migrate()
 def create_app(config_class=None):
     """Create app instance."""
     app = Flask(__name__)
-    app.config.from_object(Config)
+    if config_class is None:
+        app.config.from_object(Config)
+    else:
+        app.config.from_object(config_class)
     app.app_context().push
 
     db.init_app(app)
