@@ -23,8 +23,8 @@ def qrcode():
     # Der QR-Code muss am Anfang ein 'usr' oder 'tsk' haben.
     # usr = User
     # tsk = Task
-    # Danach folgt der 43 Zeichen lange Hash-Code, 
-    re_match = re.search("(usr|tsk)([a-zA-Z0-9]{43})", qrcode)
+    # Danach folgt der Hash-Code, 
+    re_match = re.search("(usr|tsk)([a-zA-Z0-9]*)", qrcode)
     if re_match is None:
         result_dict["qrcode_valid"] = False
     else:
