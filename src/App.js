@@ -86,9 +86,6 @@ function App() {
               <h2>Scan QR-Code</h2>
               <QRCodeScanner></QRCodeScanner>
             </Route>
-            <Route path="/qr-code">
-              
-            </Route>
             <Route
               path="/api/task/:id/:token"
               render={(props) =>
