@@ -7,25 +7,28 @@ export default class QRCodeScanner extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            qrcode: ""
+            qrcode: "",
+            result: {}
         }
     }
 
     fetchCall = () =>{
-        fetch('/api/qrcode/' + this.state.qrcode, {
+        fetch('/api/qrcode', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({'qrcode': this.state.qrcode})
         })
         .then(response => response.json())
         .then(res => {
             this.setState({
-                taskData: res.task_data
+                result: res,
+                qrcode: ""
             });
         });
-        return false;
+        
     }
 
     handleQRCodeChange = (event) => {
