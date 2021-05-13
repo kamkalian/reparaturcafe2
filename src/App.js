@@ -71,7 +71,7 @@ function App() {
       <Container>      
         <Switch>
             <Route
-              path="/qrcode/:hashToken"
+              path="/api/qrcode/:hashToken"
               render={(props) =>
                 <QRCodeController {...props}/>
               }>
