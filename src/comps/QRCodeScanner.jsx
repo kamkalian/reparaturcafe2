@@ -28,16 +28,26 @@ export default class QRCodeScanner extends React.Component{
     }
 
     handleQRCodeChange = (event) => {
-        
+        this.setState({
+            qrcode: event.currentTarget.value
+        });
+    }
+
+    handleQRCodeKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            this.fetchCall();
+        }
     }
 
     render(){
         return(
             <TextField
                 value={this.state.qrcode}
-                onChange
+                onChange={this.handleQRCodeChange}
+                onKeyDown={this.handleQRCodeKeyDown}
                 autoFocus
-                fullWidth></TextField>
+                fullWidth
+            ></TextField>
         )
     }
     
