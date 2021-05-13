@@ -1,22 +1,16 @@
 import time
 import os
-from api import app
 from flask import request, jsonify, url_for
 from werkzeug.utils import secure_filename
-from models import Task, Customer, Device, Image
+from api.models import Task, Customer, Device, Image
 from api import db
 from datetime import datetime
 import secrets
 import pyqrcode
 import hashlib
+from api.task_manager import bp
 
-
-@app.route('/api/qrcode/<token>', methods=['POST', 'GET'])
-def get_current_time(token):
-    return jsonify({'time': time.time()})
-
-
-@app.route('/new_task', methods=['POST'])
+@bp.route('/new_task', methods=['POST'])
 def new_task():
 
     post_json = request.get_json()
@@ -71,15 +65,15 @@ def new_task():
         tsk_creation_date = datetime.now(),
         tsk_cus_id = cus_id,
         tsk_dev_id = dev_id,
-        tsk_token = hash_token,
+        tsk_hash_token = hash_token,
     )
 
     db.session.add(new_task) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
 
     # QR-Code generieren
-    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/api/task/' + str(new_task.tsk_id) + '/' + token)
-    url.svg( '../public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
+    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/api/qrcode/' + str(new_task.tsk_id) + '/' + token)
+    url.svg( 'public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
 
     # Files anlegen
     files = post_json["files"]
@@ -91,7 +85,7 @@ def new_task():
     return {'tsk_id':new_task.tsk_id, 'tsk_token': token}
 
 
-@app.route('/tasks', methods=['POST'])
+@bp.route('/tasks', methods=['POST'])
 def tasks():
     post_json = request.get_json()
 
@@ -168,7 +162,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
 
 
-@app.route('/upload_image', methods=['POST'])
+@bp.route('/upload_image', methods=['POST'])
 def upload_image():
     if 'file' not in request.files:
         return {"error":"Kein file gefunden"}
@@ -186,7 +180,7 @@ def upload_image():
 
     return {"ok":1}
 
-@app.route('/api/task/<id>/<token>', methods=['POST', 'GET'])
+@bp.route('/api/task/<id>/<token>', methods=['POST', 'GET'])
 def task(id, token):
     task = Task.query.filter_by(tsk_id=id).first()
     if task:
