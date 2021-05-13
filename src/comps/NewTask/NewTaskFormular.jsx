@@ -655,7 +655,7 @@ export default class NewTaskFormular extends React.Component {
                                     <img src={"./qr_codes/" + this.state.tskToken + ".svg"} alt="QR Code Link"/>
                                 </Grid>
                                 <Grid item lg={8} sm={7} xs={12}>
-                                    <a href="https://">https://reparaturcafe.awo-oberlar.de/api/task/{this.state.tskID}/{this.state.tskToken}</a>
+                                    <a href="https://">https://reparaturcafe.awo-oberlar.de/api/qrcode/{this.state.tskToken}</a>
                                 </Grid>
                             </Grid>
                             <Typography component="p">
