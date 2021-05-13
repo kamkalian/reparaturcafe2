@@ -20,13 +20,11 @@ def qrcode():
         pass
         
     # Prüfen ob der QR-Code valide ist
-    # Der QR-Code muss am Anfang ein 'usr' oder 'tsk' oder 'adm' haben.
+    # Der QR-Code muss am Anfang ein 'usr' oder 'tsk' haben.
     # usr = User
     # tsk = Task
-    # adm = Admin
     # Danach folgt der 43 Zeichen lange Hash-Code, 
-    # oder bei 'adm' 4x die '0'
-    re_match = re.search("(usr|tsk|adm)([a-zA-Z0-9]{43}|0000)", qrcode)
+    re_match = re.search("(usr|tsk)([a-zA-Z0-9]{43})", qrcode)
     if re_match is None:
         result_dict["qrcode_valid"] = False
     else:
@@ -35,9 +33,5 @@ def qrcode():
             result_dict["action"] = "show_user"
         if re_match[1] == "tsk":
             result_dict["action"] = "show_task"
-        if re_match[1] == "adm":
-            user_list = User.query.all()
-            if len(user_list) == 0:
-                result_dict["action"] = "add_first_user"
     
     return jsonify(result_dict)

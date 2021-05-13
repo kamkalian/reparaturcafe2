@@ -15,10 +15,6 @@ import json
             "action": "show_task"
         },
         {
-            "qrcode": "adm0000",
-            "qrcode_valid": True,
-        },
-        {
             "qrcode": "usrGICeBTQ4VG3Xckiq1bEyAGYbiGrP8CvsuO12re7UjLk",
             "qrcode_valid": True,
             "action": "show_user"
