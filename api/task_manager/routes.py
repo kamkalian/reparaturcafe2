@@ -54,7 +54,7 @@ def new_task():
 
     # Ein Token wird generiert, damit kann später der Task zum bearbeiten
     # vom User geöffnet werden.
-    token = secrets.token_urlsafe(32)
+    token = "tsk" + secrets.token_urlsafe(32)
 
     # Der Token soll so nicht in der Datenbank gespeichert werden,
     # daher wir hier noch eine gehashete Version generiert.
