@@ -1,5 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
+import Alert from '@material-ui/lab/Alert';
 
 
 export default class QRCodeScanner extends React.Component{
@@ -41,6 +42,7 @@ export default class QRCodeScanner extends React.Component{
 
     render(){
         return(
+            <div>
             <TextField
                 value={this.state.qrcode}
                 onChange={this.handleQRCodeChange}
@@ -48,6 +50,12 @@ export default class QRCodeScanner extends React.Component{
                 autoFocus
                 fullWidth
             ></TextField>
+            {!this.state.result["action"] ? (
+                <Alert severity="info">
+                Scanne einen gültigen QR-Code!
+                </Alert>
+            ) : ""}
+            </div>
         )
     }
     
