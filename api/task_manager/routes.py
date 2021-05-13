@@ -72,7 +72,7 @@ def new_task():
     db.session.commit() # pylint: disable=maybe-no-member
 
     # QR-Code generieren
-    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/api/qrcode/' + str(new_task.tsk_id) + '/' + token)
+    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/api/qrcode/' + token)
     url.svg( 'public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
 
     # Files anlegen
