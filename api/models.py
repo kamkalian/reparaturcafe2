@@ -10,13 +10,15 @@ class Task(db.Model):
     tsk_creation_date = db.Column(db.DateTime())
     tsk_state = db.Column(db.String(64), index=True, nullable=True)
     tsk_next_step = db.Column(db.String(64), index=True, nullable=True)
-    tsk_hash_token = db.Column(db.String(255), nullable=False)
+    #tsk_hash_token = db.Column(db.String(255), nullable=False)
 
     tsk_cus_id = db.Column(db.Integer(), db.ForeignKey("customer.cus_id"))
     tsk_dev_id = db.Column(db.Integer(), db.ForeignKey("device.dev_id"))
     tsk_supervisor_usr_id = db.Column(db.Integer(), db.ForeignKey("user.usr_id"))
 
     tsk_acc_name = db.Column(db.String(255), db.ForeignKey("accessory.acc_name"))
+
+    hash_tokens = db.relationship('HashToken', backref='task', lazy=True)
 
 
 class Customer(db.Model):
@@ -125,3 +127,12 @@ class Category(db.Model):
     """Table fo categories"""
     __tablename__ = "category"
     cat_name = db.Column(db.String(64), primary_key=True, nullable=False)
+
+
+class HashToken(db.Model):
+    """Table for hash tokens."""
+    __tablename__ = "hashtoken"
+    htk_id = db.Column(db.String(255), primary_key=True, nullable=False)
+    htk_tsk_id = db.Column(db.Integer(), db.ForeignKey("task.tsk_id"))
+    htk_locked = db.Column(db.Boolean(), nullable=False, server_default="0")
+    htk_creation_date = db.Column(db.DateTime())
