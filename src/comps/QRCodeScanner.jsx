@@ -31,7 +31,6 @@ export default class QRCodeScanner extends React.Component{
                 res['qrcode_valid']
                 && res['type']==="task"
                 && res['tsk_id']){
-                    console.log(res['tsk_id']);
                     this.props.history.push('/task/' + res['tsk_id']);
             }
         })
