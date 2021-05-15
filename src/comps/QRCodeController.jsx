@@ -2,12 +2,6 @@ import React from 'react';
 
 
 export default class QRCodeController extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            data: ""
-        }
-    }
 
     fetchCall = () =>{
         var {hashToken} = this.props.match.params;
