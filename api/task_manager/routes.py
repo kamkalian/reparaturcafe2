@@ -55,7 +55,7 @@ def new_task():
 
     # Ein Token wird generiert, damit kann später der Task zum bearbeiten
     # vom User geöffnet werden.
-    token = "tsk" + secrets.token_urlsafe(32)
+    token = secrets.token_urlsafe(32)
 
     # Der Token soll so nicht in der Datenbank gespeichert werden,
     # daher wir hier noch eine gehashete Version generiert.
@@ -73,8 +73,8 @@ def new_task():
     db.session.commit() # pylint: disable=maybe-no-member
 
     # QR-Code generieren
-    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/api/qrcode/' + token)
-    url.svg( 'public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
+    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/api/qrcode/tsk' + token)
+    url.svg( '../public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
 
     # Files anlegen
     files = post_json["files"]
