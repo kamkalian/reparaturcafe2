@@ -53,6 +53,7 @@ export default class QRCodeScanner extends React.Component{
     render(){
         return(
             <div>
+            <h2>Scan QR-Code</h2>
             <TextField
                 value={this.state.qrcode}
                 onChange={this.handleQRCodeChange}
