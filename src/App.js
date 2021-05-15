@@ -1,8 +1,8 @@
 import './App.css';
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import NewTask from './comps/NewTask/NewTask';
-import Database from './comps/Database/Database';
+import NewTask from './comps/task/NewTask';
+import NewUserForm from './comps/user/NewUserForm';
 import QRCodeScanner from './comps/QRCodeScanner';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
