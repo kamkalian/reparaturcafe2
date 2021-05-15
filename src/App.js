@@ -87,6 +87,9 @@ function App() {
             <Route path="/new_task">
               <NewTask></NewTask>
             </Route>
+            <Route path="/new_user">
+              <NewUserForm></NewUserForm>
+            </Route>
             <Route path="/database">
               <Database></Database>
             </Route>
