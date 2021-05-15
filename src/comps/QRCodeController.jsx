@@ -15,9 +15,13 @@ export default class QRCodeController extends React.Component{
         })
         .then(response => response.json())
         .then(res => {
-            this.setState({
-                data: res
-            });
+            if(
+                res['qrcode_valid']
+                && res['type']==="task"
+                && res['tsk_id']){
+                    console.log(res['tsk_id']);
+                    this.props.history.push('/task/' + res['tsk_id']);
+            }
         });
         return false;
     }
