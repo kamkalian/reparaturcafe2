@@ -181,18 +181,30 @@ def upload_image():
 
     return {"ok":1}
 
-@bp.route('/api/task/<id>/<token>', methods=['POST', 'GET'])
-def task(id, token):
-    task = Task.query.filter_by(tsk_id=id).first()
-    if task:
-        hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
-        if hash_token == task.tsk_hash_token:
-            task_data = {}
-            task_data['taskID'] = task.tsk_id
-            task_data['devName'] = task.device.dev_name
-            return {"state": "ok", "task_data": task_data}
+
+@bp.route('/api/task', methods=['POST'])
+@jwt_required()
+def task():
+    task_id = None
+    task = None
+    resp = {}
+    
+    if request.method == "POST":
+        post_json = request.get_json()
+        if "task_id" in post_json:
+            task_id = post_json["task_id"]
+
+    if task_id:
+        # Prüfen ob die ID mit dem validierten QR-Code passt.
+        if str(get_jwt_identity()) == task_id:
+            task = Task.query.filter_by(tsk_id=task_id).first()
+            if task:
+                resp['task_id'] = task.tsk_id
+            else:
+                resp["state"] = "error"
+                resp["msg"] = "Task nicht gefunden!"
         else:
-            print("Token falsch!")
-    else:
-        return {"state": "error", "msg": "Task nicht gefunden!"}
-    return {"ok":1}
+            resp["state"] = "error"
+            resp["msg"] = "Task ID falsch!"
+
+    return jsonify(resp)
