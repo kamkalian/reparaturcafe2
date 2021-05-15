@@ -32,7 +32,7 @@ export default class QRCodeController extends React.Component{
 
     render(){
         return(
-            <h1>{this.state.data}</h1>
+            <h1>QRCodeController</h1>
         )
     }
     
