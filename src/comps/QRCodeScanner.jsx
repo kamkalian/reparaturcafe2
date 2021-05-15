@@ -34,6 +34,9 @@ export default class QRCodeScanner extends React.Component{
                     console.log(res['tsk_id']);
                     this.props.history.push('/task/' + res['tsk_id']);
             }
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
         });
         
     }
