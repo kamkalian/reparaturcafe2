@@ -61,7 +61,7 @@ export default class QRCodeScanner extends React.Component{
                 autoFocus
                 fullWidth
             ></TextField>
-            {!this.state.result["action"] ? (
+            {!this.state.result["qrcode"] ? (
                 <Alert severity="info">
                 Scanne einen gültigen QR-Code!
                 </Alert>
