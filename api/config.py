@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from formelsammlung.envvar import getenv_typed
+import datetime
 
 
 APP_BASEDIR = Path(__file__).parents[1]
@@ -21,6 +22,14 @@ class Config():
     UPLOAD_FOLDER = Path(APP_BASEDIR, "public/images")
     ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
 
+    JWT_SECRET_KEY = getenv_typed("JWT_SECRET_KEY", "Dies ist ein Dummy Key")
+    JWT_TOKEN_LOCATION = ['cookies']
+    JWT_COOKIE_SECURE = False
+    JWT_COOKIE_CSRF_PROTECT = True
+    JWT_ACCESS_COOKIE_PATH = "/api/"
+    JWT_REFRESH_COOKIE_PATH = "/token/refresh"
+    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(minutes=5)
+    
 
 class TestConfig():
     TESTING = True

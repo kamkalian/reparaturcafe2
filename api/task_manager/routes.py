@@ -9,6 +9,7 @@ import secrets
 import pyqrcode
 import hashlib
 from api.task_manager import bp
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 @bp.route('/new_task', methods=['POST'])
 def new_task():
