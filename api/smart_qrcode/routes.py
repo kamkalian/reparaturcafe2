@@ -1,7 +1,7 @@
 import time
 from api.smart_qrcode import bp
 from flask import request, jsonify, url_for
-from api.models import Task, Customer, Device, Image, User
+from api.models import Task, Customer, Device, Image, User, HashToken
 import re
 from flask_jwt_extended import (
     create_access_token,
@@ -47,20 +47,25 @@ def qrcode():
             # Hash Token erstellen
             hash_token = hashlib.sha256(re_match[2].encode("utf-8")).hexdigest()
             # Task ermitteln
-            task = Task.query.filter_by(tsk_hash_token=hash_token).first()
+            htk = HashToken.query.filter_by(htk_id=hash_token, htk_locked=False).first()
+            task_id = None
+            task = None
+            if htk:
+                task_id = htk.htk_tsk_id
+            if task_id:
+                task = Task.query.filter_by(tsk_id=task_id).first()
             if task:
                 resp["tsk_id"] = task.tsk_id
+                # Tokens generieren
+                access_token = create_access_token(identity=task.tsk_id) 
+                refresh_token = create_refresh_token(identity=task.tsk_id) 
+                # Cookies setzen
+                resp_json = jsonify(resp)
+                set_access_cookies(resp_json, access_token)
+                set_refresh_cookies(resp_json, refresh_token)
             else:
                 resp["error"] = "task_not_found"
-
-            # Tokens generieren
-            access_token = create_access_token(identity=task.tsk_id) 
-            refresh_token = create_refresh_token(identity=task.tsk_id) 
-
-            # Cookies setzen
-            resp_json = jsonify(resp)
-            set_access_cookies(resp_json, access_token)
-            set_refresh_cookies(resp_json, refresh_token)
+                resp_json = jsonify(resp)
 
     return resp_json
 

@@ -2,7 +2,7 @@ import time
 import os
 from flask import request, jsonify, url_for
 from werkzeug.utils import secure_filename
-from api.models import Task, Customer, Device, Image
+from api.models import Task, Customer, Device, Image, HashToken
 from api import db
 from datetime import datetime
 import secrets
@@ -66,10 +66,18 @@ def new_task():
         tsk_creation_date = datetime.now(),
         tsk_cus_id = cus_id,
         tsk_dev_id = dev_id,
-        tsk_hash_token = hash_token,
     )
 
     db.session.add(new_task) # pylint: disable=maybe-no-member
+    db.session.commit() # pylint: disable=maybe-no-member
+
+    # Hash Token mit Task zuordnung anlegen
+    htk = HashToken(
+        htk_id=hash_token,
+        htk_creation_date=datetime.now(),
+        htk_tsk_id=new_task.tsk_id)
+
+    db.session.add(htk) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
 
     # QR-Code generieren
