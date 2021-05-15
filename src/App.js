@@ -18,6 +18,7 @@ import theme from './theme';
 import FetchTask from './comps/FetchTask';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import QRCodeController from './comps/QRCodeController';
+import TaskOverview from './comps/task/TaskOverview';
 
 
 function App() {
@@ -74,6 +75,12 @@ function App() {
               path="/api/qrcode/:hashToken"
               render={(props) =>
                 <QRCodeController {...props}/>
+              }>
+            </Route>
+            <Route
+              path="/task/:taskId"
+              render={(props) =>
+                <TaskOverview {...props}/>
               }>
             </Route>
             <Route path="/new_task">
