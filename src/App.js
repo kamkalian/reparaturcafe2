@@ -89,10 +89,7 @@ function App() {
             <Route path="/database">
               <Database></Database>
             </Route>
-            <Route path="/scan">
-              <h2>Scan QR-Code</h2>
-              <QRCodeScanner></QRCodeScanner>
-            </Route>
+            <Route path="/scan" component={QRCodeScanner}></Route>
             <Route
               path="/api/task/:id/:token"
               render={(props) =>
