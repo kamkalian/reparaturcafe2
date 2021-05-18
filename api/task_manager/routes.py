@@ -1,6 +1,6 @@
 import time
 import os
-from flask import request, jsonify, url_for
+from flask import request, jsonify, url_for, session
 from werkzeug.utils import secure_filename
 from api.models import Task, Customer, Device, Image, HashToken
 from api import db
@@ -9,7 +9,7 @@ import secrets
 import pyqrcode
 import hashlib
 from api.task_manager import bp
-from flask_jwt_extended import jwt_required, get_jwt_identity
+
 
 @bp.route('/new_task', methods=['POST'])
 def new_task():
@@ -150,6 +150,12 @@ def tasks():
             if manufacturer_exists == False:
                 manufacturer_list.append({"name": dev_manufacturer, "count": 1})
 
+        # In der Session nachschauen ob die Task enthalten ist.
+        # Wenn ja dann writeable = True setzen.
+        writeable = False
+        if _is_exp_date_in_session_valid(d.tsk_id):
+            writeable = True
+
         task_list.append(
             {
                 "id": d.tsk_id,
@@ -159,6 +165,7 @@ def tasks():
                 "deviceManufacturer": dev_manufacturer,
                 "deviceModel": dev_model,
                 "deviceCategory": dev_category,
+                "writeable": writeable,
             }
         )
     return jsonify({
@@ -191,28 +198,75 @@ def upload_image():
 
 
 @bp.route('/api/task', methods=['POST'])
-@jwt_required()
 def task():
-    task_id = None
+    tsk_id = None
     task = None
     resp = {}
+    resp_json = jsonify({})
     
     if request.method == "POST":
         post_json = request.get_json()
-        if "task_id" in post_json:
-            task_id = post_json["task_id"]
+        if "tsk_id" in post_json:
+            tsk_id = post_json["tsk_id"]
 
-    if task_id:
-        # Prüfen ob die ID mit dem validierten QR-Code passt.
-        if str(get_jwt_identity()) == task_id:
-            task = Task.query.filter_by(tsk_id=task_id).first()
-            if task:
-                resp['task_id'] = task.tsk_id
+    if tsk_id:
+        task = Task.query.filter_by(tsk_id=tsk_id).first()
+        if task:
+            resp['tsk_id'] = task.tsk_id
+            resp['dev_name'] = task.device.dev_name
+            resp['dev_mnf_name'] = task.device.dev_mnf_name
+            resp['dev_category'] = task.device.dev_category
+            resp['tsk_fault_description'] = task.tsk_fault_description
+
+            if _is_exp_date_in_session_valid(task.tsk_id):
+                resp['writeable'] = True
             else:
-                resp["state"] = "error"
-                resp["msg"] = "Task nicht gefunden!"
+                resp['writeable'] = False
+  
         else:
             resp["state"] = "error"
-            resp["msg"] = "Task ID falsch!"
+            resp["msg"] = "Task nicht gefunden!"
+    else:
+        resp["state"] = "error"
+        resp["msg"] = "Keine Task ID angegeben!"
 
-    return jsonify(resp)
+    resp_json = jsonify(resp)
+
+    return resp_json
+
+
+@bp.route('/api/lock_task', methods=['POST'])
+def lock_task():
+    allowed_ids = session.get('ALLOWED_IDS', [])
+    allowed_left_ids = []
+    resp = {}
+    resp_json = jsonify({})
+
+    if request.method == "POST":
+        post_json = request.get_json()
+        if "tsk_id" in post_json:
+            tsk_id = post_json["tsk_id"]
+
+        if tsk_id:
+            for item in allowed_ids:
+                if tsk_id != item[0]:
+                    allowed_left_ids.append(item)
+            
+            session['ALLOWED_IDS'] = allowed_left_ids
+
+    resp_json = jsonify(resp)
+    return resp_json
+
+
+def _is_exp_date_in_session_valid(tsk_id):
+    allowed_ids = session.get('ALLOWED_IDS', [])
+    today_date = datetime.now()
+    if [item for item in allowed_ids if tsk_id in item]:
+        allowed_id_tuple = [item for item in allowed_ids if tsk_id in item][0]
+        if today_date.date() == allowed_id_tuple[1].date():
+            return True
+        else:
+            # TODO hier noch die abgelaufenen IDs aus der session Liste raus nehmen
+            return False
+    else:
+        return False
