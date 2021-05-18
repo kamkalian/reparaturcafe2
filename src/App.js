@@ -90,9 +90,7 @@ function App() {
             <Route path="/new_user">
               <NewUserForm></NewUserForm>
             </Route>
-            <Route path="/database">
-              <Database></Database>
-            </Route>
+            <Route path="/database" component={Database}></Route>
             <Route path="/scan" component={QRCodeScanner}></Route>
             <Route
               path="/api/task/:id/:token"
