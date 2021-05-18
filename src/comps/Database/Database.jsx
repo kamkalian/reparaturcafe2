@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import MagneticSign from './MagneticSign';
 import FilterArea from './FilterArea';
 import { Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 
 export default class Database extends React.Component {
@@ -119,10 +120,18 @@ export default class Database extends React.Component {
     }
   }
 */
+
   render() {    
     const taskList = this.state.data.map((item, index) => {
+      const CustomLink = props => <Link to={'/task/' + item.id} target="_blank" {...props} />;
       return(
-          <ListItem button className="task-sign" border={1} key={index}>
+          <ListItem
+          component={CustomLink}
+          button
+          border={1}
+          key={index}
+          style={{padding:0, marginBottom:10}}
+          >
             <MagneticSign 
             taskId={item.id}
             deviceName={item.deviceName}
