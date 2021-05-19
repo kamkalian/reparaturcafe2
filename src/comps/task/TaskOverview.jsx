@@ -81,6 +81,8 @@ export default class TaskOverview extends React.Component {
                     <Grid item md={12} sm={6} xs={12}>
                       <h3>Kontaktdaten</h3>
                       <p>{this.state.data['cus_first_name']}{komma}{this.state.data['cus_last_name']}</p>
+                      {this.state.data['cus_phone'] ? <p>{this.state.data['cus_phone']}</p> : ""}
+                      {this.state.data['cus_email'] ? <p>{this.state.data['cus_email']}</p> : ""}
                     </Grid>
                     <Grid item md={12} sm={6} xs={12}>
                       <h3>Status</h3>

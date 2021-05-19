@@ -219,6 +219,8 @@ def task():
             resp['tsk_fault_description'] = task.tsk_fault_description
             resp['cus_first_name'] = task.customer.cus_first_name
             resp['cus_last_name'] = task.customer.cus_last_name
+            resp['cus_phone'] = task.customer.cus_phone_no
+            resp['cus_email'] = task.customer.cus_email
 
             if _is_exp_date_in_session_valid(task.tsk_id):
                 resp['writeable'] = True
