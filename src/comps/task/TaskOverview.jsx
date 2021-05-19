@@ -49,6 +49,9 @@ export default class TaskOverview extends React.Component {
   }
 
   render(){
+      // Nur ein Komma anzeigen, wenn Vor und Nachname angegeben wurden.
+      var komma = ", " 
+      if(!this.state.data['cus_first_name'] || !this.state.data['cus_last_name']) komma = "";
       return(
           <Box style={{marginRight:20}}>
             <h2>Task</h2>
@@ -66,12 +69,27 @@ export default class TaskOverview extends React.Component {
             />
             </Badge>
             <Grid container style={{padding:30, margin:0, border:"1px solid #999"}}>
-              <Grid item>
+              <Grid item md={8} xs={12} style={{marginBottom:20}}>
                 <h3>Fehlerbeschreibung</h3>
                 <Typography>
                   {this.state.data['tsk_fault_description']}
                 </Typography>
               </Grid>
+              {this.state.writeable ? (
+                <Grid item md={4} xs={12} style={{borderLeft:"2px solid #ccccccaa", paddingLeft:10}}>
+                  <Grid container>
+                    <Grid item md={12} sm={6} xs={12}>
+                      <h3>Kontaktdaten</h3>
+                      <p>{this.state.data['cus_first_name']}{komma}{this.state.data['cus_last_name']}</p>
+                    </Grid>
+                    <Grid item md={12} sm={6} xs={12}>
+                      <h3>Status</h3>
+                    </Grid>
+                  </Grid>
+
+                </Grid>
+              ) : ""}
+              
             </Grid>
           </Box>
       )
