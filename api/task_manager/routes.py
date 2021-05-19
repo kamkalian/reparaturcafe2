@@ -27,7 +27,7 @@ def new_task():
             cus_first_name = post_json["firstName"],
             cus_last_name = post_json["lastName"],
             cus_email = post_json["email"],
-            cus_phone_no = post_json["phone"],
+            cus_phone_no = post_json["prefixNumber"] + " " + post_json["phone"],
             cus_street = post_json["street"],
             cus_house_number = post_json["houseNumber"],
             cus_post_code = post_json["postCode"]
