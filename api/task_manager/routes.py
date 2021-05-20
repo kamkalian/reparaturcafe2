@@ -75,7 +75,8 @@ def new_task():
     htk = HashToken(
         htk_id=hash_token,
         htk_creation_date=datetime.now(),
-        htk_tsk_id=new_task.tsk_id)
+        htk_tsk_id=new_task.tsk_id,
+        htk_auth="cus")
 
     db.session.add(htk) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
