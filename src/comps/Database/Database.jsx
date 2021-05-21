@@ -101,25 +101,16 @@ export default class Database extends React.Component {
     }
   }
 
-  handleFilterTextChange = (event) => {
-    this.setState({
-      filterText: event.currentTarget.value,
+  handleFilterTextEnter = (filterText, event) => {
+    if(event.key === 'Enter'){
+      this.setState({
+        filterText: filterText
+      }, function(){
+        this.apiCall();
       });
-  }
-/*
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.state.data.length, nextState.data.length);
-    if (this.state.data && nextState.data){
-      if (this.state.data.length !== nextState.data.length){
-        return true;
-      }else{
-        if (this.state.openCategory !== nextState.openCategory) return true;
-        if (this.state.openManufacturer !== nextState.openManufacturer) return true;
-        return false;
-      }
+      
     }
   }
-*/
 
   render() {    
     const taskList = this.state.data.map((item, index) => {
@@ -159,6 +150,7 @@ export default class Database extends React.Component {
             manufacturers={this.state.manufacturers}
             filterText={this.state.filterText}
             handleFilterTextChange={this.handleFilterTextChange}
+            handleFilterTextEnter={this.handleFilterTextEnter}
             />
           </Grid>
           <Grid item xs="12">

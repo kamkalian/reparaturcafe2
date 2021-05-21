@@ -7,6 +7,20 @@ import TextField from '@material-ui/core/TextField';
 
 
 export default class FilterArea extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+          filterText: "",
+        }
+    }
+
+    handleFilterTextChange = (event) => {
+        this.setState({
+          filterText: event.currentTarget.value,
+          });
+    }
+    
     render(){
         return(
             <Grid container spacing={1}>
@@ -50,8 +64,9 @@ export default class FilterArea extends React.Component {
                 </Grid>
                 <Grid item xs={12} sm={12} lg={4}>
                     <TextField
-                        value={this.props.filterText}
-                        onChange={this.props.handleFilterTextChange}
+                        value={this.state.filterText}
+                        onChange={this.handleFilterTextChange}
+                        onKeyDown={this.props.handleFilterTextEnter.bind(this, this.state.filterText)}
                         id="standard-basic"
                         label="ID / Bezeichnung"
                         fullWidth
