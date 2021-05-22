@@ -20,10 +20,34 @@ import FetchTask from './comps/FetchTask';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import QRCodeController from './comps/QRCodeController';
 import TaskOverview from './comps/task/TaskOverview';
+import { useState, useEffect } from 'react';
+import Alert from '@material-ui/lab/Alert';
 
 
 function App() {
   
+  const [noAdminAvailable, setNoAdminAvailable] = useState(false);
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    document.title = "Reparaturcafe";
+    
+      fetch('/api/admin_available', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          }
+      })
+      .then((response) => {
+        response.json()
+        .then(data => {
+          setNoAdminAvailable(!data["admin_available"]);
+        });  
+      })
+  });
+
+
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -70,6 +94,9 @@ function App() {
           </Grid>
         </Toolbar>
       </AppBar>
+      {noAdminAvailable ? (
+        <Alert severity="warning">Sicherheitshinweis: Es wurde kein User mit der Rolle Admin gefunden!</Alert>
+      ) : ""}
       <Container>      
         <Switch>
             <Route
