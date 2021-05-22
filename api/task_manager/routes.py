@@ -227,13 +227,22 @@ def task():
             resp['dev_mnf_name'] = task.device.dev_mnf_name
             resp['dev_category'] = task.device.dev_category
             resp['tsk_fault_description'] = task.tsk_fault_description
-            resp['cus_first_name'] = task.customer.cus_first_name
-            resp['cus_last_name'] = task.customer.cus_last_name
-            resp['cus_phone'] = task.customer.cus_phone_no
-            resp['cus_email'] = task.customer.cus_email
 
-            if _is_exp_date_in_session_valid(task.tsk_id):
+            is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(task.tsk_id)
+            if is_exp_date_in_session_valid:
                 resp['writeable'] = True
+                resp['cus_first_name'] = task.customer.cus_first_name
+                resp['cus_last_name'] = task.customer.cus_last_name
+                resp['cus_phone'] = task.customer.cus_phone_no
+                resp['cus_email'] = task.customer.cus_email
+                resp['tsk_auth'] = tsk_auth
+
+                if(tsk_auth == 'dev'):
+                    resp['hash_tokens'] = [{
+                    'htk_id': item.htk_id,
+                    'htk_auth': item.htk_auth,
+                    'htk_creation_date': item.htk_creation_date}
+                    for item in task.hash_tokens]
             else:
                 resp['writeable'] = False
   
@@ -278,9 +287,12 @@ def _is_exp_date_in_session_valid(tsk_id):
     if [item for item in allowed_ids if tsk_id in item]:
         allowed_id_tuple = [item for item in allowed_ids if tsk_id in item][0]
         if today_date.date() == allowed_id_tuple[1].date():
-            return True
+            try:
+                return True, allowed_id_tuple[2]
+            except IndexError:
+                return False, None
         else:
             # TODO hier noch die abgelaufenen IDs aus der session Liste raus nehmen
-            return False
+            return False, None
     else:
-        return False
+        return False, None
