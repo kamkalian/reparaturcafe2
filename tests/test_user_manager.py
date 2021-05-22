@@ -9,7 +9,6 @@ def test_no_admin_available(app, client):
         "/api/admin_available",
         headers={'Content-Type': 'application/json'}
     )
-    print(result)
     assert result.json['admin_available'] == False
 
 
