@@ -32,4 +32,7 @@ def create_app(config_class=None):
     from api.smart_qrcode import bp as smart_qrcode
     app.register_blueprint(smart_qrcode)
 
+    from api.user_manager import bp as user_manager
+    app.register_blueprint(user_manager)
+
     return app
