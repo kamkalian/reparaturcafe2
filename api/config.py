@@ -28,5 +28,6 @@ class Config():
 class TestConfig():
     TESTING = True
     SECRET_KEY = getenv_typed("SECRET_KEY", "fddsakdljdsanbfeilufh")
-    SQLALCHEMY_DATABASE_URI = getenv_typed("DATABASE_URL", "sqlite://")
+    SESSION_TYPE = "filesystem"
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
