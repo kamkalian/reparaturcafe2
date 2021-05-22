@@ -52,7 +52,7 @@ def qrcode():
                 resp["tsk_id"] = task.tsk_id
                 resp_json = jsonify(resp)
 
-                _add_session_allowed_id(task.tsk_id)
+                _add_session_allowed_id(task.tsk_id, htk.htk_auth)
             else:
                 resp["error"] = "task_not_found"
                 resp_json = jsonify(resp)
@@ -60,15 +60,15 @@ def qrcode():
     return resp_json
 
 
-def _add_session_allowed_id(tsk_id):
+def _add_session_allowed_id(tsk_id, htk_auth):
     today_date = datetime.now()
 
     allowed_ids = session.get('ALLOWED_IDS', [])
     try:
         if not [item for item in allowed_ids if tsk_id in item]:
-            allowed_ids.append((tsk_id, today_date))
+            allowed_ids.append((tsk_id, today_date, htk_auth))
             session['ALLOWED_IDS'] = allowed_ids
     except TypeError:
         allowed_ids = []
-        allowed_ids.append((tsk_id, today_date))
+        allowed_ids.append((tsk_id, today_date, htk_auth))
         session['ALLOWED_IDS'] = allowed_ids
