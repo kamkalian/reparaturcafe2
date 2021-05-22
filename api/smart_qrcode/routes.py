@@ -36,6 +36,20 @@ def qrcode():
         resp["qrcode_valid"] = True
         if re_match[1] == "usr":
             resp["type"] = "user"
+            # Hash Token erstellen
+            hash_token = hashlib.sha256(re_match[2].encode("utf-8")).hexdigest()
+            htk = HashToken.query.filter_by(htk_id=hash_token, htk_locked=False).first()
+            if htk:
+                user = htk.user
+                if user.usr_id:
+                    resp["usr_id"] = user.usr_id
+                    resp["usr_role"] = user.usr_role
+                    _add_session_user(user.usr_id, user.usr_role)
+                else:
+                    resp["error"] = "usr_id_not_found"
+            else:
+                resp["error"] = "usr_not_found"
+            resp_json = jsonify(resp)
         if re_match[1] == "tsk":
             resp["type"] = "task"
             # Hash Token erstellen
@@ -72,3 +86,16 @@ def _add_session_allowed_id(tsk_id, htk_auth):
         allowed_ids = []
         allowed_ids.append((tsk_id, today_date, htk_auth))
         session['ALLOWED_IDS'] = allowed_ids
+
+
+def _add_session_user(usr_id, usr_role):
+    today_date = datetime.now()
+
+    session_user = (
+        usr_id,
+        today_date,
+        usr_role
+    )
+    
+    session['USER'] = session_user
+    
