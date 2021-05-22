@@ -2,7 +2,6 @@ import pytest
 import json
 
 
-
 @pytest.mark.parametrize(
     "qrcodes", [
         {
@@ -12,12 +11,12 @@ import json
         {
             "qrcode": "tskGICeBTQ4VG3Xckiq1bEyAGYbiGrP8CvsuO12re7UjLk",
             "qrcode_valid": True,
-            "action": "show_task"
+            "type": "task"
         },
         {
             "qrcode": "usrGICeBTQ4VG3Xckiq1bEyAGYbiGrP8CvsuO12re7UjLk",
             "qrcode_valid": True,
-            "action": "show_user"
+            "type": "user"
         },
     ]
 )
@@ -27,7 +26,8 @@ def test_qrcodes(app, client, qrcodes):
         json={'qrcode': qrcodes["qrcode"]},
         headers={'Content-Type': 'application/json'}
     )
-    
     assert result.json["qrcode_valid"] == qrcodes["qrcode_valid"]    
-    if "action" in qrcodes:
-        assert result.json["action"] == qrcodes["action"]
+    if "type" in qrcodes:
+        assert result.json["type"] == qrcodes["type"]
+
+    
