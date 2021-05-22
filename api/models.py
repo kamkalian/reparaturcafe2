@@ -136,6 +136,7 @@ class HashToken(db.Model):
     __tablename__ = "hashtoken"
     htk_id = db.Column(db.String(255), primary_key=True, nullable=False)
     htk_tsk_id = db.Column(db.Integer(), db.ForeignKey("task.tsk_id"))
+    htk_usr_id = db.Column(db.Integer(), db.ForeignKey("user.usr_id"))
     htk_locked = db.Column(db.Boolean(), nullable=False, server_default="0")
     htk_auth = db.Column(db.String(64))
     htk_creation_date = db.Column(db.DateTime())
