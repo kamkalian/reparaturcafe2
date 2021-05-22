@@ -94,9 +94,11 @@ class User(db.Model):
     usr_name = db.Column(db.String(64), index=True, unique=True)
     usr_email = db.Column(db.String(255), index=True, unique=True)
     usr_email_confirmed_at = db.Column(db.DateTime(), nullable=True)
-    usr_hash_token = db.Column(db.String(255), nullable=False)
     
     usr_phone = db.Column(db.String(64), index=True)
+    usr_role = db.Column(db.String(64), index=True)
+
+    usr_hash_tokens = db.relationship('HashToken', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.usr_name)    
