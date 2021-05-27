@@ -1,6 +1,6 @@
 import time
 import os
-from flask import request, jsonify, url_for, session
+from flask import request, jsonify, url_for, session, current_app
 from werkzeug.utils import secure_filename
 from api.models import Task, Customer, Device, Image, HashToken
 from api import db
@@ -185,7 +185,7 @@ def tasks():
 
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config["ALLOWED_EXTENSIONS"]
 
 
 @bp.route('/upload_image', methods=['POST'])
@@ -201,7 +201,7 @@ def upload_image():
     if file and allowed_file(file.filename):
         # filename = secure_filename(file.filename)
         filename = secrets.token_urlsafe(32) + "." + file.filename.split(".")[-1]
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         return {"ok":1, "filename":filename}
 
     return {"ok":1}
