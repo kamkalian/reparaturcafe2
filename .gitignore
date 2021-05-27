@@ -27,5 +27,6 @@ venv
 __pycache__
 .env
 qr_codes/
+images/
 
 flask_session/
