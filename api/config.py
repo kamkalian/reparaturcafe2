@@ -6,7 +6,7 @@ import datetime
 
 
 APP_BASEDIR = Path(__file__).parents[1]
-ENV_FILE = Path(APP_BASEDIR, ".env")
+ENV_FILE = Path(APP_BASEDIR, "api/.env")
 
 if ENV_FILE.exists():
     load_dotenv(ENV_FILE)
