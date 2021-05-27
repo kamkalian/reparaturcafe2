@@ -2,9 +2,6 @@ from flask import Flask
 from api.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_jwt_extended import (
-    JWTManager
-)
 from flask_session import Session
 
 db = SQLAlchemy()
@@ -23,8 +20,6 @@ def create_app(config_class=None):
     db.init_app(app)
     migrate.init_app(app, db)
     session.init_app(app)
-
-    jwt = JWTManager(app)
 
     from api.task_manager import bp as task_manager
     app.register_blueprint(task_manager)
