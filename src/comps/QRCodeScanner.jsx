@@ -1,15 +1,34 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import Alert from '@material-ui/lab/Alert';
+import CropFreeIcon from '@material-ui/icons/CropFree';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import { withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
+const styles = theme => ({  
+    cssOutlinedInput: {
+      '&$cssFocused $notchedOutline': {
+        backgroundColor: '#ffff0060!important'
+      }
+    },
+    cssFocused: {},
+    notchedOutline: {
+        borderWidth: '0px',
+    },
+});
 
-export default class QRCodeScanner extends React.Component{
+class QRCodeScanner extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             qrcode: "",
             result: {}
         }
+        setTimeout(() => {
+            var qrcode_field = document.getElementById("qrcode_field");
+            qrcode_field.focus();
+          }, 200);
     }
 
     fetchCall = () =>{
@@ -31,6 +50,7 @@ export default class QRCodeScanner extends React.Component{
                 res['qrcode_valid']
                 && res['type']==="task"
                 && res['tsk_id']){
+                    this.props.history.go(0);
                     this.props.history.push('/task/' + res['tsk_id']);
             }
         })
@@ -52,24 +72,46 @@ export default class QRCodeScanner extends React.Component{
         }
     }
 
+    handleQRCodeClick = (event) => {
+        setTimeout(() => {
+            var qrcode_field = document.getElementById("qrcode_field");
+            qrcode_field.focus();
+          }, 200);
+    }
+
+
     render(){
+        const { classes } = this.props;
         return(
             <div>
-            <h2>Scan QR-Code</h2>
-            <TextField
-                value={this.state.qrcode}
-                onChange={this.handleQRCodeChange}
-                onKeyDown={this.handleQRCodeKeyDown}
-                autoFocus
-                fullWidth
-            ></TextField>
-            {!this.state.result["qrcode"] ? (
-                <Alert severity="info">
-                Scanne einen gültigen QR-Code!
-                </Alert>
-            ) : ""}
+
+                <TextField
+                    value={this.state.qrcode}
+                    onChange={this.handleQRCodeChange}
+                    onKeyDown={this.handleQRCodeKeyDown}
+                    onClick={this.handleQRCodeClick}
+                    placeholder="QR-Code scannen"
+                    size="small"
+                    variant="outlined"
+                    id="qrcode_field"
+                    InputProps={{
+                        style: {color:"white"},
+                        startAdornment: (
+                            <InputAdornment position="start" style={{cursor:"pointer"}}>
+                                <CropFreeIcon />
+                            </InputAdornment>
+                        ),
+                        classes: {
+                            root: classes.cssOutlinedInput,
+                            focused: classes.cssFocused,
+                            notchedOutline: classes.notchedOutline,
+                        },
+                    }}
+                ></TextField>
             </div>
         )
     }
     
 }
+
+export default withStyles(styles)(withRouter(QRCodeScanner));

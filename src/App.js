@@ -17,7 +17,6 @@ import './custom.css';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import FetchTask from './comps/FetchTask';
-import CropFreeIcon from '@material-ui/icons/CropFree';
 import QRCodeController from './comps/QRCodeController';
 import TaskOverview from './comps/task/TaskOverview';
 import { useState, useEffect } from 'react';
@@ -83,13 +82,7 @@ function App() {
               </Button>
             </Grid>
             <Grid item>
-              <Button 
-                  component={Link} 
-                  to="/scan"
-                  color="inherit"
-                  startIcon={<CropFreeIcon />}>
-                  Scan
-                </Button>
+              <QRCodeScanner></QRCodeScanner>
             </Grid>
           </Grid>
         </Toolbar>
