@@ -82,6 +82,15 @@ def _add_session_allowed_id(tsk_id, htk_auth):
         if not [item for item in allowed_ids if tsk_id in item]:
             allowed_ids.append((tsk_id, today_date, htk_auth))
             session['ALLOWED_IDS'] = allowed_ids
+        else:
+            # Tuple holen
+            allowed_id_tuple = [item for item in allowed_ids if tsk_id in item][0]
+            # Tuple aus Liste entfernen
+            allowed_ids.remove(allowed_id_tuple)
+            # Datum austauschen
+            new_tuple = (allowed_id_tuple[0], today_date, allowed_id_tuple[2])
+            # Tuple wieder zur Liste hinzufügen
+            allowed_ids.append(new_tuple)
     except TypeError:
         allowed_ids = []
         allowed_ids.append((tsk_id, today_date, htk_auth))
