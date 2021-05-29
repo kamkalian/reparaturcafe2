@@ -292,7 +292,6 @@ def _is_exp_date_in_session_valid(tsk_id):
             except IndexError:
                 return False, None
         else:
-            # TODO hier noch die abgelaufenen IDs aus der session Liste raus nehmen
             return False, None
     else:
         return False, None
