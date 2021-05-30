@@ -12,7 +12,7 @@ from api.task_manager import bp
 from sqlalchemy import or_
 
 
-@bp.route('/new_task', methods=['POST'])
+@bp.route('/api/new_task', methods=['POST'])
 def new_task():
 
     post_json = request.get_json()

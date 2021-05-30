@@ -62,7 +62,7 @@ export default class NewTaskFormular extends React.Component {
 
 
     apiCall = () => {
-        fetch('/new_task', {
+        fetch('/api/new_task', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
