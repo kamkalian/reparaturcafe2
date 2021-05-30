@@ -83,8 +83,8 @@ def new_task():
     db.session.commit() # pylint: disable=maybe-no-member
 
     # QR-Code generieren
-    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/api/qrcode/tsk' + token, error='L')
-    url.svg( '../public/qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
+    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/qrcode/tsk' + token, error='L')
+    url.svg( '../qr_codes/' + token + '.svg', scale=4, quiet_zone=0)
 
     # Files anlegen
     files = post_json["files"]
