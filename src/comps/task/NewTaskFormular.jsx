@@ -138,7 +138,7 @@ export default class NewTaskFormular extends React.Component {
         console.log(event.target.value)
         const fd = new FormData();
         fd.append('file', event.target.files[0]);
-        fetch('/upload_image', {
+        fetch('/api/upload_image', {
             method: 'POST',
             body: fd
         })

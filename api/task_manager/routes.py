@@ -96,7 +96,7 @@ def new_task():
     return {'tsk_id':new_task.tsk_id, 'tsk_token': token}
 
 
-@bp.route('/tasks', methods=['POST'])
+@bp.route('/api/tasks', methods=['POST'])
 def tasks():
     post_json = request.get_json()
 
@@ -188,7 +188,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config["ALLOWED_EXTENSIONS"]
 
 
-@bp.route('/upload_image', methods=['POST'])
+@bp.route('/api/upload_image', methods=['POST'])
 def upload_image():
     if 'file' not in request.files:
         return {"error":"Kein file gefunden"}

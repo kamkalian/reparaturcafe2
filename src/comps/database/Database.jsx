@@ -25,7 +25,7 @@ export default class Database extends React.Component {
   }
 
   apiCall = () => {
-    fetch('/tasks', {
+    fetch('/api/tasks', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
