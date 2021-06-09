@@ -43,7 +43,22 @@ function App() {
         .then(data => {
           setNoAdminAvailable(!data["admin_available"]);
         });  
+      });
+      
+      fetch('/api/session_user', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
       })
+    .then((response) => {
+      response.json()
+      .then(data => {
+        setUserLoggedIn(data["user_logged_in"]);
+        setUsername(data["username"]);
+      });  
+    });
   });
 
 
