@@ -21,6 +21,9 @@ def create_app(config_class=None):
     migrate.init_app(app, db)
     session.init_app(app)
 
+    from api.main import bp as main
+    app.register_blueprint(main)
+
     from api.task_manager import bp as task_manager
     app.register_blueprint(task_manager)
 
