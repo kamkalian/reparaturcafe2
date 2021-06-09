@@ -21,11 +21,14 @@ import QRCodeController from './comps/QRCodeController';
 import TaskOverview from './comps/task/TaskOverview';
 import { useState, useEffect } from 'react';
 import Alert from '@material-ui/lab/Alert';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 
 
 function App() {
   
   const [noAdminAvailable, setNoAdminAvailable] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     // Update the document title using the browser API
@@ -51,7 +54,7 @@ function App() {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
-      })
+    })
     .then((response) => {
       response.json()
       .then(data => {
@@ -69,15 +72,17 @@ function App() {
         <Toolbar>
           <h1>ReparaturCafé</h1>
           <Grid container spacing={3} justify="center">
-            <Grid item>
-              <Button 
-                component={Link} 
-                to="/"
-                color="inherit"
-                startIcon={<HomeOutlinedIcon />}>
-                Startseite
-              </Button>
-            </Grid>
+            {!userLoggedIn ? (
+              <Grid item>
+                <Button 
+                  component={Link} 
+                  to="/"
+                  color="inherit"
+                  startIcon={<HomeOutlinedIcon />}>
+                  Startseite
+                </Button>
+              </Grid>
+            ) : ""}
             <Grid item>
               <Button 
                 component={Link} 
@@ -87,18 +92,42 @@ function App() {
                 Formular
               </Button>
             </Grid>
-            <Grid item>
-              <Button 
-                component={Link} 
-                to="/database"
-                color="inherit"
-                startIcon={<StorageOutlinedIcon />}>
-                Datenbank
-              </Button>
-            </Grid>
+            {!userLoggedIn ? (
+              <Grid item>
+                <Button 
+                  component={Link} 
+                  to="/database"
+                  color="inherit"
+                  startIcon={<StorageOutlinedIcon />}>
+                  Datenbank
+                </Button>
+              </Grid>
+            ) : (
+              <Grid item>
+                <Button 
+                  component={Link} 
+                  to="/overview"
+                  color="inherit"
+                  startIcon={<StorageOutlinedIcon />}>
+                  Übersicht
+                </Button>
+              </Grid>
+            )}
             <Grid item>
               <QRCodeScanner></QRCodeScanner>
             </Grid>
+            {userLoggedIn ? (
+              <Grid item>
+                <Button 
+                  component={Link} 
+                  to="/user"
+                  color="inherit"
+                  startIcon={<AccountCircleOutlinedIcon />}>
+                  {username}
+                </Button>
+              </Grid>
+            ) : ""}
+            
           </Grid>
         </Toolbar>
       </AppBar>
