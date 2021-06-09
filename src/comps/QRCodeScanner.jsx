@@ -53,6 +53,13 @@ class QRCodeScanner extends React.Component{
                     this.props.history.go(0);
                     this.props.history.push('/task/' + res['tsk_id']);
             }
+            if(
+                res['qrcode_valid']
+                && res['type']==="user"
+                && res['usr_id']
+            ){
+                this.props.history.go(0);
+            }
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
