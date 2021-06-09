@@ -43,8 +43,9 @@ def qrcode():
                 user = htk.user
                 if user.usr_id:
                     resp["usr_id"] = user.usr_id
+                    resp["usr_name"] = user.usr_name
                     resp["usr_role"] = user.usr_role
-                    _add_session_user(user.usr_id, user.usr_role)
+                    _add_session_user(user.usr_id, user.usr_role, user.usr_name)
                 else:
                     resp["error"] = "usr_id_not_found"
             else:
@@ -97,11 +98,12 @@ def _add_session_allowed_id(tsk_id, htk_auth):
         session['ALLOWED_IDS'] = allowed_ids
 
 
-def _add_session_user(usr_id, usr_role):
+def _add_session_user(usr_id, usr_role, usr_name):
     today_date = datetime.now()
 
     session_user = (
         usr_id,
+        usr_name,
         today_date,
         usr_role
     )
