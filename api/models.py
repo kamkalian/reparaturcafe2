@@ -139,4 +139,5 @@ class HashToken(db.Model):
     htk_usr_id = db.Column(db.Integer(), db.ForeignKey("user.usr_id"))
     htk_locked = db.Column(db.Boolean(), nullable=False, server_default="0")
     htk_auth = db.Column(db.String(64))
+    htk_pin = db.Column(db.String(255))
     htk_creation_date = db.Column(db.DateTime())
