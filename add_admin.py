@@ -4,6 +4,7 @@ from api.models import HashToken, User
 from datetime import datetime
 import secrets
 import hashlib
+import random
 
 app = create_app()
 
@@ -16,16 +17,22 @@ def _generate_and_add_hashtoken(usr_id):
     # Der Token soll so nicht in der Datenbank gespeichert werden,
     # daher wir hier noch eine gehashete Version generiert.
     hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+    # Zufallszahl für den Pin ermitteln
+    pin = random.randint(1000, 9999)
+    hash_pin = hashlib.sha256(str(pin).encode("utf-8")).hexdigest()
+
     htk = HashToken(
         htk_id=hash_token,
         htk_usr_id=usr_id,
         htk_creation_date=datetime.now(),
-        htk_auth="usr"
+        htk_auth="usr",
+        htk_pin=hash_pin
     )
     db.session.add(htk)
     db.session.commit()
 
-    return token
+    return token, pin
 
 def _valid_hash_token_exists(usr_id):
     user = User.query.filter_by(usr_id=usr_id).first()
@@ -57,8 +64,9 @@ with app.app_context():
                 if _valid_hash_token_exists(user.usr_id) is not True:
                     print(" ")
                     print("User hat keinen gültigen Key, daher wird jetzt einer generiert...")
-                    token = _generate_and_add_hashtoken(user.usr_id)
+                    token, pin = _generate_and_add_hashtoken(user.usr_id)
                     print("usr" + token)
+                    print("Pin:", pin)
             else:
                 print("Fehler! User ID wurde nicht gefunden!")
 
