@@ -12,7 +12,6 @@ def session_user():
 
     if session_user:
         today_date = datetime.now()
-        print(session_user, today_date)
         if today_date.date() == session_user[2].date():
             resp = {
                 "user_logged_in": True,
