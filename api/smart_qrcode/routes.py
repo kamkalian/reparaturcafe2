@@ -11,6 +11,7 @@ from datetime import datetime
 def qrcode():
     post_json = ""
     qrcode = ""
+    pin = ""
     resp = {}
     resp_json = ""
 
@@ -19,6 +20,8 @@ def qrcode():
         post_json = request.get_json()
         if "qrcode" in post_json:
             qrcode = post_json["qrcode"]
+        if "pin" in post_json:
+            pin = post_json["pin"]
     if request.method == "GET":
         pass
         
@@ -35,21 +38,29 @@ def qrcode():
     else:
         resp["qrcode_valid"] = True
         if re_match[1] == "usr":
-            resp["type"] = "user"
-            # Hash Token erstellen
-            hash_token = hashlib.sha256(re_match[2].encode("utf-8")).hexdigest()
-            htk = HashToken.query.filter_by(htk_id=hash_token, htk_locked=False).first()
-            if htk:
-                user = htk.user
-                if user.usr_id:
-                    resp["usr_id"] = user.usr_id
-                    resp["usr_name"] = user.usr_name
-                    resp["usr_role"] = user.usr_role
-                    _add_session_user(user.usr_id, user.usr_role, user.usr_name)
+            if pin:
+                resp["type"] = "user"
+                # Hash Token erstellen
+                hash_token = hashlib.sha256(re_match[2].encode("utf-8")).hexdigest()
+                htk = HashToken.query.filter_by(htk_id=hash_token, htk_locked=False).first()
+                if htk:
+                    # Pin hashen 
+                    pin_hash = hashlib.sha256(pin.encode("utf-8")).hexdigest()
+                    if pin_hash == htk.htk_pin:
+                        user = htk.user
+                        if user.usr_id:
+                            resp["usr_id"] = user.usr_id
+                            resp["usr_name"] = user.usr_name
+                            resp["usr_role"] = user.usr_role
+                            _add_session_user(user.usr_id, user.usr_role, user.usr_name)
+                        else:
+                            resp["error"] = "usr_id_not_found"
+                    else:
+                            resp["error"] = "pin_error"
                 else:
-                    resp["error"] = "usr_id_not_found"
+                    resp["error"] = "usr_not_found"
             else:
-                resp["error"] = "usr_not_found"
+                resp["error"] = "pin_not_found"
             resp_json = jsonify(resp)
         if re_match[1] == "tsk":
             resp["type"] = "task"

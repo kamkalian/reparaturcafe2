@@ -5,6 +5,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styles = theme => ({  
     cssOutlinedInput: {
@@ -23,7 +27,9 @@ class QRCodeScanner extends React.Component{
         super(props);
         this.state = {
             qrcode: "",
-            result: {}
+            result: {},
+            pinRequest: false,
+            pin: "",
         }
         setTimeout(() => {
             var qrcode_field = document.getElementById("qrcode_field");
@@ -32,13 +38,66 @@ class QRCodeScanner extends React.Component{
     }
 
     fetchCall = () =>{
+        // Prüfen ob ein User QRCode eingegeben wurde. 
+        // Wenn ja dann Pin Abfrage anzeigen.
+        const regex = /(usr|tsk)([a-zA-Z0-9_-]*)/;
+        if(regex.test(this.state.qrcode)){
+            if(this.state.qrcode.match(regex)[1] === "usr"){
+                console.log("user");
+                this.setState({
+                    pinRequest: true
+                });
+            }
+            else{
+    
+                fetch('/api/qrcode', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({'qrcode': this.state.qrcode})
+                })
+                .then(response => response.json())
+                .then(res => {
+                    this.setState({
+                        result: res,
+                        qrcode: ""
+                    });
+                    if(
+                        res['qrcode_valid']
+                        && res['type']==="task"
+                        && res['tsk_id']){
+                            this.props.history.go(0);
+                            this.props.history.push('/task/' + res['tsk_id']);
+                    }
+                    if(
+                        res['qrcode_valid']
+                        && res['type']==="user"
+                        && res['usr_id']
+                    ){
+                        this.props.history.go(0);
+                    }
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+            }
+        }        
+    }
+
+
+    fetchCallWithPin = () =>{
+        // fetchCall mit Pin
         fetch('/api/qrcode', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({'qrcode': this.state.qrcode})
+            body: JSON.stringify({
+                'qrcode': this.state.qrcode,
+                'pin': this.state.pin})
         })
         .then(response => response.json())
         .then(res => {
@@ -46,13 +105,6 @@ class QRCodeScanner extends React.Component{
                 result: res,
                 qrcode: ""
             });
-            if(
-                res['qrcode_valid']
-                && res['type']==="task"
-                && res['tsk_id']){
-                    this.props.history.go(0);
-                    this.props.history.push('/task/' + res['tsk_id']);
-            }
             if(
                 res['qrcode_valid']
                 && res['type']==="user"
@@ -63,9 +115,9 @@ class QRCodeScanner extends React.Component{
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
-        });
-        
+        });      
     }
+
 
     handleQRCodeChange = (event) => {
         this.setState({
@@ -84,6 +136,35 @@ class QRCodeScanner extends React.Component{
             var qrcode_field = document.getElementById("qrcode_field");
             qrcode_field.focus();
           }, 200);
+    }
+
+    handlePinChange = (event) => {
+        const pin = event.target.value;
+        if(pin.length <= 4){
+            this.setState({
+                pin: pin
+            })
+        }
+        if(pin.length === 4){
+            this.setState({
+                pin: pin,
+                pinRequest: false
+            }, function(){
+                this.setState({
+                    pin: "",
+                });
+                this.fetchCallWithPin();
+            })
+        }
+    }
+
+
+    handlePinAbort = (event) => {
+        this.setState({
+            pin: "",
+            pinRequest: false,
+            qrcode: ""
+        });
     }
 
 
@@ -115,6 +196,29 @@ class QRCodeScanner extends React.Component{
                         },
                     }}
                 ></TextField>
+                <Dialog 
+                open={this.state.pinRequest} 
+                >
+                    <DialogTitle id="category-dialog">Pin eingeben</DialogTitle>
+                    <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="qrcodePin"
+                        label="Pin"
+                        type="password"
+                        fullWidth
+                        value={this.state.pin}
+                        onChange={this.handlePinChange}
+                    />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handlePinAbort} color="primary">
+                            Abbrechen
+                        </Button>
+                    </DialogActions>
+                    
+                </Dialog>
             </div>
         )
     }
