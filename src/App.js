@@ -2,7 +2,6 @@ import './App.css';
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import NewTask from './comps/task/NewTask';
-import NewUserForm from './comps/user/NewUserForm';
 import Database from './comps/database/Database';
 import QRCodeScanner from './comps/QRCodeScanner';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
@@ -22,6 +21,8 @@ import TaskOverview from './comps/task/TaskOverview';
 import { useState, useEffect } from 'react';
 import Alert from '@material-ui/lab/Alert';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import SettingsIcon from '@material-ui/icons/Settings';
+import Settings from './comps/settings/Settings'
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
   const [noAdminAvailable, setNoAdminAvailable] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
     // Update the document title using the browser API
@@ -60,6 +62,7 @@ function App() {
       .then(data => {
         setUserLoggedIn(data["user_logged_in"]);
         setUsername(data["username"]);
+        setUserRole(data["user_role"])
       });  
     });
   });
@@ -127,7 +130,17 @@ function App() {
                 </Button>
               </Grid>
             ) : ""}
-            
+            {userRole === "admin" ? (
+              <Grid item>
+                <Button 
+                  component={Link} 
+                  to="/settings"
+                  color="inherit"
+                  startIcon={<SettingsIcon />}>
+                  Einstellungen
+                </Button>
+              </Grid>
+            ) : ""}
           </Grid>
         </Toolbar>
       </AppBar>
@@ -136,6 +149,12 @@ function App() {
       ) : ""}
       <Container>      
         <Switch>
+            <Route
+              path="/settings"
+              render={(props) =>
+                <Settings {...props} userRole={userRole}/>
+              }>
+            </Route>
             <Route
               path="/qrcode/:hashToken"
               render={(props) =>
@@ -150,9 +169,6 @@ function App() {
             </Route>
             <Route path="/new_task">
               <NewTask></NewTask>
-            </Route>
-            <Route path="/new_user">
-              <NewUserForm></NewUserForm>
             </Route>
             <Route path="/database" component={Database}></Route>
             <Route path="/scan" component={QRCodeScanner}></Route>

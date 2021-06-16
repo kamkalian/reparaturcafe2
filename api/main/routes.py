@@ -12,10 +12,13 @@ def session_user():
 
     if session_user:
         today_date = datetime.now()
+        print(session_user)
         if today_date.date() == session_user[2].date():
             resp = {
                 "user_logged_in": True,
-                "username": session_user[1]}
+                "username": session_user[1],
+                "user_role": session_user[3]
+                }
         else:
             del session["USER"]
             resp = {
