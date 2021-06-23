@@ -179,7 +179,7 @@ function App() {
               }>
             </Route>
             <Route path="/">
-              <h2>Hallo.</h2>
+              <h2>Hallo. test</h2>
               <p style={{marginTop:50}}>Trete ein. Du stehst mitten im digitalen ReparaturCafè, der AWO Oberlar. </p>
               <p style={{marginTop:50}}>Können wir dir bei einem defekten Gerät helfen? Dann klicke auf den Button und erzähl uns alles über dein Gerät.</p>
               <a href="/new_task">Formular</a>
