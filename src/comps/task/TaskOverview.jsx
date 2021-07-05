@@ -6,6 +6,10 @@ import Grid from '@material-ui/core/Grid';
 import Badge from '@material-ui/core/Badge';
 import UnlockedButton from '../UnlockedButton';
 import LockedButton from '../LockedButton';
+import PrintIcon from '@material-ui/icons/Print';
+import Button from '@material-ui/core/Button';
+import ReactToPrint from 'react-to-print';
+import TaskPrint from './TaskPrint';
 
 
 export default class TaskOverview extends React.Component {
@@ -53,8 +57,8 @@ export default class TaskOverview extends React.Component {
       var komma = ", " 
       if(!this.state.data['cus_first_name'] || !this.state.data['cus_last_name']) komma = "";
       return(
-          <Box style={{marginRight:20}}>
-            <h2>Task</h2>
+          <Box style={{marginRight:20}} id="task">
+            <h2>Aufgabe</h2>
             <Badge 
               style={{width:"100%"}}
               badgeContent={this.state.writeable ? (
@@ -68,15 +72,44 @@ export default class TaskOverview extends React.Component {
             deviceCategory={this.state.data['dev_category']}
             />
             </Badge>
-            <Grid container style={{padding:30, margin:0, border:"1px solid #999"}}>
-              <Grid item md={8} xs={12} style={{marginBottom:20}}>
+            {this.state.writeable ? (
+              this.state.data ? (
+                <div>
+                <Grid container style={{marginTop:20}}>
+                  <Grid item xs={12}>  
+                    <ReactToPrint
+                      trigger={() => {
+                        // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+                        // to the root node of the returned component as it will be overwritten.
+                        return (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<PrintIcon />}
+                            >
+                              Drucken
+                          </Button>   
+                        );
+                      }}
+                      content={() => this.componentRef}
+                    />
+                    <div hidden>
+                      <TaskPrint data={this.state.data} writeable={true} ref={el => (this.componentRef = el)} /> 
+                    </div>
+                  </Grid>
+                </Grid>
+              </div>
+              ) : ""
+            ) : ""}
+            <Grid container style={{padding:30, margin:0}}>
+              <Grid item md={8} xs={12} style={{marginBottom:20, paddingRight:20}}>
                 <h3>Fehlerbeschreibung</h3>
                 <Typography>
                   {this.state.data['tsk_fault_description']}
                 </Typography>
               </Grid>
               {this.state.writeable ? (
-                <Grid item md={4} xs={12} style={{borderLeft:"2px solid #ccccccaa", paddingLeft:10}}>
+                <Grid item md={4} xs={12} style={{borderLeft:"2px solid #ccccccaa", paddingLeft:20}}>
                   <Grid container>
                     <Grid item md={12} sm={6} xs={12}>
                       <h3>Kontaktdaten</h3>
