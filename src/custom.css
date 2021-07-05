@@ -20,6 +20,13 @@
     width:100%!important;
 }
 
+.task-sign-print{
+    border-bottom: 2px solid #666!important;
+    padding: 10px!important;
+    margin: 0px!important;
+    width:100%!important;
+}
+
 .task-sign-id{
     display:block;
     border: 2px solid #000!important;

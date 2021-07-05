@@ -9,13 +9,17 @@ export default class MagneticSign extends React.Component {
     render(){
         return(
             
-            <Grid container spacing={3} className={"task-sign"}>
-                <Grid item md={1} sm={3} xs={12}>
+            <Grid 
+                container 
+                spacing={3} 
+                className={this.props.printversion ? "task-sign-print" : "task-sign"}
+            >
+                <Grid item md={2} sm={4} xs={this.props.printversion ? 2 : 12}>
                     <TaskIdLabel 
                     taskId={this.props.taskId}
                     />
                 </Grid>
-                <Grid item md={11} sm={8} xs={12}>
+                <Grid item md={10} sm={8} xs={this.props.printversion ? 10 : 12}>
                     <Typography variant="h5">
                         {this.props.deviceName}
                     </Typography>
