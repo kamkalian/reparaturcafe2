@@ -54,7 +54,7 @@ export default class NewTaskFormular extends React.Component {
             completed:false,
             error:false,
             tskID: "",
-            tskToke: "",
+            tskToken: "",
             files: [],
             newsletter: false,
         }
