@@ -24,7 +24,7 @@ export default class TaskOverview extends React.Component {
       var komma = ", " 
       if(!this.state.data['cus_first_name'] || !this.state.data['cus_last_name']) komma = "";
       return(
-          <Box style={{marginRight:20}}>
+          <Box style={{marginRight:20, marginLeft:20}}>
             <MagneticSign
             taskId={this.state.data['tsk_id']}
             deviceName={this.state.data['dev_name']}
