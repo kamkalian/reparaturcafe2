@@ -93,6 +93,9 @@ def new_task():
         db.session.add(new_file) # pylint: disable=maybe-no-member
         db.session.commit() # pylint: disable=maybe-no-member
 
+    # Token als neuer Token in der Session speichern.
+    session['NEW_TOKEN'] = token
+
     return {'tsk_id':new_task.tsk_id, 'tsk_token': token}
 
 
