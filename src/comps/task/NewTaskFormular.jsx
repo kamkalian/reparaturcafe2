@@ -643,32 +643,7 @@ export default class NewTaskFormular extends React.Component {
                             </Typography>
                         </div>
                     ): (
-                        <div>
-                            <Typography component="p">
-                                Deine Daten wurden erfolgreich unter der ID: {this.state.tskID} gespeichert.
-                            </Typography>
-                            <Typography component="p">
-                                Nachfolgend erhälst du einen Link, mit dem du jederzeit den Status einsehen und deine Daten bearbeiten kannst.
-                            </Typography>
-                            <Grid container spacing={3} style={{margin:20}}>
-                                <Grid item lg={4} sm={5} xs={12}>
-                                    <img src={"./qr_codes/" + this.state.tskToken + ".svg"} alt="QR Code Link"/>
-                                </Grid>
-                                <Grid item lg={8} sm={7} xs={12}>
-                                    <a href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk"+this.state.tskToken}>https://reparaturcafe.awo-oberlar.de/qrcode/tsk{this.state.tskToken}</a>
-                                </Grid>
-                            </Grid>
-                            <Typography component="p">
-                                {this.state.email ? "Alle Infos wurden auch an folgende Email geschickt: " + this.state.email : ""} 
-                            </Typography>
-                            <Divider style={{margin:20}}/>
-                            <Typography component="p" variant="h5">
-                                Wie geht es weiter?
-                            </Typography>
-                            <Typography component="p">
-                                Unsere Ehrenamtlerinnen und Ehrenamtler schauen sich alle Daten zu deinem Gerät an. Dabei versuchen wir Reparaturlösungen zu finden und melden uns dann in den nächsten Tagen bei dir.
-                            </Typography>
-                        </div>
+                            window.location.href = "/qrcode/tsk" + this.state.tskToken + "?new=1"
                     )
                     
                 )}
