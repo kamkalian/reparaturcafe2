@@ -10,6 +10,7 @@ import PrintIcon from '@material-ui/icons/Print';
 import Button from '@material-ui/core/Button';
 import ReactToPrint from 'react-to-print';
 import TaskPrint from './TaskPrint';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 
 export default class TaskOverview extends React.Component {
@@ -58,8 +59,21 @@ export default class TaskOverview extends React.Component {
       // Nur ein Komma anzeigen, wenn Vor und Nachname angegeben wurden.
       var komma = ", " 
       if(!this.state.data['cus_first_name'] || !this.state.data['cus_last_name']) komma = "";
+
+      var newTaskInfo = "";
+      if(this.props.location.search === "?new=1" && this.state.data["new_token"]) newTaskInfo = (
+        <Alert severity="success">
+        <AlertTitle>Deine Daten wurden erfolgreich gespeichert.</AlertTitle>
+        <p>Drucke diese Seite, oder speicher den QR-Code, damit du später auf deine Daten zugreifen kannst.<br />
+        <a href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]} ><img src={"./qr_codes/" + this.state.data["new_token"] + ".svg"} /></a></p>
+        <strong>Wie geht es weiter?</strong><br />
+        Unsere EhrenamtlerInnen schauen sich alle Daten zu deinem Gerät an.<br />
+        Dabei versuchen wir Reparaturlösungen zu finden und melden uns dann in den nächsten Tagen bei dir.
+      </Alert>
+      );
       return(
-          <Box style={{marginRight:20}} id="task">
+          <Box style={{marginRight:20, marginTop:20}} id="task">
+            {newTaskInfo}
             <h2>Aufgabe</h2>
             <Badge 
               style={{width:"100%"}}
