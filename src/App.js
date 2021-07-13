@@ -156,7 +156,7 @@ function App() {
               }>
             </Route>
             <Route
-              path="/qrcode/:hashToken"
+              path="/qrcode/:token"
               render={(props) =>
                 <QRCodeController {...props}/>
               }>

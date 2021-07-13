@@ -4,14 +4,14 @@ import React from 'react';
 export default class QRCodeController extends React.Component{
 
     fetchCall = () =>{
-        var {hashToken} = this.props.match.params;
+        var {token} = this.props.match.params;
         fetch('/api/qrcode', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({'qrcode': hashToken})
+            body: JSON.stringify({'qrcode': token})
         })
         .then(response => response.json())
         .then(res => {
