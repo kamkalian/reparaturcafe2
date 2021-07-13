@@ -19,7 +19,7 @@ export default class MagneticSign extends React.Component {
                     taskId={this.props.taskId}
                     />
                 </Grid>
-                <Grid item md={10} sm={8} xs={this.props.printversion ? 10 : 12}>
+                <Grid item md={10} sm={6} xs={this.props.printversion ? 8 : 12}>
                     <Typography variant="h5">
                         {this.props.deviceName}
                     </Typography>
@@ -36,6 +36,12 @@ export default class MagneticSign extends React.Component {
                         />
                     ) : ""}      
                 </Grid>
+                {this.props.printversion ? (
+                    <Grid item xs={2}>
+                        <img src={"./qr_codes/" + this.props.new_token + ".svg"} />
+                    </Grid>
+                ) : ""}
+                
             </Grid>
         );
     }
