@@ -213,11 +213,14 @@ def task():
     task = None
     resp = {}
     resp_json = jsonify({})
+    new_task_indicator = False
     
     if request.method == "POST":
         post_json = request.get_json()
         if "tsk_id" in post_json:
             tsk_id = post_json["tsk_id"]
+        if "new_task_indicator" in post_json:
+            new_task_indicator = post_json["new_task_indicator"]
 
     if tsk_id:
         task = Task.query.filter_by(tsk_id=tsk_id).first()
@@ -243,6 +246,9 @@ def task():
                     'htk_auth': item.htk_auth,
                     'htk_creation_date': item.htk_creation_date}
                     for item in task.hash_tokens]
+
+                if new_task_indicator:
+                    resp['new_token'] = session.get('NEW_TOKEN', None)
             else:
                 resp['writeable'] = False
   

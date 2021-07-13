@@ -24,6 +24,8 @@ export default class TaskOverview extends React.Component {
 
   fetchCall = () =>{
       var {taskId} = this.props.match.params;
+      var newTaskIndicator = false;
+      if(this.props.location.search === "?new=1") newTaskIndicator = true;
 
       fetch('/api/task', {
           method: 'POST',
@@ -31,7 +33,7 @@ export default class TaskOverview extends React.Component {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify({'tsk_id': taskId}),
+          body: JSON.stringify({'tsk_id': taskId, "new_task_indicator": newTaskIndicator}),
       })
       .then((response) => {
         if(response.status===200){

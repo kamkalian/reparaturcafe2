@@ -19,7 +19,9 @@ export default class QRCodeController extends React.Component{
                 res['qrcode_valid']
                 && res['type']==="task"
                 && res['tsk_id']){
-                    this.props.history.push('/task/' + res['tsk_id']);
+                    var newTaskIndicator = "";
+                    if(this.props.location.search === "?new=1") newTaskIndicator = this.props.location.search;
+                    this.props.history.push('/task/' + res['tsk_id']+newTaskIndicator);
             }
             if(
                 res['qrcode_valid']
