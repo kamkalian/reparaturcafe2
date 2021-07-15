@@ -15,7 +15,6 @@ import Grid from '@material-ui/core/Grid';
 import './custom.css';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
-import FetchTask from './comps/FetchTask';
 import QRCodeController from './comps/QRCodeController';
 import TaskOverview from './comps/task/TaskOverview';
 import { useState, useEffect } from 'react';
@@ -172,12 +171,6 @@ function App() {
             </Route>
             <Route path="/database" component={Database}></Route>
             <Route path="/scan" component={QRCodeScanner}></Route>
-            <Route
-              path="/api/task/:id/:token"
-              render={(props) =>
-                <FetchTask {...props}/>
-              }>
-            </Route>
             <Route path="/">
               <h2>Hallo. test</h2>
               <p style={{marginTop:50}}>Trete ein. Du stehst mitten im digitalen ReparaturCafè, der AWO Oberlar. </p>
