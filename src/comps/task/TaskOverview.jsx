@@ -20,6 +20,7 @@ export default class TaskOverview extends React.Component {
         data: "",
         writeable: false,
         hover: false,
+        showNewTaskInfo: false
     }
   }
 
@@ -45,6 +46,16 @@ export default class TaskOverview extends React.Component {
             this.setState({
               data: data,
               writeable: data['writeable']
+            }, function() {
+              if(this.props.location.search === "?new=1" && this.state.data["new_token"]){
+                this.setState({
+                  showNewTaskInfo: true
+                });
+              }
+            });
+          });  
+        }
+      });
             });
           });  
         }
