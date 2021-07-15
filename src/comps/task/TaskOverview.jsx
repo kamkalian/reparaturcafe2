@@ -20,6 +20,7 @@ export default class TaskOverview extends React.Component {
         data: "",
         writeable: false,
         hover: false,
+        newQRCodeImage: "",
         showNewTaskInfo: false
     }
   }
@@ -56,8 +57,23 @@ export default class TaskOverview extends React.Component {
           });  
         }
       });
+
+      fetch('/api/new_qrcode_image', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({'tsk_id': taskId}),
+      })
+      .then((response) => {
+        if(response.status===200){
+          response.text()
+          .then(text => {
+            this.setState({
+              newQRCodeImage: text
             });
-          });  
+          });
         }
       })
   }
@@ -73,8 +89,8 @@ export default class TaskOverview extends React.Component {
       return(
           <Box style={{marginRight:20, marginTop:20}} id="task">
             {this.state.showNewTaskInfo ? (
-        <Alert severity="success">
-        <AlertTitle>Deine Daten wurden erfolgreich gespeichert.</AlertTitle>
+              <Alert severity="success">
+              <AlertTitle>Deine Daten wurden erfolgreich gespeichert.</AlertTitle>
               <Typography>Drucke diese Seite, oder speicher den QR-Code, damit du später auf deine Daten zugreifen kannst.</Typography>
               <p>
               <Grid container spacing={3}>
@@ -94,10 +110,10 @@ export default class TaskOverview extends React.Component {
                 <Box fontWeight="fontWeightBold">
                   Wie geht es weiter?
                 </Box>
-        Unsere EhrenamtlerInnen schauen sich alle Daten zu deinem Gerät an.<br />
-        Dabei versuchen wir Reparaturlösungen zu finden und melden uns dann in den nächsten Tagen bei dir.
+                Unsere EhrenamtlerInnen schauen sich alle Daten zu deinem Gerät an.<br />
+                Dabei versuchen wir Reparaturlösungen zu finden und melden uns dann in den nächsten Tagen bei dir.
               </Typography>
-      </Alert>
+              </Alert>
             ) : ""}
             <h2>Aufgabe</h2>
             <Badge 
@@ -135,7 +151,11 @@ export default class TaskOverview extends React.Component {
                       content={() => this.componentRef}
                     />
                     <div hidden>
-                      <TaskPrint data={this.state.data} writeable={true} ref={el => (this.componentRef = el)} /> 
+                      <TaskPrint 
+                        data={this.state.data} 
+                        writeable={true} 
+                        newQRCodeImage={this.state.newQRCodeImage} 
+                        ref={el => (this.componentRef = el)} /> 
                     </div>
                   </Grid>
                 </Grid>

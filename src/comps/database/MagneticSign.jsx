@@ -38,7 +38,7 @@ export default class MagneticSign extends React.Component {
                 </Grid>
                 {this.props.printversion ? (
                     <Grid item xs={2}>
-                        <img src={"./qr_codes/" + this.props.new_token + ".svg"} />
+                        <div dangerouslySetInnerHTML={{__html: this.props.newQRCodeImage}} />
                     </Grid>
                 ) : ""}
                 

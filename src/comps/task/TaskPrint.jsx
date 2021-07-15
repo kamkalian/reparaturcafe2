@@ -31,6 +31,7 @@ export default class TaskOverview extends React.Component {
             deviceManufacturer={this.state.data['dev_mnf_name']}
             deviceCategory={this.state.data['dev_category']}
             printversion
+            newQRCodeImage={this.props.newQRCodeImage}
             />
             <Grid container style={{margin:0}}>
               <Grid item xs={8} style={{marginBottom:20, paddingRight:10}}>
