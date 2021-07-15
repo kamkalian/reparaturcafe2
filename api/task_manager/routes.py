@@ -1,6 +1,6 @@
 import time
 import os
-from flask import request, jsonify, url_for, session, current_app
+from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
 from api.models import Task, Customer, Device, Image, HashToken
 from api import db
@@ -304,3 +304,24 @@ def _is_exp_date_in_session_valid(tsk_id):
             return False, None
     else:
         return False, None
+
+
+@bp.route('/api/new_qrcode_image', methods=['POST'])
+def new_qrcode_image():
+    tsk_id = None
+    if request.method == "POST":
+        post_json = request.get_json()
+        if "tsk_id" in post_json:
+            tsk_id = post_json["tsk_id"]
+
+        if tsk_id:
+            is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
+            if is_exp_date_in_session_valid:
+                return send_file("../qr_codes/" + session.get('NEW_TOKEN', None) + ".svg", mimetype='image/svg')
+            else:
+                # TODO Hier soll das error svg direct im code eingebaut werden.
+                return send_file("../qr_codes/error.svg", mimetype='image/svg')
+        else:
+            return send_file("../qr_codes/error.svg", mimetype='image/svg')
+    else:
+        return send_file("../qr_codes/error.svg", mimetype='image/svg')
