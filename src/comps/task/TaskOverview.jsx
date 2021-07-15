@@ -59,21 +59,35 @@ export default class TaskOverview extends React.Component {
       // Nur ein Komma anzeigen, wenn Vor und Nachname angegeben wurden.
       var komma = ", " 
       if(!this.state.data['cus_first_name'] || !this.state.data['cus_last_name']) komma = "";
-
-      var newTaskInfo = "";
-      if(this.props.location.search === "?new=1" && this.state.data["new_token"]) newTaskInfo = (
-        <Alert severity="success">
-        <AlertTitle>Deine Daten wurden erfolgreich gespeichert.</AlertTitle>
-        <p>Drucke diese Seite, oder speicher den QR-Code, damit du später auf deine Daten zugreifen kannst.<br />
-        <a href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]} ><img src={"./qr_codes/" + this.state.data["new_token"] + ".svg"} /></a></p>
-        <strong>Wie geht es weiter?</strong><br />
-        Unsere EhrenamtlerInnen schauen sich alle Daten zu deinem Gerät an.<br />
-        Dabei versuchen wir Reparaturlösungen zu finden und melden uns dann in den nächsten Tagen bei dir.
-      </Alert>
-      );
       return(
           <Box style={{marginRight:20, marginTop:20}} id="task">
-            {newTaskInfo}
+            {this.state.showNewTaskInfo ? (
+        <Alert severity="success">
+        <AlertTitle>Deine Daten wurden erfolgreich gespeichert.</AlertTitle>
+              <Typography>Drucke diese Seite, oder speicher den QR-Code, damit du später auf deine Daten zugreifen kannst.</Typography>
+              <p>
+              <Grid container spacing={3}>
+                <Grid item xs={4}>
+                  <a href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]} >
+                  <div dangerouslySetInnerHTML={{__html: this.state.newQRCodeImage}} /></a>
+                </Grid>
+                <Grid item xs={8}>
+                  <Button 
+                  color="primary"
+                  href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]}
+                  >Link</Button>
+                </Grid>
+              </Grid>
+              </p>
+              <Typography>
+                <Box fontWeight="fontWeightBold">
+                  Wie geht es weiter?
+                </Box>
+        Unsere EhrenamtlerInnen schauen sich alle Daten zu deinem Gerät an.<br />
+        Dabei versuchen wir Reparaturlösungen zu finden und melden uns dann in den nächsten Tagen bei dir.
+              </Typography>
+      </Alert>
+            ) : ""}
             <h2>Aufgabe</h2>
             <Badge 
               style={{width:"100%"}}
