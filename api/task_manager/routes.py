@@ -325,3 +325,19 @@ def new_qrcode_image():
             return send_file("../qr_codes/error.svg", mimetype='image/svg')
     else:
         return send_file("../qr_codes/error.svg", mimetype='image/svg')
+
+
+@bp.route('/api/image', methods=['POST'])
+def image():
+    img_filename = None
+    if request.method == "POST":
+        post_json = request.get_json()
+        if "img_filename" in post_json:
+            img_filename = post_json["img_filename"]
+
+        if img_filename:
+            return send_file("../images/" + img_filename, mimetype='image/jpeg')
+        else:
+            return send_file("../images/error.svg", mimetype='image/svg')
+    else:
+        return send_file("../images/error.svg", mimetype='image/svg')
