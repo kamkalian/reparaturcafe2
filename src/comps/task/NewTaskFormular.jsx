@@ -135,7 +135,6 @@ export default class NewTaskFormular extends React.Component {
     }
 
     handleUploadInputChange = (event) => {
-        console.log(event.target.value)
         const fd = new FormData();
         fd.append('file', event.target.files[0]);
         fetch('/api/upload_image', {
@@ -152,6 +151,7 @@ export default class NewTaskFormular extends React.Component {
                 });
             })
         .catch(err => console.error(err)); 
+        event.target.value = '';
     }
 
     handleDeleteAttachmentButton = (file, event) => {
