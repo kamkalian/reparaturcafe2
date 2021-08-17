@@ -22,6 +22,8 @@ import Alert from '@material-ui/lab/Alert';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Settings from './comps/settings/Settings'
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import Hidden from '@material-ui/core/Hidden';
 
 
 function App() {
@@ -92,7 +94,7 @@ function App() {
                 color="inherit"
                 startIcon={<DescriptionOutlinedIcon />}>
                 <Hidden mdDown>
-                Formular
+                  Formular
                 </Hidden>
               </Button>
             </Grid>
@@ -104,7 +106,7 @@ function App() {
                   color="inherit"
                   startIcon={<StorageOutlinedIcon />}>
                   <Hidden mdDown>
-                  Datenbank
+                    Datenbank
                   </Hidden>
                 </Button>
               </Grid>
@@ -116,7 +118,7 @@ function App() {
                   color="inherit"
                   startIcon={<StorageOutlinedIcon />}>
                   <Hidden mdDown>
-                  Übersicht
+                    Übersicht
                   </Hidden>
                 </Button>
               </Grid>
@@ -132,7 +134,7 @@ function App() {
                   color="inherit"
                   startIcon={<AccountCircleOutlinedIcon />}>
                   <Hidden lgDown>
-                  {username}
+                    {username}
                   </Hidden>
                 </Button>
               </Grid>
@@ -145,11 +147,21 @@ function App() {
                   color="inherit"
                   startIcon={<SettingsIcon />}>
                   <Hidden lgDown>
-                  Einstellungen
+                    Einstellungen
                   </Hidden>
                 </Button>
               </Grid>
             ) : ""}
+            {userLoggedIn ? (
+              <Grid item>
+                <Button 
+                  component={Link} 
+                  to="/logout"
+                  color="inherit"
+                  startIcon={<PowerSettingsNewIcon />}>
+                  <Hidden lgDown>
+                    Ausloggen
+                  </Hidden>
                 </Button>
               </Grid>
             ) : ""}
