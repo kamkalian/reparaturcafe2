@@ -9,6 +9,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import PinRequest from './user/PinRequestDialog';
+
 
 const styles = theme => ({  
     cssOutlinedInput: {
@@ -158,7 +160,6 @@ class QRCodeScanner extends React.Component{
         }
     }
 
-
     handlePinAbort = (event) => {
         this.setState({
             pin: "",
@@ -196,29 +197,12 @@ class QRCodeScanner extends React.Component{
                         },
                     }}
                 ></TextField>
-                <Dialog 
-                open={this.state.pinRequest} 
-                >
-                    <DialogTitle id="category-dialog">Pin eingeben</DialogTitle>
-                    <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="qrcodePin"
-                        label="Pin"
-                        type="password"
-                        fullWidth
-                        value={this.state.pin}
-                        onChange={this.handlePinChange}
+                <PinRequest
+                    pin={this.state.pin}
+                    pinRequest={this.state.pinRequest}
+                    handlePinChange={this.handlePinChange}
+                    handlePinAbort={this.handlePinAbort}
                     />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handlePinAbort} color="primary">
-                            Abbrechen
-                        </Button>
-                    </DialogActions>
-                    
-                </Dialog>
             </div>
         )
     }
