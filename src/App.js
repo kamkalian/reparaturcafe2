@@ -91,7 +91,9 @@ function App() {
                 to="/new_task"
                 color="inherit"
                 startIcon={<DescriptionOutlinedIcon />}>
+                <Hidden mdDown>
                 Formular
+                </Hidden>
               </Button>
             </Grid>
             {!userLoggedIn ? (
@@ -101,7 +103,9 @@ function App() {
                   to="/database"
                   color="inherit"
                   startIcon={<StorageOutlinedIcon />}>
+                  <Hidden mdDown>
                   Datenbank
+                  </Hidden>
                 </Button>
               </Grid>
             ) : (
@@ -111,7 +115,9 @@ function App() {
                   to="/overview"
                   color="inherit"
                   startIcon={<StorageOutlinedIcon />}>
+                  <Hidden mdDown>
                   Übersicht
+                  </Hidden>
                 </Button>
               </Grid>
             )}
@@ -125,7 +131,9 @@ function App() {
                   to="/user"
                   color="inherit"
                   startIcon={<AccountCircleOutlinedIcon />}>
+                  <Hidden lgDown>
                   {username}
+                  </Hidden>
                 </Button>
               </Grid>
             ) : ""}
@@ -136,7 +144,12 @@ function App() {
                   to="/settings"
                   color="inherit"
                   startIcon={<SettingsIcon />}>
+                  <Hidden lgDown>
                   Einstellungen
+                  </Hidden>
+                </Button>
+              </Grid>
+            ) : ""}
                 </Button>
               </Grid>
             ) : ""}
