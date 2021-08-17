@@ -1,6 +1,6 @@
 from api.smart_qrcode import bp
 from flask import jsonify, session
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 @bp.route('/api/session_user', methods=['POST', 'GET'])
@@ -12,8 +12,8 @@ def session_user():
 
     if session_user:
         today_date = datetime.now()
-        print(session_user)
-        if today_date.date() == session_user[2].date():
+        exp_datetime = session_user[2] + timedelta(minutes=10)
+        if today_date < exp_datetime:
             resp = {
                 "user_logged_in": True,
                 "username": session_user[1],
