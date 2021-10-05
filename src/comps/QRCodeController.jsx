@@ -11,11 +11,6 @@ export default class QRCodeController extends React.Component{
             pinRequest: false,
             pin: "",
         }
-
-        setTimeout(() => {
-            var qrcodePin_field = document.getElementById("qrcodePin");
-            qrcodePin_field.focus();
-          }, 250);
     }
 
     handlePinChange = (event) => {
