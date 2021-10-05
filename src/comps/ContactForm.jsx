@@ -11,7 +11,7 @@ export default class ContactForm extends React.Component {
     render(){
         return(
             <Grid container spacing={3}>
-                <Grid item xl={5} sm={6} xs={12}>
+                <Grid item md={6} xs={12}>
                     <TextField 
                     id="firstName" 
                     label="Vorname" 
@@ -28,7 +28,7 @@ export default class ContactForm extends React.Component {
                         ),
                       }}/>
                 </Grid>
-                <Grid item xl={5} sm={6} xs={12}>
+                <Grid item md={6} xs={12}>
                     <TextField 
                     id="lastName" 
                     label="Nachname" 
@@ -63,7 +63,7 @@ export default class ContactForm extends React.Component {
                         ),
                       }}/>
                 </Grid>
-                <Grid item xl={6} sm={12} xs={12}>
+                <Grid item lg={6} xs={12}>
                     <TextField 
                     id="email" 
                     label="E-Mail" 
