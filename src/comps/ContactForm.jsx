@@ -45,23 +45,8 @@ export default class ContactForm extends React.Component {
                         ),
                       }}/>
                 </Grid>
-                <Grid item xl={2} sm={4} xs={12}>
-                    <TextField 
-                    id="prefixNumber" 
-                    label="Vorwahl" 
-                    variant="outlined" 
-                    fullWidth={true}
-                    value={this.props.prefixNumber}
-                    onChange={this.props.handleTextInputChange}
-                    InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <PhoneOutlinedIcon />
-                          </InputAdornment>
-                        ),
-                      }}/>
-                </Grid>
-                <Grid item xl={4} sm={8} xs={12}>
+                
+                <Grid item lg={6} xs={12}>
                     <TextField 
                     id="phone" 
                     label="Telefonnummer" 
