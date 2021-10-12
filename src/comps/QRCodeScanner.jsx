@@ -1,9 +1,9 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import CropFreeIcon from '@material-ui/icons/CropFree';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@mui/material/TextField';
+import CropFreeIcon from '@mui/icons-material/CropFree';
+import InputAdornment from '@mui/material/InputAdornment';
 import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@mui/styles';
 import PinRequest from './user/PinRequestDialog';
 
 

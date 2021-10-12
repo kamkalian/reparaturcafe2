@@ -1,6 +1,6 @@
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import LockIcon from '@material-ui/icons/Lock';
+import IconButton from '@mui/material/IconButton';
+import LockIcon from '@mui/icons-material/Lock';
 
 export default class LockedButton extends React.Component {
 

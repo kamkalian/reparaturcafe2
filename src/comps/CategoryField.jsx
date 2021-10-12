@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
+import Button from '@mui/materialButton';
+import Chip from '@mui/material/Chip';
 
 
 export default class CategoryField extends React.Component {

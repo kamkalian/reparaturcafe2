@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 
 
 export default class SelectionField extends React.Component {

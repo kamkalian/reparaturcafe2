@@ -1,11 +1,8 @@
 import React from 'react';
-import Box from '@material-ui/core/Box';
+import Box from '@mui/material/Box';
 import MagneticSign from '../database/MagneticSign';
-import { Typography } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import Badge from '@material-ui/core/Badge';
-import UnlockedButton from '../UnlockedButton';
-import LockedButton from '../LockedButton';
+import { Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 
 export default class TaskOverview extends React.Component {

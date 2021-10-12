@@ -1,16 +1,16 @@
 import React from 'react';
-import Box from '@material-ui/core/Box';
+import Box from '@mui/material/Box';
 import MagneticSign from '../database/MagneticSign';
-import { Typography } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import Badge from '@material-ui/core/Badge';
+import { Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Badge from '@mui/material/Badge';
 import UnlockedButton from '../UnlockedButton';
 import LockedButton from '../LockedButton';
-import PrintIcon from '@material-ui/icons/Print';
-import Button from '@material-ui/core/Button';
+import PrintIcon from '@mui/icons-material/Print';
+import Button from '@mui/material/Button';
 import ReactToPrint from 'react-to-print';
 import TaskPrint from './TaskPrint';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@mui/lab';
 
 
 export default class TaskOverview extends React.Component {

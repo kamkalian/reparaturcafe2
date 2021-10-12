@@ -1,10 +1,10 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import PhoneOutlinedIcon from '@material-ui/icons/PhoneOutlined';
-import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
-import PersonOutlinedIcon from '@material-ui/icons/PersonOutlined';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
 
 export default class ContactForm extends React.Component {

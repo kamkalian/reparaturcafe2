@@ -1,10 +1,10 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Grid from '@material-ui/core/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Grid from '@mui/material/Grid';
 import MagneticSign from './MagneticSign';
 import FilterArea from './FilterArea';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 

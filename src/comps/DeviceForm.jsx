@@ -1,18 +1,18 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
 import SelectionDialog from './SelectionDialog';
 import SelectionField from './SelectionField';
 import SelectionList from './SelectionList';
 
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 const mockCategories = [
     "CD-Player", 

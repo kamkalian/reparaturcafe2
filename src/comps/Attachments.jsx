@@ -1,12 +1,11 @@
 import React from 'react';
 import FileUpload from './FileUpload';
-import Grid from '@material-ui/core/Grid';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
-import DeleteIcon from '@material-ui/icons/Delete';
+import Grid from '@mui/material/Grid';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 class Attachments extends React.Component {
@@ -44,6 +43,7 @@ class Attachments extends React.Component {
         }, () => {
             this.props.files.map((tile) => {
                 this.callImageFetch(tile);
+                return null;
             });
         });
     }
@@ -56,25 +56,14 @@ class Attachments extends React.Component {
             }, function(){
                 this.props.files.map((tile) => {
                     this.callImageFetch(tile);
+                    return null;
                 });
             });
         }
     }
   
-
     render(){
         const getGridListCols = () => {
-            if (isWidthUp('xl', this.props.width)) {
-              return 5;
-            }
-        
-            if (isWidthUp('lg', this.props.width)) {
-              return 4;
-            }
-        
-            if (isWidthUp('md', this.props.width)) {
-              return 3;
-            }
         
             return 2;
           }
@@ -87,20 +76,20 @@ class Attachments extends React.Component {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                <GridList cellHeight={140} cols={getGridListCols()}>
+                <ImageList cellHeight={140} cols={getGridListCols()}>
                     {this.state.images.map((tile) => (
-                    <GridListTile key={tile.filename} cols={1}>
-                        <img src={tile.image} />
-                        <GridListTileBar                       
+                    <ImageListItem key={tile.filename} cols={1}>
+                        <img src={tile.image} alt={tile.image}/>
+                        <ImageListItemBar                       
                         actionIcon={
                             <IconButton color="secondary" onClick={this.props.handleDeleteAttachmentButton.bind(this, tile.filename)}>
                                 <DeleteIcon />
                             </IconButton>
                         }
                         />
-                    </GridListTile>
+                    </ImageListItem>
                     ))}
-                </GridList>
+                </ImageList>
                 </Grid>
             </Grid>
         );
@@ -109,4 +98,4 @@ class Attachments extends React.Component {
 }
 
 
-export default withWidth()(Attachments);
+export default (Attachments);

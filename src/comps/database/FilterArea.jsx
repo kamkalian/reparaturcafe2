@@ -1,9 +1,9 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import SelectionField from '../SelectionField';
 import SelectionDialog from '../SelectionDialog';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import TextField from '@material-ui/core/TextField';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import TextField from '@mui/material/TextField';
 
 
 export default class FilterArea extends React.Component {

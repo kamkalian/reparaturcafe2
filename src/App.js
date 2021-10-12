@@ -1,29 +1,29 @@
 import './App.css';
 import React from 'react';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import NewTask from './comps/task/NewTask';
 import Database from './comps/database/Database';
 import QRCodeScanner from './comps/QRCodeScanner';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
-import StorageOutlinedIcon from '@material-ui/icons/StorageOutlined';
-import Grid from '@material-ui/core/Grid';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import StorageOutlinedIcon from '@mui/icons-material/StorageOutlined';
+import Grid from '@mui/material/Grid';
 import './custom.css';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import QRCodeController from './comps/QRCodeController';
 import TaskOverview from './comps/task/TaskOverview';
 import { useState, useEffect } from 'react';
-import Alert from '@material-ui/lab/Alert';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import SettingsIcon from '@material-ui/icons/Settings';
+import Alert from '@mui/lab/Alert';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Settings from './comps/settings/Settings'
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import Hidden from '@material-ui/core/Hidden';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import Hidden from '@mui/material/Hidden';
 
 
 function App() {
