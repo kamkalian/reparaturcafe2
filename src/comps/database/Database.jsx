@@ -158,7 +158,7 @@ export default class Database extends React.Component {
               Gefundene Geräte: {this.state.data.length}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={12} lg={12} border={2}>
+          <Grid item xs={12} sm={12} lg={12}>
           <List component="ul" aria-label="main mailbox folders">
             {taskList}
             </List>
