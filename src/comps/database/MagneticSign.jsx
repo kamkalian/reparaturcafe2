@@ -3,6 +3,7 @@ import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TaskIdLabel from './TaskIdLabel';
+import Divider from '@mui/material/Divider';
 
 
 export default class MagneticSign extends React.Component {
@@ -14,15 +15,16 @@ export default class MagneticSign extends React.Component {
                 spacing={3} 
                 className={this.props.printversion ? "task-sign-print" : "task-sign"}
             >
-                <Grid item md={2} sm={4} xs={this.props.printversion ? 2 : 12}>
+                <Grid item md={2} sm={4} xs={this.props.printversion ? 2 : 12} style={{paddingTop:10}}>
                     <TaskIdLabel 
                     taskId={this.props.taskId}
                     />
                 </Grid>
-                <Grid item md={10} sm={6} xs={this.props.printversion ? 7 : 12}>
+                <Grid item md={10} sm={6} xs={this.props.printversion ? 7 : 12} style={{paddingTop:10}}>
                     <Typography variant="h5">
                         {this.props.deviceName}
                     </Typography>
+                    <Divider style={{marginTop:10, marginBottom:10}}/>
                     {this.props.deviceManufacturer ? (
                         <Chip 
                         label={this.props.deviceManufacturer}
