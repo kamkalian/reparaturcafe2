@@ -187,6 +187,100 @@ def tasks():
         'manufacturer_list':manufacturer_list})
 
 
+@bp.route('/api/task_lists', methods=['POST'])
+def task_lists():
+    post_json = request.get_json()
+
+    tasks = Task.query
+    tasks = tasks.join(Task.device, aliased=True)
+    if "filterCategory" in post_json:
+        filter_category = post_json["filterCategory"]
+        if filter_category != "":
+            if filter_category == "ohne Angabe":
+                filter_category = ""
+            tasks = tasks.filter_by(dev_category=filter_category)
+    if "filterManufacturer" in post_json:
+        filter_manufacturer = post_json["filterManufacturer"]
+        if filter_manufacturer != "":
+            if filter_manufacturer == "ohne Angabe":
+                filter_manufacturer = ""
+            tasks = tasks.filter_by(dev_mnf_name=filter_manufacturer)
+    if "filterText" in post_json:
+        filter_text = post_json["filterText"]
+        if filter_text != "" :
+            tasks = tasks.filter(or_(
+                    Task.tsk_id == filter_text, Device.dev_name.contains(filter_text)
+                )
+            )
+    tasks = tasks.order_by(Task.tsk_id.asc()).all()
+
+    new_task_list = []
+    in_process_task_list = []
+    done_task_list = []
+    category_list = []
+    manufacturer_list = []
+
+    for d in tasks:
+
+        dev_name = ""
+        dev_manufacturer = ""
+        dev_model = ""
+        dev_category = ""
+        if d.device:
+            dev_name = d.device.dev_name
+            dev_manufacturer = d.device.dev_mnf_name
+            dev_model = d.device.dev_model
+            dev_category = d.device.dev_category
+        
+            # Kategorien ermitteln und als Liste zusammenbauen
+            category_exists = False
+            if dev_category == "":
+                    dev_category = "ohne Angabe"
+            for category in category_list:
+                if dev_category == category["name"]:
+                    category["count"] += 1
+                    category_exists = True
+            if category_exists == False:
+                category_list.append({"name": dev_category, "count": 1})
+
+            # Hersteller ermitteln und als Liste zusammenbauen
+            manufacturer_exists = False
+            if dev_manufacturer == "" or dev_manufacturer == None:
+                    dev_manufacturer = "ohne Angabe"
+            for manufacturer in manufacturer_list:
+                if dev_manufacturer == manufacturer["name"]:
+                    manufacturer["count"] += 1
+                    manufacturer_exists = True
+            if manufacturer_exists == False:
+                manufacturer_list.append({"name": dev_manufacturer, "count": 1})
+
+        # In der Session nachschauen ob die Task enthalten ist.
+        # Wenn ja dann writeable = True setzen.
+        writeable = False
+        if _is_exp_date_in_session_valid(d.tsk_id):
+            writeable = True
+
+        if d.tsk_state == None:
+            new_task_list.append(
+                {
+                    "id": d.tsk_id,
+                    "faultDescription": d.tsk_fault_description,
+                    "creationDate": d.tsk_creation_date,
+                    "deviceName": dev_name,
+                    "deviceManufacturer": dev_manufacturer,
+                    "deviceModel": dev_model,
+                    "deviceCategory": dev_category,
+                    "writeable": writeable,
+                }
+            )
+    return jsonify({
+        'new_task_list':new_task_list,
+        'in_process_task_list':in_process_task_list,
+        'done_task_list':done_task_list,
+        'category_list':category_list,
+        'manufacturer_list':manufacturer_list})
+
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config["ALLOWED_EXTENSIONS"]
 
