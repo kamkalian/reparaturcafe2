@@ -2,7 +2,7 @@ import time
 import os
 from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
-from api.models import Task, Customer, Device, Image, HashToken
+from api.models import Task, Customer, Device, Image, HashToken, State
 from api import db
 from datetime import datetime
 import secrets
@@ -329,13 +329,19 @@ def task():
             resp['tsk_fault_description'] = task.tsk_fault_description
 
             is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(task.tsk_id)
-            if is_exp_date_in_session_valid:
+            is_granted = False
+            user = session.get('USER', None)
+            if user:
+                if user[3] == "admin" or user[3] == "user":
+                    is_granted = True
+            if is_exp_date_in_session_valid or is_granted:
                 resp['writeable'] = True
                 resp['cus_first_name'] = task.customer.cus_first_name
                 resp['cus_last_name'] = task.customer.cus_last_name
                 resp['cus_phone'] = task.customer.cus_phone_no
                 resp['cus_email'] = task.customer.cus_email
                 resp['tsk_auth'] = tsk_auth
+                resp['tsk_state'] = task.tsk_state
 
                 if(tsk_auth == 'dev'):
                     resp['hash_tokens'] = [{
