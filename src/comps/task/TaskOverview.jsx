@@ -180,6 +180,7 @@ export default class TaskOverview extends React.Component {
                     </Grid>
                     <Grid item md={12} sm={6} xs={12}>
                       <h3>Status</h3>
+                      <p>{this.state.data['tsk_state']}</p>
                     </Grid>
                   </Grid>
 
