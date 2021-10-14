@@ -15,13 +15,13 @@ export default class MagneticSign extends React.Component {
                 spacing={3} 
                 className={this.props.printversion ? "task-sign-print" : "task-sign"}
             >
-                <Grid item md={2} sm={4} xs={this.props.printversion ? 2 : 12} style={{paddingTop:10}}>
+                <Grid item md={4} sm={4} xs={this.props.printversion ? 2 : 12} style={{paddingTop:10}}>
                     <TaskIdLabel 
                     taskId={this.props.taskId}
                     />
                 </Grid>
-                <Grid item md={10} sm={6} xs={this.props.printversion ? 7 : 12} style={{paddingTop:10}}>
-                    <Typography variant="h5">
+                <Grid item md={8} sm={6} xs={this.props.printversion ? 7 : 12} style={{paddingTop:10}}>
+                    <Typography variant="h5" style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
                         {this.props.deviceName}
                     </Typography>
                     <Divider style={{marginTop:10, marginBottom:10}}/>
