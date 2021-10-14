@@ -260,19 +260,24 @@ def task_lists():
         if _is_exp_date_in_session_valid(d.tsk_id):
             writeable = True
 
+        task = {
+            "id": d.tsk_id,
+            "faultDescription": d.tsk_fault_description,
+            "creationDate": d.tsk_creation_date,
+            "deviceName": dev_name,
+            "deviceManufacturer": dev_manufacturer,
+            "deviceModel": dev_model,
+            "deviceCategory": dev_category,
+            "writeable": writeable,
+        }
         if d.tsk_state == None:
-            new_task_list.append(
-                {
-                    "id": d.tsk_id,
-                    "faultDescription": d.tsk_fault_description,
-                    "creationDate": d.tsk_creation_date,
-                    "deviceName": dev_name,
-                    "deviceManufacturer": dev_manufacturer,
-                    "deviceModel": dev_model,
-                    "deviceCategory": dev_category,
-                    "writeable": writeable,
-                }
-            )
+            new_task_list.append(task)
+        elif d.tsk_state == "in_process":
+            in_process_task_list.append(task)
+        elif d.tsk_state == "done":
+            done_task_list.append(task)
+
+        
     return jsonify({
         'new_task_list':new_task_list,
         'in_process_task_list':in_process_task_list,
