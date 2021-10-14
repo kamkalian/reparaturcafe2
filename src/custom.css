@@ -29,9 +29,12 @@
 
 .task-sign-id{
     display:block;
-    border: 2px solid #000!important;
+    
     border-radius: 10px;
-    padding:2px;
+    padding:5px;
     text-align: center;
-    zoom: 1.5;
+    color: #fff;
+    background-color: #666;
+    font-weight: bold;
+    font-size: 150%;
 }
