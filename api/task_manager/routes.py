@@ -435,3 +435,10 @@ def image():
             return send_file("../images/error.svg", mimetype='image/svg')
     else:
         return send_file("../images/error.svg", mimetype='image/svg')
+
+
+@bp.route('/api/state_list', methods=['GET'])
+def state_list():
+    state_list_db = State.query.all()
+    return {"state_list": [d.sta_name for d in state_list_db]}
+
