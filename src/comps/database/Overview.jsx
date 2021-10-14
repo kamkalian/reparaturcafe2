@@ -134,8 +134,7 @@ export default class Overview extends React.Component {
     }
   }
 
-  render() {    
-    console.log(this.state_list);
+  render() {
     const newTaskList = this.state.newTaskList.map((item, index) => {
       const CustomLink = props => <Link to={'/task/' + item.id} target="_blank" {...props} />;
       return(
@@ -217,7 +216,7 @@ export default class Overview extends React.Component {
             </Grid>
             <Grid item xs="12">
               <Typography>
-                Gefundene Geräte: {this.state.newTaskList.length}
+                Gefundene Geräte: {this.state.newTaskList.length + this.state.inProcessTaskList + this.state.doneTaskList}
               </Typography>
             </Grid>
 
