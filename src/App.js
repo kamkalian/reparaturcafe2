@@ -3,6 +3,7 @@ import React from 'react';
 import Container from '@mui/material/Container';
 import NewTask from './comps/task/NewTask';
 import Database from './comps/database/Database';
+import Overview from './comps/database/Overview';
 import QRCodeScanner from './comps/QRCodeScanner';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -195,6 +196,11 @@ function App() {
               <NewTask></NewTask>
             </Route>
             <Route path="/database" component={Database}></Route>
+            <Route path="/overview" 
+              render={(props) => 
+                <Overview {...props} userRole={userRole}/>
+                }>
+            </Route>
             <Route path="/scan" component={QRCodeScanner}></Route>
             <Route path="/">
               <h2>Hallo. test</h2>
