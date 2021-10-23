@@ -140,6 +140,7 @@ export default class NewTaskFormular extends React.Component {
         fd.append('file', event.target.files[0]);
         fetch('/api/upload_image', {
             method: 'POST',
+            headers: {'X-CSRFToken': this.props.csrfToken},
             body: fd
         })
         .then(res => res.json())

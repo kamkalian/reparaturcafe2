@@ -17,13 +17,12 @@ class Attachments extends React.Component {
     }
 
     callImageFetch(filename){
-        fetch('/api/image', {
-            method: 'POST',
+        fetch('/api/image/'+filename, {
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({'img_filename': filename}),
+            }
         })
         .then((response) => {
             if(response.status===200){
