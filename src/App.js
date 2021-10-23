@@ -4,6 +4,7 @@ import Container from '@mui/material/Container';
 import NewTaskFormular from './comps/task/NewTaskFormular';
 import Database from './comps/database/Database';
 import Overview from './comps/database/Overview';
+import Logout from './comps/Logout';
 import QRCodeScanner from './comps/QRCodeScanner';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -23,7 +24,6 @@ import Alert from '@mui/lab/Alert';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Settings from './comps/settings/Settings'
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import Hidden from '@mui/material/Hidden';
 
 
@@ -34,28 +34,26 @@ function App() {
   const [userRole, setUserRole] = useState("");
   const [csrfToken, setCsrfToken] = useState("");
 
-  useEffect(async () => {
-    // Update the document title using the browser API
-    document.title = "Reparaturcafe";
-      
-    let response = await fetch('/api/session_user', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-    })
-    let data = await response.json()
-    
-    
-        setUserLoggedIn(data["user_logged_in"]);
-        setUsername(data["username"]);
-        setUserRole(data["user_role"]);
-        setCsrfToken(data["csrf_token"]);
-    
- 
-  });
-
+  useEffect(() => {
+    async function fetchData() {
+      // Update the document title using the browser API
+      document.title = "Reparaturcafe";
+        
+      let response = await fetch('/api/session_user', {
+          method: 'GET',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          }
+      })
+      let data = await response.json()
+      setUserLoggedIn(data["user_logged_in"]);
+      setUsername(data["username"]);
+      setUserRole(data["user_role"]);
+      setCsrfToken(data["csrf_token"]);
+    }
+    fetchData();
+  }, []);
 
   return (    
     <ThemeProvider theme={theme}>
@@ -142,15 +140,7 @@ function App() {
             ) : ""}
             {userLoggedIn ? (
               <Grid item>
-                <Button 
-                  component={Link} 
-                  to="/logout"
-                  color="inherit"
-                  startIcon={<PowerSettingsNewIcon />}>
-                  <Hidden lgDown>
-                    Ausloggen
-                  </Hidden>
-                </Button>
+                <Logout csrfToken={csrfToken}/>
               </Grid>
             ) : ""}
           </Grid>

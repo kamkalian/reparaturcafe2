@@ -42,3 +42,9 @@ def session_user():
 def csrf_token():
     token = generate_csrf()
     return {'csrf_token': token}
+
+
+@bp.route('/api/logout', methods=['POST'])
+def logout():
+    session['USER'] = ""
+    return {'success': 1}
