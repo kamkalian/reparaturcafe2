@@ -11,6 +11,10 @@ import Button from '@mui/material/Button';
 import ReactToPrint from 'react-to-print';
 import TaskPrint from './TaskPrint';
 import { Alert, AlertTitle } from '@mui/lab';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 
 export default class TaskOverview extends React.Component {
@@ -21,7 +25,11 @@ export default class TaskOverview extends React.Component {
         writeable: false,
         hover: false,
         newQRCodeImage: "",
-        showNewTaskInfo: false
+        showNewTaskInfo: false,
+        stateList: [],
+        stepList: [],
+        state: "",
+        step: "",
     }
   }
 
@@ -45,6 +53,8 @@ export default class TaskOverview extends React.Component {
             // nur Statuscode reicht nicht aus.
             this.setState({
               data: data,
+              state: data['tsk_state'],
+              nextStep: data['tsk_next_step'],
               writeable: data['writeable']
             }, function() {
               if(this.props.location.search === "?new=1" && this.state.data["new_token"]){
@@ -74,16 +84,95 @@ export default class TaskOverview extends React.Component {
           });
         }
       })
+
+      fetch('/api/state_lists', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+      })
+      .then((response) => {
+        if(response.status===200){
+          response.json()
+          .then(data => {
+            this.setState({
+              stateList: data['state_list'],
+              stepList: data['step_list']
+            });
+          });
+        }
+      })
   }
 
   componentDidMount(){
       this.fetchCall();
   }
 
+  handleStateChange = (event) => {
+    this.setState({
+      state: event.target.value
+    }, function(){
+      fetch('/api/change_state', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': this.props.csrfToken,
+        },
+        body: JSON.stringify({
+          tsk_id: this.state.data['tsk_id'],
+          new_state: this.state.state
+        }),
+      })
+      .then((response) => {
+        if(response.status===200){
+          response.json()
+          .then(data => {
+            this.fetchCall();
+          });
+        }
+      })
+    })
+  }
+
+  handleNextStepChange = (event) => {
+    this.setState({
+      nextStep: event.target.value
+    }, function(){
+      fetch('/api/change_next_step', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': this.props.csrfToken,
+        },
+        body: JSON.stringify({
+          tsk_id: this.state.data['tsk_id'],
+          new_next_step: this.state.nextStep
+        }),
+      })
+      .then((response) => {
+        if(response.status===200){
+          response.json()
+          .then(data => {
+            this.fetchCall();
+          });
+        }
+      })
+    })
+  }
+
   render(){
       // Nur ein Komma anzeigen, wenn Vor und Nachname angegeben wurden.
       var komma = ", " 
       if(!this.state.data['cus_first_name'] || !this.state.data['cus_last_name']) komma = "";
+      const stateOptions = this.state.stateList.map((state, index) => (
+        <MenuItem value={state[0]} key={index}>{state[1]}</MenuItem>
+      ));
+      const stepOptions = this.state.stepList.map((step, index) => (
+        <MenuItem value={step[0]} key={index}>{step[1]}</MenuItem>
+      ));
       return(
           <Box style={{marginRight:20, marginTop:20}} id="task">
             {this.state.showNewTaskInfo ? (
@@ -119,7 +208,9 @@ export default class TaskOverview extends React.Component {
               badgeContent={this.state.writeable ? (
               <UnlockedButton
               taskId={this.state.data['tsk_id']} 
-              fetchCall={this.fetchCall} />) : <LockedButton />}>
+              fetchCall={this.fetchCall} 
+              csrfToken={this.props.csrfToken}/>) : <LockedButton />}
+              >
             <MagneticSign
             taskId={this.state.data['tsk_id']}
             deviceName={this.state.data['dev_name']}
@@ -177,8 +268,37 @@ export default class TaskOverview extends React.Component {
                       {this.state.data['cus_email'] ? <p>{this.state.data['cus_email']}</p> : ""}
                     </Grid>
                     <Grid item md={12} sm={6} xs={12}>
-                      <h3>Status</h3>
-                      <p>{this.state.data['tsk_state']}</p>
+                      <h3>Status / nächster Schritt</h3>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                          <FormControl fullWidth>
+                            <InputLabel id="state-label">Status</InputLabel>
+                            <Select
+                              labelId="state-label"
+                              id="state-select"
+                              value={stateOptions ? this.state.state : ""}
+                              label="Status"
+                              onChange={this.handleStateChange}
+                            >
+                              {stateOptions}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <FormControl fullWidth>
+                            <InputLabel id="next-step-label">nächster Schritt</InputLabel>
+                            <Select
+                              labelId="next-step-label"
+                              id="next-step-select"
+                              value={stepOptions ? this.state.nextStep : ""}
+                              label="nächster Schritt"
+                              onChange={this.handleNextStepChange}
+                            >
+                              {stepOptions}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
 

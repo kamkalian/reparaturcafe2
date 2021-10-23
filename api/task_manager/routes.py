@@ -2,7 +2,7 @@ import time
 import os
 from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
-from api.models import Task, Customer, Device, Image, HashToken, State
+from api.models import Task, Customer, Device, Image, HashToken, State, Step
 from api import db
 from datetime import datetime
 import secrets
@@ -67,6 +67,8 @@ def new_task():
         tsk_creation_date = datetime.now(),
         tsk_cus_id = cus_id,
         tsk_dev_id = dev_id,
+        tsk_state = "new",
+        tsk_next_step = "not_set",
     )
 
     db.session.add(new_task) # pylint: disable=maybe-no-member
@@ -190,7 +192,8 @@ def task_lists():
     filter_text = request.args.get('filter_text')
 
     tasks = Task.query
-    tasks = tasks.join(Task.device, aliased=True)
+    tasks = tasks.join(Device)
+    tasks = tasks.join(Customer)
     if filter_category != "":
         if filter_category == "ohne Angabe":
             filter_category = ""
@@ -201,7 +204,11 @@ def task_lists():
         tasks = tasks.filter_by(dev_mnf_name=filter_manufacturer)
     if filter_text != "" :
         tasks = tasks.filter(or_(
-                Task.tsk_id == filter_text, Device.dev_name.contains(filter_text)
+                Task.tsk_id == filter_text,
+                Device.dev_name.contains(filter_text),
+                Customer.cus_last_name.contains(filter_text),
+                Customer.cus_first_name.contains(filter_text),
+                Customer.cus_email.contains(filter_text),
             )
         )
     tasks = tasks.order_by(Task.tsk_id.asc()).all()
@@ -262,7 +269,7 @@ def task_lists():
             "deviceCategory": dev_category,
             "writeable": writeable,
         }
-        if d.tsk_state == None:
+        if d.tsk_state == "new":
             new_task_list.append(task)
         elif d.tsk_state == "in_process":
             in_process_task_list.append(task)
@@ -322,12 +329,8 @@ def task():
             resp['tsk_fault_description'] = task.tsk_fault_description
 
             is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(task.tsk_id)
-            is_granted = False
-            user = session.get('USER', None)
-            if user:
-                if user[3] == "admin" or user[3] == "user":
-                    is_granted = True
-            if is_exp_date_in_session_valid or is_granted:
+            
+            if is_exp_date_in_session_valid or _is_granted():
                 resp['writeable'] = True
                 resp['cus_first_name'] = task.customer.cus_first_name
                 resp['cus_last_name'] = task.customer.cus_last_name
@@ -335,6 +338,7 @@ def task():
                 resp['cus_email'] = task.customer.cus_email
                 resp['tsk_auth'] = tsk_auth
                 resp['tsk_state'] = task.tsk_state
+                resp['tsk_next_step'] = task.tsk_next_step
 
                 if(tsk_auth == 'dev'):
                     resp['hash_tokens'] = [{
@@ -399,6 +403,14 @@ def _is_exp_date_in_session_valid(tsk_id):
         return False, None
 
 
+def _is_granted():
+    user = session.get('USER', None)
+    if user:
+        if user[3] == "admin" or user[3] == "user":
+            return True
+    return False
+
+
 @bp.route('/api/new_qrcode_image/<tsk_id>', methods=['GET'])
 def new_qrcode_image(tsk_id):
     if tsk_id:
@@ -421,8 +433,76 @@ def image(img_filename):
         return send_file("../images/error.svg", mimetype='image/svg')
 
 
-@bp.route('/api/state_list', methods=['GET'])
-def state_list():
-    state_list_db = State.query.all()
-    return {"state_list": [d.sta_name for d in state_list_db]}
+@bp.route('/api/state_lists', methods=['GET'])
+def state_lists():
+    state_list_db = State.query.order_by(State.sta_caption).all()
+    step_list_db = Step.query.order_by(Step.ste_caption).all()
+    return jsonify({
+        "state_list": [(d.sta_name, d.sta_caption) for d in state_list_db],
+        "step_list": [(d.ste_name, d.ste_caption) for d in step_list_db]})
 
+
+@bp.route('/api/change_state', methods=['POST'])
+def change_state():
+    post_json = request.get_json()
+    tsk_id = None
+    new_state = None
+    resp = {}
+    resp_json = jsonify({})
+
+    if "tsk_id" in post_json:
+        tsk_id = post_json["tsk_id"]
+    if "new_state" in post_json:
+        new_state = post_json["new_state"]
+    
+    if tsk_id and new_state:
+        is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
+        if is_exp_date_in_session_valid or _is_granted():
+            task = Task.query.filter_by(tsk_id=tsk_id).first()
+            if task:
+                task.tsk_state = new_state
+                db.session.commit()
+                resp["state"] = "success"
+        else:
+            resp["state"] = "error"
+            resp["msg"] = "Keine Berechtigung!"
+    else:
+        resp["state"] = "error"
+        resp["msg"] = "Keine Task ID angegeben!"
+
+    resp_json = jsonify(resp)
+
+    return resp_json
+
+
+@bp.route('/api/change_next_step', methods=['POST'])
+def change_next_step():
+    post_json = request.get_json()
+    tsk_id = None
+    new_state = None
+    resp = {}
+    resp_json = jsonify({})
+
+    if "tsk_id" in post_json:
+        tsk_id = post_json["tsk_id"]
+    if "new_next_step" in post_json:
+        new_next_step = post_json["new_next_step"]
+    
+    if tsk_id and new_next_step:
+        is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
+        if is_exp_date_in_session_valid or _is_granted():
+            task = Task.query.filter_by(tsk_id=tsk_id).first()
+            if task:
+                task.tsk_next_step = new_next_step
+                db.session.commit()
+                resp["state"] = "success"
+        else:
+            resp["state"] = "error"
+            resp["msg"] = "Keine Berechtigung!"
+    else:
+        resp["state"] = "error"
+        resp["msg"] = "Keine Task ID angegeben!"
+
+    resp_json = jsonify(resp)
+
+    return resp_json
