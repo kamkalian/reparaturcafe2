@@ -18,7 +18,6 @@ export default class Overview extends React.Component {
       doneTaskList: [],
       categories: [],
       manufacturers: [],
-      state_list: [],
       openCategory: false,
       openManufacturer: false,
       filterCategory: "",
@@ -47,25 +46,8 @@ export default class Overview extends React.Component {
     });
   }
 
-  fetchStateList = () => {
-    fetch('/api/state_list', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-      this.setState({ 
-        state_list: data['state_list'],
-        })
-    });
-  }
-
   componentDidMount() {
     this.fetchTaskLists();
-    this.fetchStateList();
   }
 
   handleFilterOpen = (event) => {
