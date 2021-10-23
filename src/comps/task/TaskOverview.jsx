@@ -57,13 +57,12 @@ export default class TaskOverview extends React.Component {
         }
       });
 
-      fetch('/api/new_qrcode_image', {
-        method: 'POST',
+      fetch('/api/new_qrcode_image/'+taskId, {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({'tsk_id': taskId}),
+            'Content-Type': 'application/json'
+        }
       })
       .then((response) => {
         if(response.status===200){
