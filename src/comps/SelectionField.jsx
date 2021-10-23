@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 
 
 export default class SelectionField extends React.Component {
@@ -12,7 +12,8 @@ export default class SelectionField extends React.Component {
             color="primary"
             fullWidth={true}
             onClick={this.props.handleOpen}
-            style={{justifyContent: "flex-start"}}
+            style={{minHeight:"50px", justifyContent: "flex-start"}}
+            startIcon={this.props.startIcon}
             >
                 {this.props.buttonLabel}
             </Button>
@@ -21,7 +22,7 @@ export default class SelectionField extends React.Component {
             <Chip 
             label={this.props.selectedName}
             onDelete={this.props.handleSelectedDelete.bind(this, this.props.stateName)}
-            style={{fontSize:20, width:"100%", justifyContent: "flex-start", paddingLeft:5}}
+            style={{minHeight:"50px", fontSize:"20px", width:"100%", justifyContent: "flex-start", paddingLeft:5}}
             color="secondary"
             />
             );

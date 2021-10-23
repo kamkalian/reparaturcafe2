@@ -1,13 +1,15 @@
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import List from '@material-ui/core/List';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import List from '@mui/material/List';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 export default class SelectionDialog extends React.Component {
@@ -29,27 +31,29 @@ export default class SelectionDialog extends React.Component {
             // Prüfen ob der Eintrag eventuell blockiert ist, weil er schon ausgewählt wurde.
             var blockedItem = false;
             var i;
+            const itemName = this.props.withCounts ? item["name"] : item;
             if(this.props.blockedList){
                 for(i=0; i < this.props.blockedList.length; i++){
-                    if(item === this.props.blockedList[i]){
+                    if(itemName === this.props.blockedList[i]){
                         blockedItem = true;
                         break;
                     }
                 }
             }
-
-            if(item.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1 && !blockedItem) return true;
+            if(itemName.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1 && !blockedItem) return true;
             return false;
         }, this).map((item, index) => {
+            const itemName = this.props.withCounts ? item["name"] : item;
+            const itemCount = this.props.withCounts ? item["count"] : 0;
             return (
                 <Chip 
                 key={index}
                 style={{margin:10, fontSize:20}}
-                data-id={item}
+                data-id={itemName}
                 data-statename={this.props.stateName}
                 color="primary" 
                 onClick={this.props.handleSelectionClick}
-                label={item}
+                label={itemName + (this.props.withCounts ? ( "(" + itemCount + ")") : "")}
                 icon={<AddCircleIcon />} />
                 );
         });
@@ -68,6 +72,8 @@ export default class SelectionDialog extends React.Component {
 
         return(
             <Dialog 
+            fullWidth
+            maxWidth="md"
             open={this.props.openSelection} 
             onClose={this.props.handleClose} 
             aria-labelledby="selection-dialog"
@@ -78,11 +84,18 @@ export default class SelectionDialog extends React.Component {
                     autoFocus
                     margin="dense"
                     id={"selection" + this.props.selectionTitle}
-                    label="Suche"
+                    label="Suche / Eingabe"
                     type="search"
                     fullWidth
                     value={this.state.searchString}
                     onChange={this.handleSearchChange}
+                    InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon />
+                          </InputAdornment>
+                        ),
+                      }}
                 />
                 <List component="nav" aria-label="main mailbox folders">
                     {listItems}

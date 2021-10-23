@@ -6,3 +6,35 @@
 .checked-box{
     border: 2px solid #00998c;
 }
+
+.MuiGridListTileBar-root{
+    background:rgba(255,255,255,0.8)!important;
+}
+
+.task-sign{
+    background: #e7bb3e!important;
+    border-right: 2px solid #666!important;
+    border-bottom: 2px solid #666!important;
+    padding: 10px!important;
+    margin: 0px!important;
+    width:100%!important;
+}
+
+.task-sign-print{
+    border-bottom: 2px solid #666!important;
+    padding: 10px!important;
+    margin: 0px!important;
+    width:100%!important;
+}
+
+.task-sign-id{
+    display:block;
+    
+    border-radius: 10px;
+    padding:5px;
+    text-align: center;
+    color: #fff;
+    background-color: #666;
+    font-weight: bold;
+    font-size: 150%;
+}

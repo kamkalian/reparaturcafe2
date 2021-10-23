@@ -1,4 +1,4 @@
-import {createMuiTheme} from '@material-ui/core'
+import {createMuiTheme} from '@mui/material'
 
 
 const theme = createMuiTheme({
@@ -17,7 +17,7 @@ const theme = createMuiTheme({
     typography: {
         // In Chinese and Japanese the characters are usually larger,
         // so a smaller fontsize may be appropriate.
-        fontSize: 14,
+        fontSize: 16,
     },
 })
 

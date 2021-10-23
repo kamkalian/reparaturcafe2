@@ -1,20 +1,23 @@
 import React from 'react';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
-import StepContent from '@material-ui/core/StepContent';
-import Button from '@material-ui/core/Button';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepButton from '@mui/material/StepButton';
+import StepContent from '@mui/material/StepContent';
+import Button from '@mui/material/Button';
 import ContactForm from '../ContactForm';
 import DeviceForm from '../DeviceForm';
 import FaultDescriptionField from '../FaultDescriptionField';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+import Attachments from '../Attachments';
 
 
 export default class NewTaskFormular extends React.Component {
@@ -51,17 +54,20 @@ export default class NewTaskFormular extends React.Component {
             completed:false,
             error:false,
             tskID: "",
-            tskToke: "",
+            tskToken: "",
+            files: [],
+            newsletter: false,
         }
     }
 
 
     apiCall = () => {
-        fetch('/new_task', {
+        fetch('/api/new_task', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                'X-CSRFToken': this.props.csrfToken,
             },
             body: JSON.stringify({
                 gender: this.state.gender,
@@ -80,6 +86,7 @@ export default class NewTaskFormular extends React.Component {
                 electricalMechanical: this.state.electricalMechanical,
                 accessories: this.state.accessories,
                 faultDescription: this.state.faultDescription,
+                files: this.state.files,
             })
         })
         .then(res => res.json())
@@ -107,12 +114,14 @@ export default class NewTaskFormular extends React.Component {
         this.setState({
             activeStep: step
         });
+        this.checkStepCompleted();
     };
 
     handleNext = () => {
         this.setState({
             activeStep: this.state.activeStep + 1
         });
+        this.checkStepCompleted();
     }
 
     handleBack = () => {
@@ -122,7 +131,42 @@ export default class NewTaskFormular extends React.Component {
                     activeStep: this.state.activeStep - 1
                 }
             )
+            this.checkStepCompleted();
         }
+    }
+
+    handleUploadInputChange = (event) => {
+        const fd = new FormData();
+        fd.append('file', event.target.files[0]);
+        fetch('/api/upload_image', {
+            method: 'POST',
+            body: fd
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({
+                    files: this.state.files.concat(result.filename)
+                }, function() {
+                    this.checkStepCompleted();
+                });
+            })
+        .catch(err => console.error(err)); 
+        event.target.value = '';
+    }
+
+    handleDeleteAttachmentButton = (file, event) => {
+        var array = [...this.state.files];
+        var index = this.state.files.indexOf(file);
+        if (index !== -1){
+            array.splice(index, 1);
+        }
+        this.setState({
+            files: array
+        }, function(){
+            this.checkStepCompleted();
+        });
+        
     }
 
     handleReset(){
@@ -131,10 +175,6 @@ export default class NewTaskFormular extends React.Component {
                 activeStep: 0
             }
         )
-    }
-
-    handleGenderChange = (event) =>{
-        this.setState({gender: event.target.value})
     }
 
     checkNameCompleted = () => {
@@ -155,6 +195,24 @@ export default class NewTaskFormular extends React.Component {
         return false;
     }
 
+    checkDevNameCompleted = () => {
+        if(this.state.devName !==""){
+            this.setState({devNameError: false});
+            return true;
+        }
+        this.setState({devNameError: true});
+        return false;
+    }
+
+    checkFaultDescriptionCompleted = () => {
+        if(this.state.faultDescription.length > 49){
+            this.setState({faultDescriptionError: false});
+            return true;
+        }
+        this.setState({faultDescriptionError: true});
+        return false;
+    }
+
     checkStepCompleted = () => {
         var array = [...this.state.stepReleased];
 
@@ -166,7 +224,7 @@ export default class NewTaskFormular extends React.Component {
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
 
-        if(this.state.devName !==""){
+        if(this.checkDevNameCompleted()){
             array[1] = true;
             this.setState({stepReleased: array, devNameError: false}, function(){this.checkFormCompleted()});
         }else{
@@ -174,19 +232,27 @@ export default class NewTaskFormular extends React.Component {
             this.setState({stepReleased: array, devNameError: true}, function(){this.checkFormCompleted()});
         }
 
-        if(this.state.faultDescription.length > 50){
+        if(this.checkFaultDescriptionCompleted()){
             array[2] = true;
-            this.setState({stepReleased: array, faultDescriptionError: false}, function(){this.checkFormCompleted()});
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }else{
             array[2] = false;
-            this.setState({stepReleased: array, faultDescriptionError: true}, function(){this.checkFormCompleted()});
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
 
-        if(this.state.dataProtection){
+        if(this.state.files.length > 0){
             array[3] = true;
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }else{
             array[3] = false;
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
+        }
+
+        if(this.state.dataProtection){
+            array[4] = true;
+            this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
+        }else{
+            array[4] = false;
             this.setState({stepReleased: array}, function(){this.checkFormCompleted()});
         }
     }
@@ -196,7 +262,7 @@ export default class NewTaskFormular extends React.Component {
             this.state.stepReleased[0] &&
             this.state.stepReleased[1] &&
             this.state.stepReleased[2] &&
-            this.state.stepReleased[3]
+            this.state.stepReleased[4]
         ) this.setState({formLocked:false});
         else this.setState({formLocked:true});
     }
@@ -204,48 +270,39 @@ export default class NewTaskFormular extends React.Component {
     handleTextInputChange = (event) => {
         switch(event.currentTarget.id) {
             case 'firstName':
-                this.setState({firstName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({firstName: event.target.value}, function() {
+                    this.checkNameCompleted();
                 });
                 return false;
             case 'lastName':
-                this.setState({lastName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({lastName: event.target.value}, function() {
+                    this.checkNameCompleted();
                 });
-                return false;
-            case 'street':
-                this.setState({street: event.target.value})
-                return false;
-            case 'houseNumber':
-                this.setState({houseNumber: event.target.value})
-                return false;
-            case 'postCode':
-                this.setState({postCode: event.target.value})
                 return false;
             case 'prefixNumber':
                 this.setState({prefixNumber: event.target.value})
                 return false;
             case 'phone':
-                this.setState({phone: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({phone: event.target.value}, function() {
+                    this.checkTelOrEmailCompleted();
                 });
                 return false;
             case 'email':
-                this.setState({email: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({email: event.target.value}, function() {
+                    this.checkTelOrEmailCompleted();
                 });
                 return false;
             case 'devName':
-                this.setState({devName: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({devName: event.target.value}, function() {
+                    this.checkDevNameCompleted();
                 });
                 return false;
             case 'devModel':
                 this.setState({devModel: event.target.value})
                 return false;
             case 'faultDescription':
-                this.setState({faultDescription: event.target.value}, function (){
-                    this.checkStepCompleted();
+                this.setState({faultDescription: event.target.value}, function() {
+                    this.checkFaultDescriptionCompleted();
                 });
                 return false;
             default:
@@ -257,7 +314,7 @@ export default class NewTaskFormular extends React.Component {
     }
 
     getSteps() {
-        return ['Kontaktdaten', 'Gerätedaten', 'Fehlerbeschreibung', 'Prüfen und Abschicken'];
+        return ['Kontaktdaten', 'Gerätedaten', 'Fehlerbeschreibung', "Fotos", 'Prüfen und Abschicken'];
     }
 
     getStepContent(step) {
@@ -273,18 +330,11 @@ export default class NewTaskFormular extends React.Component {
                     </Grid>
                     <Grid item xs={12}>
                         <ContactForm 
-                        gender={this.state.gender}
-                        handleGenderChange={this.handleGenderChange}
                         firstName={this.state.firstName}
                         lastName={this.state.lastName}
-                        street={this.state.street}
-                        houseNumber={this.state.houseNumber}
-                        postCode={this.state.postCode}
                         prefixNumber={this.state.prefixNumber}
                         phone={this.state.phone}
                         email={this.state.email}
-                        openCategory={this.state.openCategory}
-                        openManufacturer={this.state.openManufacturer}
                         handleTextInputChange={this.handleTextInputChange}
                         nameError={this.state.nameError}
                         telEmailError={this.state.telEmailError}
@@ -336,6 +386,22 @@ export default class NewTaskFormular extends React.Component {
                 </React.Fragment>
             );
             case 3:
+                return (
+                    <React.Fragment>
+                    <Grid item xs={12}>
+                        <Typography>Mit einem Foto kannst du uns eventuell zeigen wo das Problem liegt. Wenn möglich lade gerne mehrere Fotos von deinem Gerät hoch. </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        
+                        <Attachments
+                        files={this.state.files}
+                        handleUploadInputChange={this.handleUploadInputChange}
+                        handleDeleteAttachmentButton={this.handleDeleteAttachmentButton}
+                        />
+                    </Grid>
+                    </React.Fragment>
+                )
+            case 4:
             return (
                 <React.Fragment>
                     <Grid item xs={12}>
@@ -401,6 +467,20 @@ export default class NewTaskFormular extends React.Component {
                         />
                     </Grid>
                     <Grid item xs={12}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    value={this.state.newsletter}
+                                    checked={this.state.newsletter}
+                                    onChange={this.handleNewsletterChange}
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                                />
+                            }
+                            label="Aktiviere dieses Häckchen, wenn die AWO Oberlar dir einen Newsletter per Email schicken darf."
+                            style={{paddingRight:10, borderRadius:5, marginLeft:0}}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
                         <div 
                         className={!this.state.formLocked ? 'checked-box' : 'important-box'}
                         style={{padding:10, borderRadius:5}}>
@@ -412,7 +492,7 @@ export default class NewTaskFormular extends React.Component {
                                     <li><Typography>Es fehlt noch die Gerätebezeichnung.</Typography></li>) : ""}
                                 {!this.state.stepReleased[2] ? (
                                     <li><Typography>Gebe bei der Fehlerbeschreibung mindestens 50 Zeichen ein.</Typography></li>) : ""}
-                                {!this.state.stepReleased[3] ? (
+                                {!this.state.stepReleased[4] ? (
                                     <li><Typography>Bestätigung zur Datenschutzerklärung fehlt.</Typography></li>) : ""}
                                 
                                 </ul>
@@ -495,91 +575,84 @@ export default class NewTaskFormular extends React.Component {
         });
     }
 
+    handleNewsletterChange = (event) => {
+        this.setState({
+            newsletter: event.currentTarget.checked,
+        }, function () {
+            this.checkStepCompleted();
+        });
+    }
+
     render(){    
         const steps = this.getSteps();
         return(
-            <Grid container>
-                <Grid item>
-                    {!this.state.completed ? (
-                        <Stepper 
-                        activeStep={this.state.activeStep} 
-                        orientation="vertical"
-                        style={{padding:0}}
-                        nonLinear >
-                        {steps.map((label, index) => (
-                        <Step key={label}>
-                            <StepButton onClick={this.handleStep(index)} completed={this.state.stepReleased[index]}>
-                                <h3>{label}</h3>
-                            </StepButton>
-                            
-                            <StepContent>
-                                <Grid container spacing={5}>
-                                    {this.getStepContent(index)}
-                                    <Grid item xs={12}>
-                                        {this.state.activeStep ? (
-                                            <Button
-                                            onClick={this.handleBack}
-                                            >
-                                                Zurück
-                                            </Button>
-                                        ) : ""}
-                                        {this.state.activeStep === steps.length - 1 ? (
-                                            <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.apiCall}
-                                            disabled={this.state.formLocked}
-                                            >
-                                                Abschicken
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.handleNext}
-                                            >
-                                                Weiter
-                                            </Button>
-                                        )}                           
+            <Box>
+                <h2>Formular</h2>
+                <Grid container>
+                    <Grid item>
+                        {!this.state.completed ? (
+                            <Stepper 
+                            activeStep={this.state.activeStep} 
+                            orientation="vertical"
+                            style={{padding:0}}
+                            nonLinear >
+                            {steps.map((label, index) => (
+                            <Step key={label}>
+                                <StepButton onClick={this.handleStep(index)} completed={this.state.stepReleased[index]}>
+                                    <h3>{label}</h3>
+                                </StepButton>
+                                
+                                <StepContent>
+                                    <Grid container spacing={5}>
+                                        {this.getStepContent(index)}
+                                        <Grid item xs={12}>
+                                            {this.state.activeStep ? (
+                                                <Button
+                                                onClick={this.handleBack}
+                                                >
+                                                    Zurück
+                                                </Button>
+                                            ) : ""}
+                                            {this.state.activeStep === steps.length - 1 ? (
+                                                <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.apiCall}
+                                                disabled={this.state.formLocked}
+                                                >
+                                                    Abschicken
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.handleNext}
+                                                >
+                                                    Weiter
+                                                </Button>
+                                            )}                           
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </StepContent>
-                        </Step>
-                        ))}
-                    </Stepper>
-                ) : (
-                    
-                    this.state.error ? (
-                        <div>
-                            <Typography component="p">
-                                "Irgendwas ist schief gelaufen. Bitte versuche es später noch einmal." 
-                            </Typography>
-                        </div>
-                    ): (
-                        <div>
-                            <Typography component="p">
-                                Deine Daten wurden erfolgreich unter der ID: {this.state.tskID} gespeichert.
-                            </Typography>
-                            <Typography component="p">
-                                Nachfolgend erhälst du einen Link, mit dem du jederzeit den Status einsehen und deine Daten bearbeiten kannst.
-                            </Typography>
-                            <Grid container spacing={3} style={{margin:20}}>
-                                <Grid item lg={4} sm={5} xs={12}>
-                                    <img src={"./qr_codes/" + this.state.tskToken + ".svg"} alt="QR Code Link"/>
-                                </Grid>
-                                <Grid item lg={8} sm={7} xs={12}>
-                                    <a href="https://">https://reparaturcafe.awo-oberlar.de/{this.state.tskToken}</a>
-                                </Grid>
-                            </Grid>
-                            <Typography component="p">
-                                {this.state.email ? "Alle Infos wurden auch an folgende Email geschickt: " + this.state.email : ""} 
-                            </Typography>
-                        </div>
-                    )
-                    
-                )}
-            </Grid>    
-        </Grid>
+                                </StepContent>
+                            </Step>
+                            ))}
+                        </Stepper>
+                    ) : (
+                        
+                        this.state.error ? (
+                            <div>
+                                <Typography component="p">
+                                    "Irgendwas ist schief gelaufen. Bitte versuche es später noch einmal." 
+                                </Typography>
+                            </div>
+                        ): (
+                                window.location.href = "/qrcode/tsk" + this.state.tskToken + "?new=1"
+                        )
+                        
+                    )}
+                </Grid>    
+            </Grid>
+        </Box>
         );
     }
 

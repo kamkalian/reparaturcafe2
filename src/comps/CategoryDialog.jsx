@@ -1,13 +1,13 @@
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import List from '@material-ui/core/List';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import List from '@mui/material/List';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 
 export default class CategoryDialog extends React.Component {
