@@ -28,17 +28,12 @@ export default class Overview extends React.Component {
   }
 
   fetchTaskLists = () => {
-    fetch('/api/task_lists', {
-        method: 'POST',
+    fetch('/api/task_lists?filter_category='+this.state.filterCategory+'&filter_manufacturer='+this.state.filterManufacturer+'&filter_text='+this.state.filterText, {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          filterCategory: this.state.filterCategory,
-          filterManufacturer: this.state.filterManufacturer,
-          filterText: this.state.filterText,
-        })
+        }
     })
     .then(response => response.json())
     .then(data => {

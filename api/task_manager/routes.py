@@ -183,31 +183,27 @@ def tasks():
         'manufacturer_list':manufacturer_list})
 
 
-@bp.route('/api/task_lists', methods=['POST'])
+@bp.route('/api/task_lists', methods=['GET'])
 def task_lists():
-    post_json = request.get_json()
+    filter_category = request.args.get('filter_category')
+    filter_manufacturer = request.args.get('filter_manufacturer')
+    filter_text = request.args.get('filter_text')
 
     tasks = Task.query
     tasks = tasks.join(Task.device, aliased=True)
-    if "filterCategory" in post_json:
-        filter_category = post_json["filterCategory"]
-        if filter_category != "":
-            if filter_category == "ohne Angabe":
-                filter_category = ""
-            tasks = tasks.filter_by(dev_category=filter_category)
-    if "filterManufacturer" in post_json:
-        filter_manufacturer = post_json["filterManufacturer"]
-        if filter_manufacturer != "":
-            if filter_manufacturer == "ohne Angabe":
-                filter_manufacturer = ""
-            tasks = tasks.filter_by(dev_mnf_name=filter_manufacturer)
-    if "filterText" in post_json:
-        filter_text = post_json["filterText"]
-        if filter_text != "" :
-            tasks = tasks.filter(or_(
-                    Task.tsk_id == filter_text, Device.dev_name.contains(filter_text)
-                )
+    if filter_category != "":
+        if filter_category == "ohne Angabe":
+            filter_category = ""
+        tasks = tasks.filter_by(dev_category=filter_category)
+    if filter_manufacturer != "":
+        if filter_manufacturer == "ohne Angabe":
+            filter_manufacturer = ""
+        tasks = tasks.filter_by(dev_mnf_name=filter_manufacturer)
+    if filter_text != "" :
+        tasks = tasks.filter(or_(
+                Task.tsk_id == filter_text, Device.dev_name.contains(filter_text)
             )
+        )
     tasks = tasks.order_by(Task.tsk_id.asc()).all()
 
     new_task_list = []
