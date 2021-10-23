@@ -3,10 +3,12 @@ from api.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_session import Session
+from flask_wtf.csrf import CSRFProtect
 
 db = SQLAlchemy()
 migrate = Migrate()
 session = Session()
+csrf = CSRFProtect()
 
 def create_app(config_class=None):
     """Create app instance."""
@@ -20,6 +22,7 @@ def create_app(config_class=None):
     db.init_app(app)
     migrate.init_app(app, db)
     session.init_app(app)
+    csrf.init_app(app)
 
     from api.main import bp as main
     app.register_blueprint(main)

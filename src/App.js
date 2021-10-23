@@ -33,6 +33,7 @@ function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [userRole, setUserRole] = useState("");
+  const [csrfToken, setCsrfToken] = useState("");
 
   useEffect(() => {
     // Update the document title using the browser API
@@ -64,9 +65,10 @@ function App() {
       .then(data => {
         setUserLoggedIn(data["user_logged_in"]);
         setUsername(data["username"]);
-        setUserRole(data["user_role"])
-      });  
-    });
+        setUserRole(data["user_role"]);
+        setCsrfToken(data["csrf_token"]);
+    
+ 
   });
 
 
@@ -183,13 +185,13 @@ function App() {
             <Route
               path="/qrcode/:token"
               render={(props) =>
-                <QRCodeController {...props}/>
+                <QRCodeController {...props} csrfToken={csrfToken}/>
               }>
             </Route>
             <Route
               path="/task/:taskId"
               render={(props) =>
-                <TaskOverview {...props}/>
+                <TaskOverview {...props} csrfToken={csrfToken}/>
               }>
             </Route>
             <Route path="/new_task">

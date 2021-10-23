@@ -5,9 +5,10 @@ from api.models import Task, Customer, Device, Image, User, HashToken
 import re
 import hashlib
 from datetime import datetime
+from api import csrf
 
 
-@bp.route('/api/qrcode', methods=['POST', 'GET'])
+@csrf.exempt
 def qrcode():
     post_json = ""
     qrcode = ""
