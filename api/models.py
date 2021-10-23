@@ -117,12 +117,14 @@ class State(db.Model):
     """Table fo states"""
     __tablename__ = "state"
     sta_name = db.Column(db.String(64), primary_key=True, nullable=False)
+    sta_caption = db.Column(db.String(255))
 
 
 class Step(db.Model):
     """Table fo steps"""
     __tablename__ = "step"
     ste_name = db.Column(db.String(64), primary_key=True, nullable=False)
+    ste_caption = db.Column(db.String(255))
 
 
 class Category(db.Model):
