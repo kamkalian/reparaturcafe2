@@ -60,89 +60,95 @@ function App() {
       <BrowserRouter>
       <AppBar position="static">
         <Toolbar>
-          <h1>ReparaturCafé</h1>
-          <Grid container spacing={3} justify="center">
-            {!userLoggedIn ? (
-              <Grid item>
-                <Button 
-                  component={Link} 
-                  to="/"
-                  color="inherit"
-                  startIcon={<HomeOutlinedIcon />}>
-                  Startseite
-                </Button>
-              </Grid>
-            ) : ""}
-            <Grid item>
-              <Button 
-                component={Link} 
-                to="/new_task"
-                color="inherit"
-                startIcon={<DescriptionOutlinedIcon />}>
-                <Hidden mdDown>
-                  Formular
-                </Hidden>
-              </Button>
+          <Grid container spacing={3}>
+            <Grid item xs={3}>
+              <h1>ReparaturCafé</h1>
             </Grid>
-            {!userLoggedIn ? (
-              <Grid item>
-                <Button 
-                  component={Link} 
-                  to="/database"
-                  color="inherit"
-                  startIcon={<StorageOutlinedIcon />}>
-                  <Hidden mdDown>
-                    Datenbank
-                  </Hidden>
-                </Button>
+            <Grid item xs={9} display="flex" >
+              <Grid container spacing={3} justifyContent="flex-end">
+                {!userLoggedIn ? (
+                  <Grid item display="flex" justify="center">
+                    <Button 
+                      component={Link} 
+                      to="/"
+                      color="inherit"
+                      startIcon={<HomeOutlinedIcon />}>
+                      Startseite
+                    </Button>
+                  </Grid>
+                ) : ""}
+                <Grid item display="flex" justify="center">
+                  <Button 
+                    component={Link} 
+                    to="/new_task"
+                    color="inherit"
+                    startIcon={<DescriptionOutlinedIcon />}>
+                    <Hidden mdDown>
+                      Formular
+                    </Hidden>
+                  </Button>
+                </Grid>
+                {!userLoggedIn ? (
+                  <Grid item display="flex" justify="center">
+                    <Button 
+                      component={Link} 
+                      to="/database"
+                      color="inherit"
+                      startIcon={<StorageOutlinedIcon />}>
+                      <Hidden mdDown>
+                        Datenbank
+                      </Hidden>
+                    </Button>
+                  </Grid>
+                ) : (
+                  <Grid item display="flex" justify="center">
+                    <Button 
+                      component={Link} 
+                      to="/overview"
+                      color="inherit"
+                      startIcon={<StorageOutlinedIcon />}>
+                      <Hidden mdDown>
+                        Übersicht
+                      </Hidden>
+                    </Button>
+                  </Grid>
+                )}
+                <Grid item style={{ display: "flex", alignItems: "center" }}>
+                  <QRCodeScanner></QRCodeScanner>
+                </Grid>
+                {userLoggedIn ? (
+                  <Grid item display="flex" justify="center">
+                    <Button 
+                      component={Link} 
+                      to="/user"
+                      color="inherit"
+                      startIcon={<AccountCircleOutlinedIcon />}>
+                      <Hidden lgDown>
+                        {username}
+                      </Hidden>
+                    </Button>
+                  </Grid>
+                ) : ""}
+                {userRole === "admin" ? (
+                  <Grid item display="flex" justify="center">
+                    <Button 
+                      component={Link} 
+                      to="/settings"
+                      color="inherit"
+                      startIcon={<SettingsIcon />}>
+                      <Hidden lgDown>
+                        Einstellungen
+                      </Hidden>
+                    </Button>
+                  </Grid>
+                ) : ""}
+                {userLoggedIn ? (
+                  <Grid item display="flex" justify="center">
+                    <Logout csrfToken={csrfToken}/>
+                  </Grid>
+                ) : ""}
               </Grid>
-            ) : (
-              <Grid item>
-                <Button 
-                  component={Link} 
-                  to="/overview"
-                  color="inherit"
-                  startIcon={<StorageOutlinedIcon />}>
-                  <Hidden mdDown>
-                    Übersicht
-                  </Hidden>
-                </Button>
-              </Grid>
-            )}
-            <Grid item>
-              <QRCodeScanner></QRCodeScanner>
             </Grid>
-            {userLoggedIn ? (
-              <Grid item>
-                <Button 
-                  component={Link} 
-                  to="/user"
-                  color="inherit"
-                  startIcon={<AccountCircleOutlinedIcon />}>
-                  <Hidden lgDown>
-                    {username}
-                  </Hidden>
-                </Button>
-              </Grid>
-            ) : ""}
-            {userRole === "admin" ? (
-              <Grid item>
-                <Button 
-                  component={Link} 
-                  to="/settings"
-                  color="inherit"
-                  startIcon={<SettingsIcon />}>
-                  <Hidden lgDown>
-                    Einstellungen
-                  </Hidden>
-                </Button>
-              </Grid>
-            ) : ""}
-            {userLoggedIn ? (
-              <Grid item>
-                <Logout csrfToken={csrfToken}/>
-              </Grid>
-            ) : ""}
           </Grid>
         </Toolbar>
       </AppBar>
