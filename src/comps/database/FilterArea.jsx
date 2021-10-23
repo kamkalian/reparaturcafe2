@@ -68,7 +68,7 @@ export default class FilterArea extends React.Component {
                         onChange={this.handleFilterTextChange}
                         onKeyDown={this.props.handleFilterTextEnter.bind(this, this.state.filterText)}
                         id="standard-basic"
-                        label="ID / Bezeichnung"
+                        label={this.props.label ? this.props.label : "ID / Bezeichnung"}
                         fullWidth
                         InputProps={{type: 'search' }}/>
                 </Grid>

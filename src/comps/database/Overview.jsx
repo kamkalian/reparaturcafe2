@@ -176,6 +176,7 @@ export default class Overview extends React.Component {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <FilterArea
+              label="ID / Bezeichnung / Name / Email"
               handleOpen={this.handleFilterOpen}
               handleSelectedDelete={this.handleFilterSelectedDelete}
               handleClose={this.handleFilterClose}
