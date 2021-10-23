@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
 import Container from '@mui/material/Container';
-import NewTask from './comps/task/NewTask';
+import NewTaskFormular from './comps/task/NewTaskFormular';
 import Database from './comps/database/Database';
 import Overview from './comps/database/Overview';
 import QRCodeScanner from './comps/QRCodeScanner';
@@ -193,7 +193,7 @@ function App() {
               }>
             </Route>
             <Route path="/new_task">
-              <NewTask></NewTask>
+              <NewTaskFormular csrfToken={csrfToken}></NewTaskFormular>
             </Route>
             <Route path="/database" component={Database}></Route>
             <Route path="/overview" 
