@@ -29,40 +29,25 @@ import Hidden from '@mui/material/Hidden';
 
 function App() {
   
-  const [noAdminAvailable, setNoAdminAvailable] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [userRole, setUserRole] = useState("");
   const [csrfToken, setCsrfToken] = useState("");
 
-  useEffect(() => {
+  useEffect(async () => {
     // Update the document title using the browser API
     document.title = "Reparaturcafe";
-    
-      fetch('/api/admin_available', {
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-          }
-      })
-      .then((response) => {
-        response.json()
-        .then(data => {
-          setNoAdminAvailable(!data["admin_available"]);
-        });  
-      });
       
-      fetch('/api/session_user', {
-        method: 'POST',
+    let response = await fetch('/api/session_user', {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
     })
-    .then((response) => {
-      response.json()
-      .then(data => {
+    let data = await response.json()
+    
+    
         setUserLoggedIn(data["user_logged_in"]);
         setUsername(data["username"]);
         setUserRole(data["user_role"]);
@@ -72,7 +57,7 @@ function App() {
   });
 
 
-  return (
+  return (    
     <ThemeProvider theme={theme}>
       <BrowserRouter>
       <AppBar position="static">
@@ -171,9 +156,6 @@ function App() {
           </Grid>
         </Toolbar>
       </AppBar>
-      {noAdminAvailable ? (
-        <Alert severity="warning">Sicherheitshinweis: Es wurde kein User mit der Rolle Admin gefunden!</Alert>
-      ) : ""}
       <Container>      
         <Switch>
             <Route
