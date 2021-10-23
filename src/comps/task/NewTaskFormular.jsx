@@ -8,6 +8,7 @@ import ContactForm from '../ContactForm';
 import DeviceForm from '../DeviceForm';
 import FaultDescriptionField from '../FaultDescriptionField';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -66,6 +67,7 @@ export default class NewTaskFormular extends React.Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                'X-CSRFToken': this.props.csrfToken,
             },
             body: JSON.stringify({
                 gender: this.state.gender,
@@ -584,70 +586,73 @@ export default class NewTaskFormular extends React.Component {
     render(){    
         const steps = this.getSteps();
         return(
-            <Grid container>
-                <Grid item>
-                    {!this.state.completed ? (
-                        <Stepper 
-                        activeStep={this.state.activeStep} 
-                        orientation="vertical"
-                        style={{padding:0}}
-                        nonLinear >
-                        {steps.map((label, index) => (
-                        <Step key={label}>
-                            <StepButton onClick={this.handleStep(index)} completed={this.state.stepReleased[index]}>
-                                <h3>{label}</h3>
-                            </StepButton>
-                            
-                            <StepContent>
-                                <Grid container spacing={5}>
-                                    {this.getStepContent(index)}
-                                    <Grid item xs={12}>
-                                        {this.state.activeStep ? (
-                                            <Button
-                                            onClick={this.handleBack}
-                                            >
-                                                Zurück
-                                            </Button>
-                                        ) : ""}
-                                        {this.state.activeStep === steps.length - 1 ? (
-                                            <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.apiCall}
-                                            disabled={this.state.formLocked}
-                                            >
-                                                Abschicken
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.handleNext}
-                                            >
-                                                Weiter
-                                            </Button>
-                                        )}                           
+            <Box>
+                <h2>Formular</h2>
+                <Grid container>
+                    <Grid item>
+                        {!this.state.completed ? (
+                            <Stepper 
+                            activeStep={this.state.activeStep} 
+                            orientation="vertical"
+                            style={{padding:0}}
+                            nonLinear >
+                            {steps.map((label, index) => (
+                            <Step key={label}>
+                                <StepButton onClick={this.handleStep(index)} completed={this.state.stepReleased[index]}>
+                                    <h3>{label}</h3>
+                                </StepButton>
+                                
+                                <StepContent>
+                                    <Grid container spacing={5}>
+                                        {this.getStepContent(index)}
+                                        <Grid item xs={12}>
+                                            {this.state.activeStep ? (
+                                                <Button
+                                                onClick={this.handleBack}
+                                                >
+                                                    Zurück
+                                                </Button>
+                                            ) : ""}
+                                            {this.state.activeStep === steps.length - 1 ? (
+                                                <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.apiCall}
+                                                disabled={this.state.formLocked}
+                                                >
+                                                    Abschicken
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.handleNext}
+                                                >
+                                                    Weiter
+                                                </Button>
+                                            )}                           
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </StepContent>
-                        </Step>
-                        ))}
-                    </Stepper>
-                ) : (
-                    
-                    this.state.error ? (
-                        <div>
-                            <Typography component="p">
-                                "Irgendwas ist schief gelaufen. Bitte versuche es später noch einmal." 
-                            </Typography>
-                        </div>
-                    ): (
-                            window.location.href = "/qrcode/tsk" + this.state.tskToken + "?new=1"
-                    )
-                    
-                )}
-            </Grid>    
-        </Grid>
+                                </StepContent>
+                            </Step>
+                            ))}
+                        </Stepper>
+                    ) : (
+                        
+                        this.state.error ? (
+                            <div>
+                                <Typography component="p">
+                                    "Irgendwas ist schief gelaufen. Bitte versuche es später noch einmal." 
+                                </Typography>
+                            </div>
+                        ): (
+                                window.location.href = "/qrcode/tsk" + this.state.tskToken + "?new=1"
+                        )
+                        
+                    )}
+                </Grid>    
+            </Grid>
+        </Box>
         );
     }
 
