@@ -109,7 +109,7 @@ export default class Database extends React.Component {
 
   render() {    
     const taskList = this.state.data.map((item, index) => {
-      const CustomLink = props => <Link to={'/task/' + item.id} target="_blank" {...props} />;
+      const CustomLink = props => <Link to={'/task/' + item.id} {...props} />;
       return(
           <ListItem
           component={CustomLink}

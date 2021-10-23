@@ -131,7 +131,7 @@ export default class Overview extends React.Component {
 
   render() {
     const newTaskList = this.state.newTaskList.map((item, index) => {
-      const CustomLink = props => <Link to={'/task/' + item.id} target="_blank" {...props} />;
+      const CustomLink = props => <Link to={'/task/' + item.id} {...props} />;
       return(
           <ListItem
           component={CustomLink}
@@ -150,7 +150,7 @@ export default class Overview extends React.Component {
     });
 
     const inProcessTaskList = this.state.inProcessTaskList.map((item, index) => {
-      const CustomLink = props => <Link to={'/task/' + item.id} target="_blank" {...props} />;
+      const CustomLink = props => <Link to={'/task/' + item.id} {...props} />;
       return(
           <ListItem
           component={CustomLink}
@@ -169,7 +169,7 @@ export default class Overview extends React.Component {
     });
 
     const doneTaskList = this.state.doneTaskList.map((item, index) => {
-      const CustomLink = props => <Link to={'/task/' + item.id} target="_blank" {...props} />;
+      const CustomLink = props => <Link to={'/task/' + item.id} {...props} />;
       return(
           <ListItem
           component={CustomLink}
