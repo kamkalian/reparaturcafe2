@@ -99,31 +99,27 @@ def new_task():
     return {'tsk_id':new_task.tsk_id, 'tsk_token': token}
 
 
-@bp.route('/api/tasks', methods=['POST'])
+@bp.route('/api/tasks', methods=['GET'])
 def tasks():
-    post_json = request.get_json()
+    filter_category = request.args.get('filter_category')
+    filter_manufacturer = request.args.get('filter_manufacturer')
+    filter_text = request.args.get('filter_text')
 
     tasks = Task.query
     tasks = tasks.join(Task.device, aliased=True)
-    if "filterCategory" in post_json:
-        filter_category = post_json["filterCategory"]
-        if filter_category != "":
-            if filter_category == "ohne Angabe":
-                filter_category = ""
-            tasks = tasks.filter_by(dev_category=filter_category)
-    if "filterManufacturer" in post_json:
-        filter_manufacturer = post_json["filterManufacturer"]
-        if filter_manufacturer != "":
-            if filter_manufacturer == "ohne Angabe":
-                filter_manufacturer = ""
-            tasks = tasks.filter_by(dev_mnf_name=filter_manufacturer)
-    if "filterText" in post_json:
-        filter_text = post_json["filterText"]
-        if filter_text != "" :
-            tasks = tasks.filter(or_(
-                    Task.tsk_id == filter_text, Device.dev_name.contains(filter_text)
-                )
+    if filter_category != "":
+        if filter_category == "ohne Angabe":
+            filter_category = ""
+        tasks = tasks.filter_by(dev_category=filter_category)
+    if filter_manufacturer != "":
+        if filter_manufacturer == "ohne Angabe":
+            filter_manufacturer = ""
+        tasks = tasks.filter_by(dev_mnf_name=filter_manufacturer)
+    if filter_text != "" :
+        tasks = tasks.filter(or_(
+                Task.tsk_id == filter_text, Device.dev_name.contains(filter_text)
             )
+        )
     tasks = tasks.order_by(Task.tsk_id.desc()).all()
 
     task_list = []
@@ -309,7 +305,7 @@ def upload_image():
     return {"ok":1}
 
 
-@bp.route('/api/task', methods=['POST'])
+@bp.route('/api/task', methods=['GET'])
 def task():
     tsk_id = None
     task = None
@@ -317,12 +313,8 @@ def task():
     resp_json = jsonify({})
     new_task_indicator = False
     
-    if request.method == "POST":
-        post_json = request.get_json()
-        if "tsk_id" in post_json:
-            tsk_id = post_json["tsk_id"]
-        if "new_task_indicator" in post_json:
-            new_task_indicator = post_json["new_task_indicator"]
+    tsk_id = request.args.get('tsk_id')
+    new_task_indicator = request.args.get('new_task_indicator')
 
     if tsk_id:
         task = Task.query.filter_by(tsk_id=tsk_id).first()
@@ -411,25 +403,18 @@ def _is_exp_date_in_session_valid(tsk_id):
         return False, None
 
 
-@bp.route('/api/new_qrcode_image', methods=['POST'])
-def new_qrcode_image():
-    tsk_id = None
-    if request.method == "POST":
-        post_json = request.get_json()
-        if "tsk_id" in post_json:
-            tsk_id = post_json["tsk_id"]
-
-        if tsk_id:
-            is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
-            if is_exp_date_in_session_valid:
-                return send_file("../qr_codes/" + session.get('NEW_TOKEN', None) + ".svg", mimetype='image/svg')
-            else:
-                # TODO Hier soll das error svg direct im code eingebaut werden.
-                return send_file("../qr_codes/error.svg", mimetype='image/svg')
+@bp.route('/api/new_qrcode_image/<tsk_id>', methods=['GET'])
+def new_qrcode_image(tsk_id):
+    if tsk_id:
+        is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
+        if is_exp_date_in_session_valid:
+            return send_file("../qr_codes/" + session.get('NEW_TOKEN', None) + ".svg", mimetype='image/svg')
         else:
+            # TODO Hier soll das error svg direct im code eingebaut werden.
             return send_file("../qr_codes/error.svg", mimetype='image/svg')
     else:
         return send_file("../qr_codes/error.svg", mimetype='image/svg')
+
 
 
 @bp.route('/api/image', methods=['POST'])
