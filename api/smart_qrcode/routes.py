@@ -8,6 +8,7 @@ from datetime import datetime
 from api import csrf
 
 
+@bp.route('/api/qrcode', methods=['POST'])
 @csrf.exempt
 def qrcode():
     post_json = ""
@@ -23,8 +24,6 @@ def qrcode():
             qrcode = post_json["qrcode"]
         if "pin" in post_json:
             pin = post_json["pin"]
-    if request.method == "GET":
-        pass
         
     # Prüfen ob der QR-Code valide ist
     # Der QR-Code muss am Anfang ein 'usr' oder 'tsk' haben.
