@@ -193,7 +193,7 @@ export default class Overview extends React.Component {
             </Grid>
             <Grid item xs="12">
               <Typography>
-                Gefundene Geräte: {this.state.newTaskList.length + this.state.inProcessTaskList + this.state.doneTaskList}
+                Gefundene Geräte: {this.state.newTaskList.length + this.state.inProcessTaskList.length + this.state.doneTaskList.length}
               </Typography>
             </Grid>
 
