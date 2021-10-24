@@ -10,6 +10,7 @@ import pyqrcode
 import hashlib
 from api.task_manager import bp
 from sqlalchemy import or_
+from pathlib import Path
 
 
 @bp.route('/api/new_task', methods=['POST'])
@@ -85,8 +86,9 @@ def new_task():
     db.session.commit() # pylint: disable=maybe-no-member
 
     # QR-Code generieren
+    path = Path(current_app.root_path)
     url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/qrcode/tsk' + token, error='L')
-    url.svg( '../qr_codes/' + token + '.svg', scale=3, quiet_zone=0)
+    url.svg( str(path.parent.absolute()) + '/qr_codes/' + token + '.svg', scale=3, quiet_zone=0)
 
     # Files anlegen
     files = post_json["files"]
