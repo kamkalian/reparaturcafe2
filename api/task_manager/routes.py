@@ -2,7 +2,7 @@ import time
 import os
 from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
-from api.models import Task, Customer, Device, Image, HashToken, State, Step
+from api.models import Task, Customer, Device, Image, HashToken, State, Step, Log
 from api import db
 from datetime import datetime
 import secrets
@@ -473,8 +473,15 @@ def change_state():
         if is_exp_date_in_session_valid or _is_granted():
             task = Task.query.filter_by(tsk_id=tsk_id).first()
             if task:
+                old_state = task.tsk_state
                 task.tsk_state = new_state
                 db.session.commit()
+
+                old_state_caption = db.session.query(State.sta_caption).filter(State.sta_name == old_state).first()[0]
+                new_state_caption = db.session.query(State.sta_caption).filter(State.sta_name == new_state).first()[0]
+                
+                _add_log_item(tsk_id, "action", "Status von '" + old_state_caption + "' auf '" + new_state_caption + "' geändert.")
+                
                 resp["state"] = "success"
         else:
             resp["state"] = "error"
@@ -492,7 +499,7 @@ def change_state():
 def change_next_step():
     post_json = request.get_json()
     tsk_id = None
-    new_state = None
+    new_next_step = None
     resp = {}
     resp_json = jsonify({})
 
@@ -506,8 +513,14 @@ def change_next_step():
         if is_exp_date_in_session_valid or _is_granted():
             task = Task.query.filter_by(tsk_id=tsk_id).first()
             if task:
+                old_step = task.tsk_next_step
                 task.tsk_next_step = new_next_step
                 db.session.commit()
+
+                old_step_caption = db.session.query(Step.ste_caption).filter(Step.ste_name == old_step).first()[0]
+                new_step_caption = db.session.query(Step.ste_caption).filter(Step.ste_name == new_next_step).first()[0]
+                _add_log_item(tsk_id, "action", "Nächster Schritt von '" + old_step_caption + "' auf '" + new_step_caption + "' geändert.")
+
                 resp["state"] = "success"
         else:
             resp["state"] = "error"
@@ -519,3 +532,17 @@ def change_next_step():
     resp_json = jsonify(resp)
 
     return resp_json
+
+
+def _add_log_item(tsk_id, log_type, log_msg):
+    print(tsk_id)
+    user = session.get('USER', None)
+    if user:
+        log_item = Log(
+            log_type=log_type,
+            log_msg=log_msg,
+            log_tsk_id=tsk_id,
+            log_usr_id=user[0],
+            )
+        db.session.add(log_item)
+        db.session.commit()
