@@ -20,6 +20,7 @@ class Task(db.Model):
     tsk_acc_name = db.Column(db.String(255), db.ForeignKey("accessory.acc_name"))
 
     hash_tokens = db.relationship('HashToken', backref='task', lazy=True)
+    log_list = db.relationship('Log', backref='task', lazy=True)
 
 
 class Customer(db.Model):
@@ -100,6 +101,7 @@ class User(db.Model):
     usr_role = db.Column(db.String(64), index=True)
 
     usr_hash_tokens = db.relationship('HashToken', backref='user', lazy=True)
+    log_list = db.relationship('Log', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.usr_name)    
@@ -119,6 +121,8 @@ class State(db.Model):
     __tablename__ = "state"
     sta_name = db.Column(db.String(64), primary_key=True, nullable=False)
     sta_caption = db.Column(db.String(255))
+
+    task_list = db.relationship('Task', backref='state', lazy=True)
 
 
 class Step(db.Model):
