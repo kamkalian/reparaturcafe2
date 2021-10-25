@@ -15,6 +15,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Log from './Log';
+import Attachments from '../Attachments';
 
 
 export default class TaskOverview extends React.Component {
@@ -29,7 +31,8 @@ export default class TaskOverview extends React.Component {
         stateList: [],
         stepList: [],
         state: "",
-        step: "",
+        nextStep: "",
+        logList: []
     }
   }
 
@@ -55,6 +58,7 @@ export default class TaskOverview extends React.Component {
               data: data,
               state: data['tsk_state'],
               nextStep: data['tsk_next_step'],
+              logList: data['log_list'],
               writeable: data['writeable']
             }, function() {
               if(this.props.location.search === "?new=1" && this.state.data["new_token"]){
@@ -164,9 +168,15 @@ export default class TaskOverview extends React.Component {
   }
 
   render(){
-      // Nur ein Komma anzeigen, wenn Vor und Nachname angegeben wurden.
-      var komma = ", " 
-      if(!this.state.data['cus_first_name'] || !this.state.data['cus_last_name']) komma = "";
+      var full_name = "";
+      if(this.state.data['cus_first_name'] && this.state.data['cus_last_name']){
+        full_name = this.state.data['cus_first_name'] + ", " + this.state.data['cus_last_name'];
+      }else if(this.state.data['cus_first_name']){
+        full_name = this.state.data['cus_first_name'];
+      }else{
+        full_name = this.state.data['cus_last_name'];
+      }
+       
       const stateOptions = this.state.stateList.map((state, index) => (
         <MenuItem value={state[0]} key={index}>{state[1]}</MenuItem>
       ));
@@ -253,58 +263,74 @@ export default class TaskOverview extends React.Component {
             ) : ""}
             <Grid container style={{padding:30, margin:0}}>
               <Grid item md={8} xs={12} style={{marginBottom:20, paddingRight:20}}>
-                <h3>Fehlerbeschreibung</h3>
-                <Typography>
-                  {this.state.data['tsk_fault_description']}
-                </Typography>
-              </Grid>
-              {this.state.writeable ? (
-                <Grid item md={4} xs={12} style={{borderLeft:"2px solid #ccccccaa", paddingLeft:20}}>
-                  <Grid container>
-                    <Grid item md={12} sm={6} xs={12}>
-                      <h3>Kontaktdaten</h3>
-                      <p>{this.state.data['cus_first_name']}{komma}{this.state.data['cus_last_name']}</p>
-                      {this.state.data['cus_phone'] ? <p>{this.state.data['cus_phone']}</p> : ""}
-                      {this.state.data['cus_email'] ? <p>{this.state.data['cus_email']}</p> : ""}
+                <Grid container>
+                  <Grid item xs={12} style={{marginBottom:20}}>
+                    <h3>Fehlerbeschreibung</h3>
+                    <Typography>
+                      {this.state.data['tsk_fault_description']}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} style={{marginBottom:20}}>
+                    <h3>Fotos</h3>
+                    :)
+                  </Grid>
+                  {this.state.logList ? (
+                    <Grid item xs={12} style={{marginBottom:20}}>
+                      <h3>Verlauf</h3>
+                      <Log logList={this.state.logList}/>
                     </Grid>
-                    <Grid item md={12} sm={6} xs={12}>
-                      <h3>Status / nächster Schritt</h3>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                          <FormControl fullWidth>
-                            <InputLabel id="state-label">Status</InputLabel>
-                            <Select
-                              labelId="state-label"
-                              id="state-select"
-                              value={stateOptions ? this.state.state : ""}
-                              label="Status"
-                              onChange={this.handleStateChange}
-                            >
-                              {stateOptions}
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                          <FormControl fullWidth>
-                            <InputLabel id="next-step-label">nächster Schritt</InputLabel>
-                            <Select
-                              labelId="next-step-label"
-                              id="next-step-select"
-                              value={stepOptions ? this.state.nextStep : ""}
-                              label="nächster Schritt"
-                              onChange={this.handleNextStepChange}
-                            >
-                              {stepOptions}
-                            </Select>
-                          </FormControl>
-                        </Grid>
+                  ) : ""}
+                </Grid>
+              </Grid>
+              {full_name ? (
+              <Grid item md={4} xs={12} style={{borderLeft:"2px solid #ccccccaa", paddingLeft:20}}>
+                <Grid container>
+                  <Grid item md={12} sm={6} xs={12}>
+                    <h3>Kontaktdaten</h3>
+                    <p>{full_name}</p>
+                    {this.state.data['cus_phone'] ? <p>{this.state.data['cus_phone']}</p> : ""}
+                    {this.state.data['cus_email'] ? <p>{this.state.data['cus_email']}</p> : ""}
+                  </Grid>
+                  <Grid item md={12} sm={6} xs={12}>
+                    <h3>Status / nächster Schritt</h3>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        {this.state.writeable ? (
+                        <FormControl fullWidth>
+                          <InputLabel id="state-label">Status</InputLabel>
+                          <Select
+                            labelId="state-label"
+                            id="state-select"
+                            value={stateOptions ? this.state.state : ""}
+                            label="Status"
+                            onChange={this.handleStateChange}
+                          >
+                            {stateOptions}
+                          </Select>
+                        </FormControl>
+                        ) : this.state.data['tsk_state_caption'] }
+                      </Grid>
+                      <Grid item xs={12}>
+                        {this.state.writeable ? (
+                        <FormControl fullWidth>
+                          <InputLabel id="next-step-label">nächster Schritt</InputLabel>
+                          <Select
+                            labelId="next-step-label"
+                            id="next-step-select"
+                            value={stepOptions ? this.state.nextStep : ""}
+                            label="nächster Schritt"
+                            onChange={this.handleNextStepChange}
+                          >
+                            {stepOptions}
+                          </Select>
+                        </FormControl>
+                        ) : this.state.data['tsk_next_step_caption']}
                       </Grid>
                     </Grid>
                   </Grid>
-
-                </Grid>
-              ) : ""}
-              
+                  </Grid>
+                </Grid>    
+            ) : ""}     
             </Grid>
           </Box>
       )
