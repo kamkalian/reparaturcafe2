@@ -324,6 +324,7 @@ def task():
     if tsk_id:
         task = Task.query.filter_by(tsk_id=tsk_id).first()
         if task:
+            resp['writeable'] = False
             resp['tsk_id'] = task.tsk_id
             resp['dev_name'] = task.device.dev_name
             resp['dev_mnf_name'] = task.device.dev_mnf_name
@@ -332,8 +333,8 @@ def task():
 
             is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(task.tsk_id)
             
-            if is_exp_date_in_session_valid or _is_granted():
-                resp['writeable'] = True
+            is_granted = _is_granted()
+            if is_exp_date_in_session_valid or is_granted:
                 resp['cus_first_name'] = task.customer.cus_first_name
                 resp['cus_last_name'] = task.customer.cus_last_name
                 resp['cus_phone'] = task.customer.cus_phone_no
@@ -342,12 +343,22 @@ def task():
                 resp['tsk_state'] = task.tsk_state
                 resp['tsk_next_step'] = task.tsk_next_step
 
-                if(tsk_auth == 'dev'):
+                state = State.query.filter_by(sta_name=task.tsk_state).first()
+                next_step = Step.query.filter_by(ste_name=task.tsk_next_step).first()
+                resp['tsk_state_caption'] = state.sta_caption
+                resp['tsk_next_step_caption'] = next_step.ste_caption
+                
+                resp['tsk_auth'] = tsk_auth
+
+                if(tsk_auth == 'dev' or is_granted):
+                    resp['writeable'] = True
                     resp['hash_tokens'] = [{
                     'htk_id': item.htk_id,
                     'htk_auth': item.htk_auth,
                     'htk_creation_date': item.htk_creation_date}
                     for item in task.hash_tokens]
+                    if task.log_list:
+                        resp['log_list'] = [(d.log_type, d.log_msg, d.user.usr_name, d.log_timestamp.strftime("%d.%m.%Y")) for d in task.log_list]
 
                 if new_task_indicator:
                     resp['new_token'] = session.get('NEW_TOKEN', None)
