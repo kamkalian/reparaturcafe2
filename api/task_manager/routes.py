@@ -4,7 +4,7 @@ from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
 from api.models import Task, Customer, Device, Image, HashToken, State, Step, Log
 from api import db
-from datetime import datetime
+from datetime import datetime, timedelta
 import secrets
 import pyqrcode
 import hashlib
@@ -420,6 +420,10 @@ def _is_granted():
     user = session.get('USER', None)
     if user:
         if user[3] == "admin" or user[3] == "user":
+            today_date = datetime.now()
+            exp_datetime = user[2] + timedelta(minutes=10)
+            if today_date > exp_datetime:
+                return False
             return True
     return False
 
