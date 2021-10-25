@@ -1,5 +1,6 @@
 # pylint: disable=no-member
 from api import db
+import datetime
 
 
 class Task(db.Model):
@@ -72,7 +73,7 @@ class Log(db.Model):
     log_id = db.Column(db.Integer, primary_key=True)
     log_type = db.Column(db.String(64), index=True, nullable=True)
     log_msg = db.Column(db.String(1000), nullable=True)
-    log_timestamp = db.Column(db.DateTime(), nullable=False)
+    log_timestamp = db.Column(db.DateTime(), nullable=False, default=datetime.datetime.utcnow)
 
     log_usr_id = db.Column(db.Integer(), db.ForeignKey("user.usr_id"))
     log_tsk_id = db.Column(db.Integer(), db.ForeignKey("task.tsk_id"))
