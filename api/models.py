@@ -8,8 +8,8 @@ class Task(db.Model):
     tsk_id = db.Column(db.Integer, primary_key=True)
     tsk_fault_description = db.Column(db.String(1000))
     tsk_creation_date = db.Column(db.DateTime())
-    tsk_state = db.Column(db.String(64), index=True, nullable=True)
-    tsk_next_step = db.Column(db.String(64), index=True, nullable=True)
+    tsk_state = db.Column(db.String(64), db.ForeignKey("state.sta_name"))
+    tsk_next_step = db.Column(db.String(64), db.ForeignKey("step.ste_name"))
     #tsk_hash_token = db.Column(db.String(255), nullable=False)
 
     tsk_cus_id = db.Column(db.Integer(), db.ForeignKey("customer.cus_id"))
