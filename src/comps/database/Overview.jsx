@@ -198,21 +198,21 @@ export default class Overview extends React.Component {
               </Typography>
             </Grid>
 
-            <Grid item xs={12} md={12} xl={4}>
+            <Grid item xs={12} md={6} lg={4}>
               <Typography style={{color:"#999"}}>Neue Aufgaben</Typography>
               <List component="ul">
               {newTaskList}
               </List>
             </Grid>
 
-            <Grid item xs={12} md={12} xl={4}>
+            <Grid item xs={12} md={6} lg={4}>
               <Typography style={{color:"#999"}}>In Bearbeitung</Typography>
               <List component="ul">
               {inProcessTaskList}
               </List>
             </Grid>
 
-            <Grid item xs={12} md={12} xl={4}>
+            <Grid item xs={12} md={12} lg={4}>
               <Typography style={{color:"#999"}}>Fertig</Typography>
               <List component="ul">
               {doneTaskList}
