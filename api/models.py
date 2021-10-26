@@ -1,5 +1,6 @@
 # pylint: disable=no-member
 from api import db
+import datetime
 
 
 class Task(db.Model):
@@ -8,8 +9,8 @@ class Task(db.Model):
     tsk_id = db.Column(db.Integer, primary_key=True)
     tsk_fault_description = db.Column(db.String(1000))
     tsk_creation_date = db.Column(db.DateTime())
-    tsk_state = db.Column(db.String(64), index=True, nullable=True)
-    tsk_next_step = db.Column(db.String(64), index=True, nullable=True)
+    tsk_state = db.Column(db.String(64), db.ForeignKey("state.sta_name"))
+    tsk_next_step = db.Column(db.String(64), db.ForeignKey("step.ste_name"))
     #tsk_hash_token = db.Column(db.String(255), nullable=False)
 
     tsk_cus_id = db.Column(db.Integer(), db.ForeignKey("customer.cus_id"))
@@ -19,6 +20,7 @@ class Task(db.Model):
     tsk_acc_name = db.Column(db.String(255), db.ForeignKey("accessory.acc_name"))
 
     hash_tokens = db.relationship('HashToken', backref='task', lazy=True)
+    log_list = db.relationship('Log', backref='task', lazy=True)
 
 
 class Customer(db.Model):
@@ -72,7 +74,7 @@ class Log(db.Model):
     log_id = db.Column(db.Integer, primary_key=True)
     log_type = db.Column(db.String(64), index=True, nullable=True)
     log_msg = db.Column(db.String(1000), nullable=True)
-    log_timestamp = db.Column(db.DateTime(), nullable=False)
+    log_timestamp = db.Column(db.DateTime(), nullable=False, default=datetime.datetime.utcnow)
 
     log_usr_id = db.Column(db.Integer(), db.ForeignKey("user.usr_id"))
     log_tsk_id = db.Column(db.Integer(), db.ForeignKey("task.tsk_id"))
@@ -99,6 +101,7 @@ class User(db.Model):
     usr_role = db.Column(db.String(64), index=True)
 
     usr_hash_tokens = db.relationship('HashToken', backref='user', lazy=True)
+    log_list = db.relationship('Log', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.usr_name)    
@@ -118,6 +121,8 @@ class State(db.Model):
     __tablename__ = "state"
     sta_name = db.Column(db.String(64), primary_key=True, nullable=False)
     sta_caption = db.Column(db.String(255))
+
+    task_list = db.relationship('Task', backref='state', lazy=True)
 
 
 class Step(db.Model):

@@ -2,9 +2,9 @@ import time
 import os
 from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
-from api.models import Task, Customer, Device, Image, HashToken, State, Step
+from api.models import Task, Customer, Device, Image, HashToken, State, Step, Log
 from api import db
-from datetime import datetime
+from datetime import datetime, timedelta
 import secrets
 import pyqrcode
 import hashlib
@@ -324,6 +324,7 @@ def task():
     if tsk_id:
         task = Task.query.filter_by(tsk_id=tsk_id).first()
         if task:
+            resp['writeable'] = False
             resp['tsk_id'] = task.tsk_id
             resp['dev_name'] = task.device.dev_name
             resp['dev_mnf_name'] = task.device.dev_mnf_name
@@ -332,8 +333,8 @@ def task():
 
             is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(task.tsk_id)
             
-            if is_exp_date_in_session_valid or _is_granted():
-                resp['writeable'] = True
+            is_granted = _is_granted()
+            if is_exp_date_in_session_valid or is_granted:
                 resp['cus_first_name'] = task.customer.cus_first_name
                 resp['cus_last_name'] = task.customer.cus_last_name
                 resp['cus_phone'] = task.customer.cus_phone_no
@@ -342,12 +343,22 @@ def task():
                 resp['tsk_state'] = task.tsk_state
                 resp['tsk_next_step'] = task.tsk_next_step
 
-                if(tsk_auth == 'dev'):
+                state = State.query.filter_by(sta_name=task.tsk_state).first()
+                next_step = Step.query.filter_by(ste_name=task.tsk_next_step).first()
+                resp['tsk_state_caption'] = state.sta_caption
+                resp['tsk_next_step_caption'] = next_step.ste_caption
+                
+                resp['tsk_auth'] = tsk_auth
+
+                if(tsk_auth == 'dev' or is_granted):
+                    resp['writeable'] = True
                     resp['hash_tokens'] = [{
                     'htk_id': item.htk_id,
                     'htk_auth': item.htk_auth,
                     'htk_creation_date': item.htk_creation_date}
                     for item in task.hash_tokens]
+                    if task.log_list:
+                        resp['log_list'] = [(d.log_type, d.log_msg, d.user.usr_name, d.log_timestamp.strftime("%d.%m.%Y")) for d in task.log_list]
 
                 if new_task_indicator:
                     resp['new_token'] = session.get('NEW_TOKEN', None)
@@ -409,21 +420,26 @@ def _is_granted():
     user = session.get('USER', None)
     if user:
         if user[3] == "admin" or user[3] == "user":
+            today_date = datetime.now()
+            exp_datetime = user[2] + timedelta(minutes=10)
+            if today_date > exp_datetime:
+                return False
             return True
     return False
 
 
 @bp.route('/api/new_qrcode_image/<tsk_id>', methods=['GET'])
 def new_qrcode_image(tsk_id):
+    path = Path(current_app.root_path)
     if tsk_id:
         is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
         if is_exp_date_in_session_valid:
             return send_file("../qr_codes/" + session.get('NEW_TOKEN', None) + ".svg", mimetype='image/svg')
         else:
             # TODO Hier soll das error svg direct im code eingebaut werden.
-            return send_file("../qr_codes/error.svg", mimetype='image/svg')
+            return send_file(str(path.parent.absolute()) + "/qr_codes/error.svg", mimetype='image/svg')
     else:
-        return send_file("../qr_codes/error.svg", mimetype='image/svg')
+        return send_file(str(path.parent.absolute()) + "/qr_codes/error.svg", mimetype='image/svg')
 
 
 
@@ -462,8 +478,15 @@ def change_state():
         if is_exp_date_in_session_valid or _is_granted():
             task = Task.query.filter_by(tsk_id=tsk_id).first()
             if task:
+                old_state = task.tsk_state
                 task.tsk_state = new_state
                 db.session.commit()
+
+                old_state_caption = db.session.query(State.sta_caption).filter(State.sta_name == old_state).first()[0]
+                new_state_caption = db.session.query(State.sta_caption).filter(State.sta_name == new_state).first()[0]
+                
+                _add_log_item(tsk_id, "action", "Status von '" + old_state_caption + "' auf '" + new_state_caption + "' geändert.")
+                
                 resp["state"] = "success"
         else:
             resp["state"] = "error"
@@ -481,7 +504,7 @@ def change_state():
 def change_next_step():
     post_json = request.get_json()
     tsk_id = None
-    new_state = None
+    new_next_step = None
     resp = {}
     resp_json = jsonify({})
 
@@ -495,8 +518,14 @@ def change_next_step():
         if is_exp_date_in_session_valid or _is_granted():
             task = Task.query.filter_by(tsk_id=tsk_id).first()
             if task:
+                old_step = task.tsk_next_step
                 task.tsk_next_step = new_next_step
                 db.session.commit()
+
+                old_step_caption = db.session.query(Step.ste_caption).filter(Step.ste_name == old_step).first()[0]
+                new_step_caption = db.session.query(Step.ste_caption).filter(Step.ste_name == new_next_step).first()[0]
+                _add_log_item(tsk_id, "action", "Nächster Schritt von '" + old_step_caption + "' auf '" + new_step_caption + "' geändert.")
+
                 resp["state"] = "success"
         else:
             resp["state"] = "error"
@@ -508,3 +537,17 @@ def change_next_step():
     resp_json = jsonify(resp)
 
     return resp_json
+
+
+def _add_log_item(tsk_id, log_type, log_msg):
+    print(tsk_id)
+    user = session.get('USER', None)
+    if user:
+        log_item = Log(
+            log_type=log_type,
+            log_msg=log_msg,
+            log_tsk_id=tsk_id,
+            log_usr_id=user[0],
+            )
+        db.session.add(log_item)
+        db.session.commit()
