@@ -191,9 +191,14 @@ function App() {
               <a href="/database">Datenbank</a>
             </Route>
         </Switch>
-      
     </Container>
     </BrowserRouter>
+    <Divider style={{marginTop:150}}/>
+    <Grid container>
+      <Grid item textAlign="center" xs={12}>
+        <Typography variant="caption">v1.1.0-beta</Typography>
+      </Grid>
+    </Grid>
     </ThemeProvider>
     
   );
