@@ -25,6 +25,8 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import SettingsIcon from '@mui/icons-material/Settings';
 import Settings from './comps/settings/Settings'
 import Hidden from '@mui/material/Hidden';
+import { Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
 
 
 function App() {
@@ -183,12 +185,30 @@ function App() {
             </Route>
             <Route path="/scan" component={QRCodeScanner}></Route>
             <Route path="/">
-              <h2>Hallo. test</h2>
+              <h2>Hallo.</h2>
               <p style={{marginTop:50}}>Trete ein. Du stehst mitten im digitalen ReparaturCafè, der AWO Oberlar. </p>
               <p style={{marginTop:50}}>Können wir dir bei einem defekten Gerät helfen? Dann klicke auf den Button und erzähl uns alles über dein Gerät.</p>
-              <a href="/new_task">Formular</a>
+              <Button 
+                component={Link} 
+                to="/new_task"
+                variant="contained"
+                color="primary"
+                startIcon={<DescriptionOutlinedIcon />}>
+                <Hidden mdDown>
+                  Formular
+                </Hidden>
+              </Button>
               <p style={{marginTop:50}}>Gerne kannst du dich hier umschauen, klicke auf den nachfolgenden Button um unsere Datenbank zu durchstöbern.</p>
-              <a href="/database">Datenbank</a>
+              <Button 
+                component={Link} 
+                to="/database"
+                variant="contained"
+                color="primary"
+                startIcon={<StorageOutlinedIcon />}>
+                <Hidden mdDown>
+                  Datenbank
+                </Hidden>
+              </Button>
             </Route>
         </Switch>
     </Container>
