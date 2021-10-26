@@ -17,6 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Log from './Log';
 import Attachments from '../Attachments';
+import NewComment from './NewComment';
 
 
 export default class TaskOverview extends React.Component {
@@ -32,7 +33,8 @@ export default class TaskOverview extends React.Component {
         stepList: [],
         state: "",
         nextStep: "",
-        logList: []
+        logList: [],
+        comment: ""
     }
   }
 
@@ -166,6 +168,8 @@ export default class TaskOverview extends React.Component {
       })
     })
   }
+
+  
 
   render(){
       var full_name = "";
@@ -327,6 +331,12 @@ export default class TaskOverview extends React.Component {
                         ) : this.state.data['tsk_next_step_caption']}
                       </Grid>
                     </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <NewComment 
+                    tsk_id={this.state.data['tsk_id']}
+                    csrfToken={this.props.csrfToken}
+                    fetchCall={this.fetchCall}/>
                   </Grid>
                   </Grid>
                 </Grid>    
