@@ -129,7 +129,7 @@ export default class Database extends React.Component {
     
     return(
       <React.Fragment>
-        <h2>Database</h2>
+        <h2>Datenbank</h2>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <FilterArea
