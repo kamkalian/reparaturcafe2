@@ -540,7 +540,6 @@ def change_next_step():
 
 
 def _add_log_item(tsk_id, log_type, log_msg):
-    print(tsk_id)
     user = session.get('USER', None)
     if user:
         log_item = Log(
