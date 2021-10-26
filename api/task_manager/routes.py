@@ -550,3 +550,35 @@ def _add_log_item(tsk_id, log_type, log_msg):
             )
         db.session.add(log_item)
         db.session.commit()
+
+
+@bp.route('/api/save_comment', methods=['POST'])
+def save_comment():
+    post_json = request.get_json()
+    tsk_id = None
+    comment = None
+    resp = {}
+    resp_json = jsonify({})
+
+    if "tsk_id" in post_json:
+        tsk_id = post_json["tsk_id"]
+    if "comment" in post_json:
+        comment = post_json["comment"]
+    
+    if tsk_id and comment:
+        is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
+        if is_exp_date_in_session_valid or _is_granted():
+            task = Task.query.filter_by(tsk_id=tsk_id).first()
+            if task:
+                _add_log_item(tsk_id, "comment", comment)
+                resp["state"] = "success"
+        else:
+            resp["state"] = "error"
+            resp["msg"] = "Keine Berechtigung!"
+    else:
+        resp["state"] = "error"
+        resp["msg"] = "Keine Task ID angegeben!"
+
+    resp_json = jsonify(resp)
+
+    return resp_json
