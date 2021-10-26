@@ -216,7 +216,7 @@ function App() {
     <Divider style={{marginTop:150}}/>
     <Grid container>
       <Grid item textAlign="center" xs={12}>
-        <Typography variant="caption">v1.1.0-beta</Typography>
+        <Typography variant="caption">v1.2.0-beta</Typography>
       </Grid>
     </Grid>
     </ThemeProvider>
