@@ -12,6 +12,9 @@ const theme = createMuiTheme({
         },
         error: {
             main: "#cb0000"
+        },
+        info: {
+            main: "#e7bb3e"
         }
     },
     typography: {
