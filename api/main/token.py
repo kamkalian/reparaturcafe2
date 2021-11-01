@@ -21,7 +21,7 @@ def generate_token(type, tsk_id):
 
     # Der Token soll so nicht in der Datenbank gespeichert werden,
     # daher wir hier noch eine gehashete Version generiert.
-    hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
+    hash_token = hashed_token(token)
 
     # Hash Token mit Task zuordnung anlegen
     htk = HashToken(
@@ -34,3 +34,7 @@ def generate_token(type, tsk_id):
     db.session.commit() # pylint: disable=maybe-no-member
 
     return token
+
+
+def hashed_token(token):
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
