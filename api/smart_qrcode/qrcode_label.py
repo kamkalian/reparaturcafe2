@@ -5,7 +5,10 @@ from PIL import ImageFont
 from PIL import ImageDraw 
 from datetime import datetime
 from flask import current_app
+from api.models import HashToken
+from api.main.token import hashed_token
 import pyqrcode
+import os
 
 
 def generate_qrcode_label(type, tsk_id, token):
@@ -36,3 +39,13 @@ def generate_qrcode_label(type, tsk_id, token):
     new_qr_code_image.save(image_file)
 
     return image_file
+
+
+def print_label(token):
+    htk = HashToken.query.filter_by(htk_id=hashed_token(token)).first()
+    if htk:
+        print("label wird gedruckt...")
+        path = Path(current_app.root_path)
+        image_file = str(path.parent.absolute()) + '/qr_codes/' + token + '.png'
+        bashCommand = "lpr " + image_file
+        os.system(bashCommand)
