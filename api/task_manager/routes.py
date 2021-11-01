@@ -1,15 +1,12 @@
-import time
 import os
 from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
-from api.models import Task, Customer, Device, Image, HashToken, State, Step, Log
+from api.models import Task, Customer, Device, Image, State, Step, Log
 from api import db
 from datetime import datetime, timedelta
-import secrets
-import pyqrcode
-import hashlib
 from api.task_manager import bp
 from sqlalchemy import or_
+from api.smart_qrcode.qrcode_label import generate_qrcode_label
 from api.main.token import generate_token
 from pathlib import Path
 
@@ -56,14 +53,6 @@ def new_task():
         db.session.commit() # pylint: disable=maybe-no-member
         dev_id = device.dev_id
 
-    # Ein Token wird generiert, damit kann später der Task zum bearbeiten
-    # vom User geöffnet werden.
-    token = secrets.token_urlsafe(32)
-
-    # Der Token soll so nicht in der Datenbank gespeichert werden,
-    # daher wir hier noch eine gehashete Version generiert.
-    hash_token = hashlib.sha256(token.encode("utf-8")).hexdigest()
-
     new_task = Task(
         tsk_fault_description = post_json["faultDescription"],
         tsk_creation_date = datetime.now(),
@@ -79,9 +68,7 @@ def new_task():
     tk = generate_token("customer", new_task.tsk_id)
 
     # QR-Code generieren
-    path = Path(current_app.root_path)
-    url = pyqrcode.create('https://reparaturcafe.awo-oberlar.de/qrcode/tsk' + token, error='L')
-    url.svg( str(path.parent.absolute()) + '/qr_codes/' + token + '.svg', scale=3, quiet_zone=0)
+    image_file = generate_qrcode_label("customer", new_task.tsk_id, tk)
 
     # Files anlegen
     files = post_json["files"]
@@ -427,7 +414,7 @@ def new_qrcode_image(tsk_id):
     if tsk_id:
         is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
         if is_exp_date_in_session_valid:
-            return send_file("../qr_codes/" + session.get('NEW_TOKEN', None) + ".svg", mimetype='image/svg')
+            return send_file("../qr_codes/" + session.get('NEW_TOKEN', None) + ".png", mimetype='image/png')
         else:
             # TODO Hier soll das error svg direct im code eingebaut werden.
             return send_file(str(path.parent.absolute()) + "/qr_codes/error.svg", mimetype='image/svg')
