@@ -9,6 +9,7 @@ from sqlalchemy import or_
 from api.smart_qrcode.qrcode_label import generate_qrcode_label
 from api.main.token import generate_token
 from pathlib import Path
+import secrets
 
 
 @bp.route('/api/new_task', methods=['POST'])
