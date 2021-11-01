@@ -6,6 +6,7 @@ import re
 import hashlib
 from datetime import datetime
 from api import csrf
+from api.smart_qrcode.qrcode_label import print_label
 
 
 @bp.route('/api/qrcode', methods=['POST'])
@@ -84,6 +85,12 @@ def qrcode():
                 resp_json = jsonify(resp)
 
     return resp_json
+
+
+@bp.route('/api/print_label_request/<token>', methods=['POST'])
+def print_label_request(token):
+    print_label(token)
+    return jsonify({'success': 1})
 
 
 def _add_session_allowed_id(tsk_id, htk_auth):

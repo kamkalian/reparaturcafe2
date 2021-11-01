@@ -169,7 +169,16 @@ export default class TaskOverview extends React.Component {
     })
   }
 
-  
+  handlePrintLabelClick = (event) => {
+    fetch('/api/print_label_request/' + this.state.data['new_token'], {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': this.props.csrfToken,
+      },
+    })
+  }
 
   render(){
       var full_name = "";
@@ -195,15 +204,29 @@ export default class TaskOverview extends React.Component {
               <Typography>Drucke diese Seite, oder speicher den QR-Code, damit du später auf deine Daten zugreifen kannst.</Typography>
               <p>
               <Grid container spacing={3}>
-                <Grid item xs={4}>
+                <Grid item md={6} xs={12}>
                   <a href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]} >
                   <img src={this.state.newQRCodeImage} /></a>
                 </Grid>
-                <Grid item xs={8}>
-                  <Button 
-                  color="primary"
-                  href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]}
-                  >Link</Button>
+                <Grid item md={6} xs={12}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Button 
+                      color="primary"
+                      variant="contained"
+                      href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]}
+                      fullWidth
+                      >Link</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button 
+                      color="primary"
+                      variant="contained"
+                      fullWidth
+                      onClick={this.handlePrintLabelClick}
+                      >Kunden-Etikett ausdrucken</Button>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
               </p>
