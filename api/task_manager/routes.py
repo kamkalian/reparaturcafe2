@@ -10,6 +10,7 @@ import pyqrcode
 import hashlib
 from api.task_manager import bp
 from sqlalchemy import or_
+from api.main.token import generate_token
 from pathlib import Path
 
 
@@ -75,15 +76,7 @@ def new_task():
     db.session.add(new_task) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
 
-    # Hash Token mit Task zuordnung anlegen
-    htk = HashToken(
-        htk_id=hash_token,
-        htk_creation_date=datetime.now(),
-        htk_tsk_id=new_task.tsk_id,
-        htk_auth="cus")
-
-    db.session.add(htk) # pylint: disable=maybe-no-member
-    db.session.commit() # pylint: disable=maybe-no-member
+    tk = generate_token("customer", new_task.tsk_id)
 
     # QR-Code generieren
     path = Path(current_app.root_path)
@@ -98,9 +91,9 @@ def new_task():
         db.session.commit() # pylint: disable=maybe-no-member
 
     # Token als neuer Token in der Session speichern.
-    session['NEW_TOKEN'] = token
+    session['NEW_TOKEN'] = tk
 
-    return {'tsk_id':new_task.tsk_id, 'tsk_token': token}
+    return {'tsk_id':new_task.tsk_id, 'tsk_token': tk}
 
 
 @bp.route('/api/tasks', methods=['GET'])
