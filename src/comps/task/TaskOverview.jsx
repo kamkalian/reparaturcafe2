@@ -27,7 +27,7 @@ export default class TaskOverview extends React.Component {
         data: "",
         writeable: false,
         hover: false,
-        newQRCodeImage: "",
+        newQRCodeImage: null,
         showNewTaskInfo: false,
         stateList: [],
         stepList: [],
@@ -82,10 +82,10 @@ export default class TaskOverview extends React.Component {
       })
       .then((response) => {
         if(response.status===200){
-          response.text()
-          .then(text => {
+          response.blob()
+          .then(imageBlob => {
             this.setState({
-              newQRCodeImage: text
+              newQRCodeImage: URL.createObjectURL(imageBlob)
             });
           });
         }
@@ -197,7 +197,7 @@ export default class TaskOverview extends React.Component {
               <Grid container spacing={3}>
                 <Grid item xs={4}>
                   <a href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]} >
-                  <div dangerouslySetInnerHTML={{__html: this.state.newQRCodeImage}} /></a>
+                  <img src={this.state.newQRCodeImage} /></a>
                 </Grid>
                 <Grid item xs={8}>
                   <Button 
