@@ -7,13 +7,13 @@ import hashlib
 
 def generate_token(type, tsk_id):
     # type prüfen
-    prefix = ""
+    htk_auth = ""
     if type == "customer":
-        prefix = "cus"
+        htk_auth = "cus"
     if type == "device":
-        prefix = "dev"
+        htk_auth = "dev"
     if type == "user":
-        prefix = "usr"
+        htk_auth = "usr"
 
     # Ein Token wird generiert, damit kann später der Task zum bearbeiten
     # vom User geöffnet werden.
@@ -28,7 +28,7 @@ def generate_token(type, tsk_id):
         htk_id=hash_token,
         htk_creation_date=datetime.now(),
         htk_tsk_id=tsk_id,
-        htk_auth="cus")
+        htk_auth=htk_auth)
 
     db.session.add(htk) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
