@@ -15,9 +15,9 @@ def generate_qrcode_label(type, tsk_id, token):
     # type prüfen
     prefix = ""
     if type == "customer":
-        prefix = "cus"
+        prefix = "tsk"
     if type == "device":
-        prefix = "dev"
+        prefix = "tsk"
     if type == "user":
         prefix = "usr"
 
