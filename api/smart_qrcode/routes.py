@@ -6,7 +6,8 @@ import re
 import hashlib
 from datetime import datetime
 from api import csrf
-from api.smart_qrcode.qrcode_label import print_label
+from api.smart_qrcode.qrcode_label import print_label, generate_qrcode_label
+from api.main.token import generate_token
 
 
 @bp.route('/api/qrcode', methods=['POST'])
