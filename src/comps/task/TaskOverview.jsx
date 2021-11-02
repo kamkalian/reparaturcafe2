@@ -18,6 +18,7 @@ import Select from '@mui/material/Select';
 import Log from './Log';
 import Attachments from '../Attachments';
 import NewComment from './NewComment';
+import QRCodes from './QRCodes';
 
 
 export default class TaskOverview extends React.Component {
@@ -34,7 +35,8 @@ export default class TaskOverview extends React.Component {
         state: "",
         nextStep: "",
         logList: [],
-        comment: ""
+        comment: "",
+        qrCodesOpen: false,
     }
   }
 
@@ -258,8 +260,8 @@ export default class TaskOverview extends React.Component {
             {this.state.writeable ? (
               this.state.data ? (
                 <div>
-                <Grid container style={{marginTop:20}}>
-                  <Grid item xs={12}>  
+                <Grid container style={{marginTop:10}} spacing={3}>
+                  <Grid item md={6} xs={12}>  
                     <ReactToPrint
                       trigger={() => {
                         // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
@@ -269,6 +271,7 @@ export default class TaskOverview extends React.Component {
                             variant="contained"
                             color="primary"
                             startIcon={<PrintIcon />}
+                            fullWidth
                             >
                               Drucken
                           </Button>   
@@ -284,6 +287,15 @@ export default class TaskOverview extends React.Component {
                         ref={el => (this.componentRef = el)} /> 
                     </div>
                   </Grid>
+                  <Grid item md={6} xs={12}>  
+                    {this.state.writeable ? (
+                      <QRCodes 
+                        hashTokens={this.state.data['hash_tokens']}
+                        csrfToken={this.props.csrfToken}
+                        tskId={this.state.data['tsk_id']}
+                        handleRefresh={this.fetchCall}/>
+                    ) : ""}
+                  </Grid>                  
                 </Grid>
               </div>
               ) : ""
