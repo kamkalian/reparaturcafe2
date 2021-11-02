@@ -93,6 +93,25 @@ def print_label_request(token):
     return jsonify({'success': 1})
 
 
+@bp.route('/api/generate_new_qr_code', methods=['POST'])
+def generate_new_qr_code():
+    type = None
+    tsk_id = None
+    token = None
+    post_json = request.get_json()
+    if "type" in post_json:
+        type = post_json["type"]
+    if "tsk_id" in post_json:
+        tsk_id = post_json["tsk_id"]
+    
+    if type and tsk_id:
+        token = generate_token(type, tsk_id)
+        generate_qrcode_label(type, tsk_id, token)
+        print_label(token)
+
+    return jsonify({'success': 1})
+
+
 def _add_session_allowed_id(tsk_id, htk_auth):
     today_date = datetime.now()
 
