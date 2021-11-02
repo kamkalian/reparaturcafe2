@@ -42,7 +42,10 @@ export default class QRCodes extends React.Component {
         type: "customer"
       }),
     })
-    this.props.handleRefresh()
+    .then(response => response.json())
+    .then(data => {
+      this.props.handleRefresh()
+    })
   }
 
   render(){
