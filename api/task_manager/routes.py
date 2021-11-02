@@ -336,7 +336,7 @@ def task():
                     resp['hash_tokens'] = [{
                     'htk_id': item.htk_id,
                     'htk_auth': item.htk_auth,
-                    'htk_creation_date': item.htk_creation_date}
+                    'htk_creation_date': item.htk_creation_date.strftime("%d.%m.%Y")}
                     for item in task.hash_tokens]
                     if task.log_list:
                         resp['log_list'] = [(d.log_type, d.log_msg, d.user.usr_name, d.log_timestamp.strftime("%d.%m.%Y")) for d in task.log_list]
