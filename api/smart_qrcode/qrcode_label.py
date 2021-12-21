@@ -47,5 +47,7 @@ def print_label(token):
         print("label wird gedruckt...")
         path = Path(current_app.root_path)
         image_file = str(path.parent.absolute()) + '/qr_codes/' + token + '.png'
-        bashCommand = "lpr " + image_file
+        bashCommand = "scp -i "
+        bashCommand += str(path.parent.absolute()) + "/pi_label_printer_key "
+        bashCommand += image_file + " pi@192.168.2.116:/home/pi/qr_codes/"
         os.system(bashCommand)
