@@ -1,4 +1,4 @@
-from api.smart_qrcode import bp
+from api.main import bp
 from flask import jsonify, session
 from datetime import datetime, timedelta
 from flask_wtf.csrf import generate_csrf
