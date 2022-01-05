@@ -7,6 +7,7 @@ from datetime import datetime
 from flask import current_app
 from api.models import HashToken
 from api.main.token import hashed_token
+from api.main.settings import lp_settings_from_file
 import pyqrcode
 import os
 
@@ -46,8 +47,11 @@ def print_label(token):
     if htk:
         print("label wird gedruckt...")
         path = Path(current_app.root_path)
+        pi_settings = lp_settings_from_file()
+        print(pi_settings)
         image_file = str(path.parent.absolute()) + '/qr_codes/' + token + '.png'
         bashCommand = "scp -i "
         bashCommand += str(path.parent.absolute()) + "/pi_label_printer_key "
-        bashCommand += image_file + " pi@192.168.2.116:/home/pi/qr_codes/"
-        os.system(bashCommand)
+        bashCommand += image_file + " pi@" + pi_settings['addr'] + ":" + pi_settings['addr']
+        print(bashCommand)
+        #os.system(bashCommand)
