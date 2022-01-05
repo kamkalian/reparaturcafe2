@@ -35,6 +35,7 @@ function App() {
   const [username, setUsername] = useState("");
   const [userRole, setUserRole] = useState("");
   const [csrfToken, setCsrfToken] = useState("");
+  const [isLoadingDone, setIsLoadingDone] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -53,11 +54,13 @@ function App() {
       setUsername(data["username"]);
       setUserRole(data["user_role"]);
       setCsrfToken(data["csrf_token"]);
+      setIsLoadingDone(true);
     }
     fetchData();
   }, []);
 
-  return (    
+  return (
+    isLoadingDone ? (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
       <AppBar position="static">
@@ -159,7 +162,7 @@ function App() {
             <Route
               path="/settings"
               render={(props) =>
-                <Settings {...props} userRole={userRole}/>
+                <Settings {...props} userRole={userRole} csrfToken={csrfToken}/>
               }>
             </Route>
             <Route
@@ -220,7 +223,7 @@ function App() {
       </Grid>
     </Grid>
     </ThemeProvider>
-    
+    ):"loading..."
   );
 }
 
