@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from formelsammlung.envvar import getenv_typed
 import datetime
+from api.main.settings import lp_settings_from_file
 
 
 APP_BASEDIR = Path(__file__).parents[1]
