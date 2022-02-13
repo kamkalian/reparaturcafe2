@@ -29,3 +29,5 @@ __pycache__
 
 flask_session/
 pi_label_printer_key
+
+lp_key
