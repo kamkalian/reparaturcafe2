@@ -91,7 +91,7 @@ def qrcode():
 @bp.route('/api/print_label_request/<token>', methods=['POST'])
 def print_label_request(token):
     print_label(token)
-    return jsonify({'success': 1})
+    return jsonify({'state': "success"})
 
 
 @bp.route('/api/generate_new_qr_code', methods=['POST'])
