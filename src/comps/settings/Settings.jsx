@@ -104,6 +104,7 @@ export default class Settings extends React.Component {
               </Box>
               <UserList
               handleUserOpen={this.handleUserOpen}
+              csrfToken={this.props.csrfToken}
               />
             </Grid>
 
