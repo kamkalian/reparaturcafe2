@@ -77,10 +77,7 @@ export default class Settings extends React.Component {
         <h2>Einstellungen</h2>
         {this.props.userRole === "admin" ? (
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <h3>Label Drucker</h3>
-              <LabelPrinterSettings csrfToken={this.props.csrfToken}/>
-            </Grid>
+
             <Grid item xs={12}>
               <h3>User verwalten</h3>
               <Box textAlign="right">
@@ -109,6 +106,12 @@ export default class Settings extends React.Component {
               handleUserOpen={this.handleUserOpen}
               />
             </Grid>
+
+            <Grid item xs={12}>
+              <h3>Label Drucker</h3>
+              <LabelPrinterSettings csrfToken={this.props.csrfToken}/>
+            </Grid>
+            
           </Grid>
         ) : (
           "Kein Zutritt!"
