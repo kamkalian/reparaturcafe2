@@ -29,6 +29,7 @@ export default class UserList extends React.Component {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'X-CSRFToken': this.props.csrfToken,
         }
     })
     .then(response => response.json())
