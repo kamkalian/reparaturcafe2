@@ -18,6 +18,7 @@ import Select from '@mui/material/Select';
 import Log from './Log';
 import Attachments from '../Attachments';
 import NewComment from './NewComment';
+import QRCodes from './QRCodes';
 
 
 export default class TaskOverview extends React.Component {
@@ -27,14 +28,15 @@ export default class TaskOverview extends React.Component {
         data: "",
         writeable: false,
         hover: false,
-        newQRCodeImage: "",
+        newQRCodeImage: null,
         showNewTaskInfo: false,
         stateList: [],
         stepList: [],
         state: "",
         nextStep: "",
         logList: [],
-        comment: ""
+        comment: "",
+        qrCodesOpen: false,
     }
   }
 
@@ -82,10 +84,10 @@ export default class TaskOverview extends React.Component {
       })
       .then((response) => {
         if(response.status===200){
-          response.text()
-          .then(text => {
+          response.blob()
+          .then(imageBlob => {
             this.setState({
-              newQRCodeImage: text
+              newQRCodeImage: URL.createObjectURL(imageBlob)
             });
           });
         }
@@ -169,7 +171,16 @@ export default class TaskOverview extends React.Component {
     })
   }
 
-  
+  handlePrintLabelClick = (event) => {
+    fetch('/api/print_label_request/' + this.state.data['new_token'], {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': this.props.csrfToken,
+      },
+    })
+  }
 
   render(){
       var full_name = "";
@@ -195,15 +206,29 @@ export default class TaskOverview extends React.Component {
               <Typography>Drucke diese Seite, oder speicher den QR-Code, damit du später auf deine Daten zugreifen kannst.</Typography>
               <p>
               <Grid container spacing={3}>
-                <Grid item xs={4}>
+                <Grid item md={6} xs={12}>
                   <a href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]} >
-                  <div dangerouslySetInnerHTML={{__html: this.state.newQRCodeImage}} /></a>
+                  <img src={this.state.newQRCodeImage} /></a>
                 </Grid>
-                <Grid item xs={8}>
-                  <Button 
-                  color="primary"
-                  href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]}
-                  >Link</Button>
+                <Grid item md={6} xs={12}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Button 
+                      color="primary"
+                      variant="contained"
+                      href={"https://reparaturcafe.awo-oberlar.de/qrcode/tsk" + this.state.data["new_token"]}
+                      fullWidth
+                      >Link</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button 
+                      color="primary"
+                      variant="contained"
+                      fullWidth
+                      onClick={this.handlePrintLabelClick}
+                      >Kunden-Etikett ausdrucken</Button>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
               </p>
@@ -235,8 +260,8 @@ export default class TaskOverview extends React.Component {
             {this.state.writeable ? (
               this.state.data ? (
                 <div>
-                <Grid container style={{marginTop:20}}>
-                  <Grid item xs={12}>  
+                <Grid container style={{marginTop:10}} spacing={3}>
+                  <Grid item md={6} xs={12}>  
                     <ReactToPrint
                       trigger={() => {
                         // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
@@ -246,6 +271,7 @@ export default class TaskOverview extends React.Component {
                             variant="contained"
                             color="primary"
                             startIcon={<PrintIcon />}
+                            fullWidth
                             >
                               Drucken
                           </Button>   
@@ -261,6 +287,15 @@ export default class TaskOverview extends React.Component {
                         ref={el => (this.componentRef = el)} /> 
                     </div>
                   </Grid>
+                  <Grid item md={6} xs={12}>  
+                    {this.state.writeable ? (
+                      <QRCodes 
+                        hashTokens={this.state.data['hash_tokens']}
+                        csrfToken={this.props.csrfToken}
+                        tskId={this.state.data['tsk_id']}
+                        handleRefresh={this.fetchCall}/>
+                    ) : ""}
+                  </Grid>                  
                 </Grid>
               </div>
               ) : ""

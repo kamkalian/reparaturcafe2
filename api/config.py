@@ -17,7 +17,7 @@ else:
 
 class Config():
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = getenv_typed("DATABASE_URL", "sqlite://")
 
     UPLOAD_FOLDER = Path(APP_BASEDIR, "images")
     ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}

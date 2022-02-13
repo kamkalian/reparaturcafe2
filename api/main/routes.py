@@ -15,7 +15,7 @@ def session_user():
 
     if session_user:
         today_date = datetime.now()
-        exp_datetime = session_user[2] + timedelta(minutes=10)
+        exp_datetime = session_user[2] + timedelta(minutes=300)
         if today_date < exp_datetime:
             resp = {
                 "user_logged_in": True,

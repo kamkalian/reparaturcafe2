@@ -6,6 +6,8 @@ import re
 import hashlib
 from datetime import datetime
 from api import csrf
+from api.smart_qrcode.qrcode_label import print_label, generate_qrcode_label
+from api.main.token import generate_token
 
 
 @bp.route('/api/qrcode', methods=['POST'])
@@ -86,6 +88,31 @@ def qrcode():
     return resp_json
 
 
+@bp.route('/api/print_label_request/<token>', methods=['POST'])
+def print_label_request(token):
+    print_label(token)
+    return jsonify({'success': 1})
+
+
+@bp.route('/api/generate_new_qr_code', methods=['POST'])
+def generate_new_qr_code():
+    type = None
+    tsk_id = None
+    token = None
+    post_json = request.get_json()
+    if "type" in post_json:
+        type = post_json["type"]
+    if "tsk_id" in post_json:
+        tsk_id = post_json["tsk_id"]
+    
+    if type and tsk_id:
+        token = generate_token(type, tsk_id)
+        generate_qrcode_label(type, tsk_id, token)
+        print_label(token)
+
+    return jsonify({'success': 1})
+
+
 def _add_session_allowed_id(tsk_id, htk_auth):
     today_date = datetime.now()
 
@@ -99,8 +126,8 @@ def _add_session_allowed_id(tsk_id, htk_auth):
             allowed_id_tuple = [item for item in allowed_ids if tsk_id in item][0]
             # Tuple aus Liste entfernen
             allowed_ids.remove(allowed_id_tuple)
-            # Datum austauschen
-            new_tuple = (allowed_id_tuple[0], today_date, allowed_id_tuple[2])
+            # Datum und htk_auth austauschen
+            new_tuple = (allowed_id_tuple[0], today_date, htk_auth)
             # Tuple wieder zur Liste hinzufügen
             allowed_ids.append(new_tuple)
     except TypeError:
