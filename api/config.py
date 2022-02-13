@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from pathlib import Path
 from formelsammlung.envvar import getenv_typed
 import datetime
-from api.main.settings import lp_settings_from_file
 
 
 APP_BASEDIR = Path(__file__).parents[1]
@@ -25,6 +24,7 @@ class Config():
 
     SECRET_KEY = getenv_typed("SECRET_KEY", "DiesisteinDummyKey")
     SESSION_TYPE = "filesystem"
+
 
 class TestConfig():
     TESTING = True
