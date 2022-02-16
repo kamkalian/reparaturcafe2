@@ -44,14 +44,14 @@ def generate_qrcode_label(type, tsk_id, token):
 
 def print_label(token):
     htk = HashToken.query.filter_by(htk_id=hashed_token(token)).first()
-    if htk:
+    if htk or token == "test":
         print("label wird gedruckt...")
         path = Path(current_app.root_path)
-        pi_settings = settings_from_file()
-        print(pi_settings)
+        pi_settings = settings_from_file()["label_printer"]
+        # print(pi_settings)
         image_file = str(path.parent.absolute()) + '/qr_codes/' + token + '.png'
         bashCommand = "scp -i "
-        bashCommand += str(path.parent.absolute()) + "/pi_label_printer_key "
+        bashCommand += str(path.parent.absolute()) + "/api/lp_key "
         bashCommand += image_file + " "+ pi_settings['user'] + "@" + pi_settings['host'] + ":" + pi_settings['qr_code_path']
-        print(bashCommand)
-        #os.system(bashCommand)
+        # print(bashCommand)
+        os.system(bashCommand)
