@@ -29,6 +29,7 @@ export default class TaskOverview extends React.Component {
         writeable: false,
         hover: false,
         newQRCodeImage: null,
+        newQRCodePrintImage: null,
         showNewTaskInfo: false,
         stateList: [],
         stepList: [],
@@ -75,7 +76,28 @@ export default class TaskOverview extends React.Component {
         }
       });
 
-      fetch('/api/new_qrcode_image/'+taskId, {
+      // Nachfolgender Fetch wird nur abgeschickt, wenn die Task gerade neu angelegt wurde.
+      if(newTaskIndicator){
+        fetch('/api/new_qrcode_image/'+taskId, {
+          method: 'GET',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          }
+        })
+        .then((response) => {
+          if(response.status===200){
+            response.blob()
+            .then(imageBlob => {
+              this.setState({
+                newQRCodeImage: URL.createObjectURL(imageBlob)
+              });
+            });
+          }
+        })
+      }
+
+      fetch('/api/new_qrcode_image/'+taskId+'?qrcode_only=1', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -87,7 +109,7 @@ export default class TaskOverview extends React.Component {
           response.blob()
           .then(imageBlob => {
             this.setState({
-              newQRCodeImage: URL.createObjectURL(imageBlob)
+              newQRCodePrintImage: URL.createObjectURL(imageBlob)
             });
           });
         }
@@ -283,7 +305,7 @@ export default class TaskOverview extends React.Component {
                       <TaskPrint 
                         data={this.state.data} 
                         writeable={true} 
-                        newQRCodeImage={this.state.newQRCodeImage} 
+                        newQRCodeImage={this.state.newQRCodePrintImage} 
                         ref={el => (this.componentRef = el)} /> 
                     </div>
                   </Grid>

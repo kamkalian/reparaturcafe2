@@ -411,13 +411,19 @@ def _is_granted():
 
 @bp.route('/api/new_qrcode_image/<tsk_id>', methods=['GET'])
 def new_qrcode_image(tsk_id):
+    qrcode_only = request.args.get('qrcode_only')
     path = Path(current_app.root_path)
+    new_token = session.get('NEW_TOKEN', "empty")
+
+    suffix = ""
+    if qrcode_only and new_token != "empty":
+        suffix = "_qrcode_only"
+
     if tsk_id:
         is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
         if is_exp_date_in_session_valid or _is_granted():
-            return send_file("../qr_codes/" + session.get('NEW_TOKEN', "empty") + ".png", mimetype='image/png')
+            return send_file("../qr_codes/" + new_token + suffix + ".png", mimetype='image/png')
         else:
-            # TODO Hier soll das error svg direct im code eingebaut werden.
             return send_file(str(path.parent.absolute()) + "/qr_codes/empty.png", mimetype='image/png')
     else:
         return send_file(str(path.parent.absolute()) + "/qr_codes/empty.png", mimetype='image/png')
