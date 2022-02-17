@@ -33,7 +33,7 @@ def label_printer_save_settings():
             config["qr_code_path"] = post_json["qr_code_path"]
         if "ssh_key" in post_json:
             if post_json["ssh_key"] != "":
-                bashCommand = "echo -n '" + post_json["ssh_key"] + "' > lp_key | chmod 600 lp_key"
+                bashCommand = "echo -n '" + post_json["ssh_key"] + "' > api/lp_key | chmod 600 lp_key"
                 os.system(bashCommand)
         
         save_settings(config)
