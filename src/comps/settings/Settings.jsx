@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import UserList from './UserList';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import UserDialog from '../user/UserDialog';
+import LabelPrinterSettings from './LabelPrinterSettings';
 
 
 export default class Settings extends React.Component {
@@ -17,7 +18,9 @@ export default class Settings extends React.Component {
       selectedUserID: "",
       selectedUserName: "",
       selectedUserEmail: "",
-      selectedUserRole: ""
+      selectedUserRole: "",
+      adminLogoutTimer: 0,
+      logo: "",
     } 
   }
 
@@ -68,11 +71,13 @@ export default class Settings extends React.Component {
   }
 
   render(){
+    console.log("settings", this.props.csrfToken)
     return(
       <Box>
         <h2>Einstellungen</h2>
         {this.props.userRole === "admin" ? (
           <Grid container spacing={3}>
+
             <Grid item xs={12}>
               <h3>User verwalten</h3>
               <Box textAlign="right">
@@ -99,8 +104,15 @@ export default class Settings extends React.Component {
               </Box>
               <UserList
               handleUserOpen={this.handleUserOpen}
+              csrfToken={this.props.csrfToken}
               />
             </Grid>
+
+            <Grid item xs={12}>
+              <h3>Label Drucker</h3>
+              <LabelPrinterSettings csrfToken={this.props.csrfToken}/>
+            </Grid>
+            
           </Grid>
         ) : (
           "Kein Zutritt!"

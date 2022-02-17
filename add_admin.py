@@ -85,9 +85,11 @@ with app.app_context():
             print("User wurde angelegt.")
             if _valid_hash_token_exists(user.usr_id) is not True:
                 print(" ")
-                print("User hat keinen gültigen Key, daher wird jetzt einer generiert...")
+                print("Key wird generiert...")
                 token = _generate_and_add_hashtoken(user.usr_id)
+                token, pin = _generate_and_add_hashtoken(user.usr_id)
                 print("usr" + token)
+                print("Pin:", pin)
         else:
             print("Abbruch.")
             quit()

@@ -16,6 +16,7 @@ Jinja2==3.0.1
 Mako==1.1.4
 MarkupSafe==2.0.1
 packaging==20.9
+Pillow==9.0.1
 pluggy==0.13.1
 py==1.10.0
 pydocstyle==5.1.1
@@ -27,6 +28,7 @@ pytest-flask==1.2.0
 python-dateutil==2.8.1
 python-dotenv==0.15.0
 python-editor==1.0.4
+PyYAML==6.0
 six==1.16.0
 snowballstemmer==2.1.0
 SQLAlchemy==1.4.15

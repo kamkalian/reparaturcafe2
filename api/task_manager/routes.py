@@ -8,6 +8,7 @@ from api.task_manager import bp
 from sqlalchemy import or_
 from api.smart_qrcode.qrcode_label import generate_qrcode_label
 from api.main.token import generate_token, htk_from_token
+from api.main.auth import _is_granted
 from pathlib import Path
 import secrets
 
@@ -395,18 +396,6 @@ def _is_exp_date_in_session_valid(tsk_id):
             return False, None
     else:
         return False, None
-
-
-def _is_granted():
-    user = session.get('USER', None)
-    if user:
-        if user[3] == "admin" or user[3] == "user":
-            today_date = datetime.now()
-            exp_datetime = user[2] + timedelta(minutes=300)
-            if today_date > exp_datetime:
-                return False
-            return True
-    return False
 
 
 @bp.route('/api/new_qrcode_image/<tsk_id>', methods=['GET'])

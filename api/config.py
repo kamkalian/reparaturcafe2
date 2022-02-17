@@ -25,6 +25,7 @@ class Config():
     SECRET_KEY = getenv_typed("SECRET_KEY", "DiesisteinDummyKey")
     SESSION_TYPE = "filesystem"
 
+
 class TestConfig():
     TESTING = True
     SECRET_KEY = getenv_typed("SECRET_KEY", "fddsakdljdsanbfeilufh")
