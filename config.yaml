@@ -1,4 +1,0 @@
-label_printer:
-  host: 192.168.0.22
-  qr_code_path: /home/pi/qr_codes
-  user: pi
