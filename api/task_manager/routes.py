@@ -415,12 +415,12 @@ def new_qrcode_image(tsk_id):
     if tsk_id:
         is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
         if is_exp_date_in_session_valid or _is_granted():
-            return send_file("../qr_codes/" + session.get('NEW_TOKEN', None) + ".png", mimetype='image/png')
+            return send_file("../qr_codes/" + session.get('NEW_TOKEN', "empty") + ".png", mimetype='image/png')
         else:
             # TODO Hier soll das error svg direct im code eingebaut werden.
-            return send_file(str(path.parent.absolute()) + "/qr_codes/error.svg", mimetype='image/svg')
+            return send_file(str(path.parent.absolute()) + "/qr_codes/empty.png", mimetype='image/png')
     else:
-        return send_file(str(path.parent.absolute()) + "/qr_codes/error.svg", mimetype='image/svg')
+        return send_file(str(path.parent.absolute()) + "/qr_codes/empty.png", mimetype='image/png')
 
 
 
