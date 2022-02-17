@@ -29,7 +29,7 @@ export default class QRCodes extends React.Component {
     }
   }
 
-  handleNewCustomerQRCodeButtonClick = () => {
+  handleNewDeviceQRCodeButtonClick = () => {
     fetch('/api/generate_new_qr_code', {
       method: 'POST',
       headers: {
@@ -39,7 +39,7 @@ export default class QRCodes extends React.Component {
       },
       body: JSON.stringify({
         tsk_id: this.props.tskId,
-        type: "customer"
+        type: "device"
       }),
     })
     .then(response => response.json())
@@ -100,7 +100,7 @@ export default class QRCodes extends React.Component {
                 variant="contained"
                 size="small"
                 startIcon={<PrintIcon />}
-                onClick={this.handleNewCustomerQRCodeButtonClick}
+                onClick={this.handleNewDeviceQRCodeButtonClick}
                 >Neuen QR-Code drucken</Button>
             </Grid>
           </React.Fragment>
