@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from api.task_manager import bp
 from sqlalchemy import or_
 from api.smart_qrcode.qrcode_label import generate_qrcode_label
-from api.main.token import generate_token
+from api.main.token import generate_token, htk_from_token
 from pathlib import Path
 import secrets
 
@@ -420,9 +420,26 @@ def new_qrcode_image(tsk_id):
         suffix = "_qrcode_only"
 
     if tsk_id:
-        is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
-        if is_exp_date_in_session_valid or _is_granted():
-            return send_file("../qr_codes/" + new_token + suffix + ".png", mimetype='image/png')
+        # Prüfen ob der Token auch zur Task ID passt.
+        # Task ermitteln
+        htk = None
+        htk = htk_from_token(new_token)
+        task_id = None
+        task = None
+        if htk:
+            task_id = htk.htk_tsk_id
+            if task_id == int(tsk_id):
+                task = Task.query.filter_by(tsk_id=task_id).first()
+                if task:
+                    is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
+                    if is_exp_date_in_session_valid or _is_granted():
+                        return send_file("../qr_codes/" + new_token + suffix + ".png", mimetype='image/png')
+                    else:
+                        return send_file(str(path.parent.absolute()) + "/qr_codes/empty.png", mimetype='image/png')
+                else:
+                    return send_file(str(path.parent.absolute()) + "/qr_codes/empty.png", mimetype='image/png')
+            else:
+                return send_file(str(path.parent.absolute()) + "/qr_codes/empty.png", mimetype='image/png')
         else:
             return send_file(str(path.parent.absolute()) + "/qr_codes/empty.png", mimetype='image/png')
     else:
