@@ -414,7 +414,7 @@ def new_qrcode_image(tsk_id):
     path = Path(current_app.root_path)
     if tsk_id:
         is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(int(tsk_id))
-        if is_exp_date_in_session_valid:
+        if is_exp_date_in_session_valid or _is_granted():
             return send_file("../qr_codes/" + session.get('NEW_TOKEN', None) + ".png", mimetype='image/png')
         else:
             # TODO Hier soll das error svg direct im code eingebaut werden.
