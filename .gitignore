@@ -28,4 +28,4 @@ __pycache__
 .env
 
 flask_session/
-pi_label_printer_key
+lp_key
