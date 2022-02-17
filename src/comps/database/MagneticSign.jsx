@@ -40,7 +40,7 @@ export default class MagneticSign extends React.Component {
                 </Grid>
                 {this.props.printversion ? (
                     <Grid item xs={4}>
-                        <img src={this.props.newQRCodeImage} width={"200px"}/>
+                        <img src={this.props.newQRCodeImage} width={"100px"}/>
                     </Grid>
                 ) : ""}
                 
