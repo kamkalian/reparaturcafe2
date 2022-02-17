@@ -38,3 +38,10 @@ def generate_token(type, tsk_id):
 
 def hashed_token(token):
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def htk_from_token(token):
+    htk = None
+    hash_token = hashed_token(token)
+    htk = HashToken.query.filter_by(htk_id=hash_token, htk_locked=False).first()
+    return htk
