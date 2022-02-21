@@ -340,7 +340,14 @@ def task():
                     'htk_creation_date': item.htk_creation_date.strftime("%d.%m.%Y")}
                     for item in task.hash_tokens]
                     if task.log_list:
-                        resp['log_list'] = [(d.log_type, d.log_msg, d.user.usr_name, d.log_timestamp.strftime("%d.%m.%Y")) for d in task.log_list]
+                        log_list = []
+                        for d in task.log_list:
+                            user_name = ""
+                            if d.user:
+                                user_name = d.user.usr_name
+                            log_tuple = (d.log_type, d.log_msg, user_name, d.log_timestamp.strftime("%d.%m.%Y"))
+                            log_list.append(log_tuple)
+                        resp['log_list'] = log_list
 
                 if new_task_indicator:
                     resp['new_token'] = session.get('NEW_TOKEN', None)
@@ -534,15 +541,19 @@ def change_next_step():
 
 def _add_log_item(tsk_id, log_type, log_msg):
     user = session.get('USER', None)
+    user_id = None
+    
     if user:
-        log_item = Log(
-            log_type=log_type,
-            log_msg=log_msg,
-            log_tsk_id=tsk_id,
-            log_usr_id=user[0],
-            )
-        db.session.add(log_item)
-        db.session.commit()
+        user_id = user[0]
+
+    log_item = Log(
+        log_type=log_type,
+        log_msg=log_msg,
+        log_tsk_id=tsk_id,
+        log_usr_id=user_id,
+        )
+    db.session.add(log_item)
+    db.session.commit()
 
 
 @bp.route('/api/save_comment', methods=['POST'])
