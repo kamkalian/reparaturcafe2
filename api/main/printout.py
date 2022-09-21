@@ -36,7 +36,7 @@ def printout(tsk_id):
 
             # Daten ersetzen
             html = html.replace(
-                "Laufzettel_html_425b1b1f96f73285.png",
+                "header_image.png",
                 "/api/printout_logo")
             html = html.replace("cus_first_name", task.customer.cus_first_name)
             html = html.replace("cus_last_name", task.customer.cus_last_name)
@@ -60,5 +60,5 @@ def printout(tsk_id):
 @bp.route('/api/printout_logo', methods=['GET'])
 def printout_logo():
     path = Path(current_app.root_path)
-    filename = str(path.parent.absolute()) + "/templates/Laufzettel_html_425b1b1f96f73285.png"
+    filename = str(path.parent.absolute()) + "/templates/header_image.png"
     return send_file(filename, mimetype='image/png')
