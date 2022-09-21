@@ -20,12 +20,12 @@ def printout(tsk_id):
         # Datensatz holn
         task = Task.query.filter_by(tsk_id=tsk_id).first()
         if task:
-
+            print("#"+task.customer.cus_last_name+"#")
             # Datum des letzten Log Eintrags holen
-            b_dat = ""
+            last_log_dat = ""
             last_log = Log.query.filter_by(log_tsk_id=tsk_id).order_by(Log.log_id.desc()).first()
             if last_log:
-                b_dat = last_log.log_timestamp.strftime("%d.%m.%y")
+                last_log_dat = last_log.log_timestamp.strftime("%d.%m.%y")
 
             # Logs als Protokoll zu einem String zusammenbauen
             log_string = ""
@@ -38,19 +38,19 @@ def printout(tsk_id):
             html = html.replace(
                 "Laufzettel_html_425b1b1f96f73285.png",
                 "/api/printout_logo")
-            html = html.replace("Vorname", task.customer.cus_first_name)
-            html = html.replace("Name", task.customer.cus_last_name)
-            html = html.replace("Telefonnummer", task.customer.cus_phone_no)
-            html = html.replace("E-Mail", task.customer.cus_email)
-            html = html.replace("A-Dat", task.tsk_creation_date.strftime("%d.%m.%y"))
-            html = html.replace("B-Dat", b_dat)
-            html = html.replace("R-Nr", tsk_id)
-            html = html.replace("Bez", task.device.dev_name)
-            html = html.replace("Her", task.device.dev_mnf_name)
-            html = html.replace("Mod", task.device.dev_model)
+            html = html.replace("cus_first_name", task.customer.cus_first_name)
+            html = html.replace("cus_last_name", task.customer.cus_last_name)
+            html = html.replace("cus_phone_no", task.customer.cus_phone_no)
+            html = html.replace("cus_email", task.customer.cus_email)
+            html = html.replace("tsk_creation_date", task.tsk_creation_date.strftime("%d.%m.%y"))
+            html = html.replace("last_log_dat", last_log_dat)
+            html = html.replace("tsk_id", tsk_id)
+            html = html.replace("dev_name", task.device.dev_name)
+            html = html.replace("dev_mnf_name", task.device.dev_mnf_name)
+            html = html.replace("dev_model", task.device.dev_model)
             #html = html.replace("Zub", task.device.dev_mnf_name)
-            html = html.replace("Fehler", task.tsk_fault_description)
-            html = html.replace("Protokoll", log_string)
+            html = html.replace("tsk_fault_description", task.tsk_fault_description)
+            html = html.replace("log_string", log_string)
             
         return html
     else:
