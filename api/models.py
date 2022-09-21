@@ -11,14 +11,12 @@ class Task(db.Model):
     tsk_creation_date = db.Column(db.DateTime())
     tsk_state = db.Column(db.String(64), db.ForeignKey("state.sta_name"))
     tsk_next_step = db.Column(db.String(64), db.ForeignKey("step.ste_name"))
-    #tsk_hash_token = db.Column(db.String(255), nullable=False)
 
     tsk_cus_id = db.Column(db.Integer(), db.ForeignKey("customer.cus_id"))
     tsk_dev_id = db.Column(db.Integer(), db.ForeignKey("device.dev_id"))
     tsk_supervisor_usr_id = db.Column(db.Integer(), db.ForeignKey("user.usr_id"))
 
-    tsk_acc_name = db.Column(db.String(255), db.ForeignKey("accessory.acc_name"))
-
+    accessory_list = db.relationship('Accessory', backref='task', lazy=True)
     hash_tokens = db.relationship('HashToken', backref='task', lazy=True)
     log_list = db.relationship('Log', backref='task', lazy=True)
 
@@ -65,7 +63,9 @@ class Manufacturer(db.Model):
 class Accessory(db.Model):
     """Table fo accessories"""
     __tablename__ = "accessory"
-    acc_name = db.Column(db.String(255), primary_key=True)
+    acc_id = db.Column(db.Integer(), primary_key=True)
+    acc_name = db.Column(db.String(255))
+    acc_tsk_id = db.Column(db.Integer(), db.ForeignKey("task.tsk_id"))
 
 
 class Log(db.Model):
