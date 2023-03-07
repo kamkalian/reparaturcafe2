@@ -1,7 +1,7 @@
 import os
 from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
-from api.models import Task, Customer, Device, Image, State, Step, Log
+from api.models import Task, Customer, Device, Image, State, Step, Log, Accessory
 from api import db
 from datetime import datetime, timedelta
 from api.task_manager import bp
