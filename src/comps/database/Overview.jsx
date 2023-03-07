@@ -126,7 +126,9 @@ export default class Overview extends React.Component {
             taskId={item.id}
             deviceName={item.deviceName}
             deviceManufacturer={item.deviceManufacturer === "ohne Angabe" ? "" : item.deviceManufacturer}
-            deviceCategory={item.deviceCategory === "ohne Angabe" ? "" : item.deviceCategory}/>
+            deviceCategory={item.deviceCategory === "ohne Angabe" ? "" : item.deviceCategory}
+            nextStep={item.nextStep}
+            />
           </ListItem>
       );
     });

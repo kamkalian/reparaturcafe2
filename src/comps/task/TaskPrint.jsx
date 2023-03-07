@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import MagneticSign from '../database/MagneticSign';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import Log from './Log';
 
 
 export default class TaskOverview extends React.Component {
@@ -32,10 +33,36 @@ export default class TaskOverview extends React.Component {
             />
             <Grid container style={{margin:0}}>
               <Grid item xs={8} style={{marginBottom:20, paddingRight:10}}>
-                <h3>Fehlerbeschreibung</h3>
-                <Typography>
-                  {this.state.data['tsk_fault_description']}
-                </Typography>
+                <Grid container>
+                  <Grid item xs={6} style={{marginBottom:20}}>
+                    <h3>Modell</h3>
+                    {this.state.data['dev_model'] ? (
+                      <Typography>
+                        {this.state.data['dev_model']}
+                      </Typography>
+                    ): "-"}
+                  </Grid>
+                  <Grid item xs={6} style={{marginBottom:20}}>
+                    <h3>Zubehör</h3>
+                      {this.state.data['accessory_list'] && this.state.data['accessory_list'].length ? (
+                        <Typography>
+                          {this.state.data['accessory_list']}
+                        </Typography>
+                      ): "-"}
+                  </Grid>
+                  <Grid item xs={12} style={{marginBottom:20}}>
+                    <h3>Fehlerbeschreibung</h3>
+                    <Typography>
+                      {this.state.data['tsk_fault_description']}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} style={{marginBottom:20}}>
+                    <h3>Verlauf</h3>
+                    {this.state.data['log_list'] && this.state.data['log_list'].length ? (
+                        <Log logList={this.state.data['log_list']}/>
+                    ) : "-"}
+                  </Grid>
+                </Grid>
               </Grid>
               {this.state.data['writeable'] ? (
                 <Grid item xs={4} style={{borderLeft:"2px solid #ccccccaa", paddingLeft:10}}>
@@ -46,8 +73,17 @@ export default class TaskOverview extends React.Component {
                       {this.state.data['cus_phone'] ? <p>{this.state.data['cus_phone']}</p> : ""}
                       {this.state.data['cus_email'] ? <p>{this.state.data['cus_email']}</p> : ""}
                     </Grid>
-                    <Grid item md={12} sm={6} xs={12}>
+                    <Grid item xs={12}>
                       <h3>Status</h3>
+                      <Typography>
+                        {this.state.data['tsk_state_caption']}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <h3>Nächster Schritt</h3>
+                      <Typography>
+                        {this.state.data['tsk_next_step_caption']}
+                      </Typography>
                     </Grid>
                   </Grid>
 

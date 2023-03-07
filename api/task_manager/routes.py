@@ -1,7 +1,7 @@
 import os
 from flask import request, jsonify, url_for, session, current_app, send_file
 from werkzeug.utils import secure_filename
-from api.models import Task, Customer, Device, Image, State, Step, Log
+from api.models import Task, Customer, Device, Image, State, Step, Log, Accessory
 from api import db
 from datetime import datetime, timedelta
 from api.task_manager import bp
@@ -63,8 +63,16 @@ def new_task():
         tsk_state = "new",
         tsk_next_step = "not_set",
     )
-
     db.session.add(new_task) # pylint: disable=maybe-no-member
+    db.session.commit() # pylint: disable=maybe-no-member
+
+    # Zubehör
+    for acc in post_json["accessories"]:
+        accessory = Accessory(
+            acc_name = acc,
+            acc_tsk_id = new_task.tsk_id
+        )
+        db.session.add(accessory) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
 
     tk = generate_token("customer", new_task.tsk_id)
@@ -252,6 +260,7 @@ def task_lists():
             "deviceModel": dev_model,
             "deviceCategory": dev_category,
             "writeable": writeable,
+            "nextStep": d.tsk_next_step,
         }
         if d.tsk_state == "new":
             new_task_list.append(task)
@@ -311,7 +320,11 @@ def task():
             resp['dev_name'] = task.device.dev_name
             resp['dev_mnf_name'] = task.device.dev_mnf_name
             resp['dev_category'] = task.device.dev_category
+            resp['dev_model'] = task.device.dev_model
+            resp['dev_electronic_mechanical_type'] = task.device.dev_electronic_mechanical_type
             resp['tsk_fault_description'] = task.tsk_fault_description
+            resp['accessory_list'] = ', '.join(r.acc_name for r in task.accessory_list)
+            resp['image_files'] = [img.img_filename for img in task.image_list]
 
             is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(task.tsk_id)
             

@@ -277,6 +277,8 @@ export default class TaskOverview extends React.Component {
             deviceName={this.state.data['dev_name']}
             deviceManufacturer={this.state.data['dev_mnf_name']}
             deviceCategory={this.state.data['dev_category']}
+            deviceType={this.state.data['dev_electronic_mechanical_type']}
+            nextStep={this.state.data['tsk_next_step']}
             />
             </Badge>
             {this.state.writeable ? (
@@ -325,6 +327,22 @@ export default class TaskOverview extends React.Component {
             <Grid container style={{padding:30, margin:0}}>
               <Grid item md={8} xs={12} style={{marginBottom:20, paddingRight:20}}>
                 <Grid container>
+                  <Grid item xs={6} style={{marginBottom:20}}>
+                    <h3>Modell</h3>
+                    {this.state.data['dev_model'] ? (
+                      <Typography>
+                        {this.state.data['dev_model']}
+                      </Typography>
+                    ): "-"}
+                  </Grid>
+                  <Grid item xs={6} style={{marginBottom:20}}>
+                    <h3>Zubehör</h3>
+                      {this.state.data['accessory_list'] && this.state.data['accessory_list'].length ? (
+                        <Typography>
+                          {this.state.data['accessory_list']}
+                        </Typography>
+                      ): "-"}
+                  </Grid>
                   <Grid item xs={12} style={{marginBottom:20}}>
                     <h3>Fehlerbeschreibung</h3>
                     <Typography>
@@ -333,14 +351,20 @@ export default class TaskOverview extends React.Component {
                   </Grid>
                   <Grid item xs={12} style={{marginBottom:20}}>
                     <h3>Fotos</h3>
-                    :)
+                    <Grid item xs={12}>
+                        <Attachments
+                        files={this.state.data['image_files']}
+                        handleUploadInputChange={this.handleUploadInputChange}
+                        handleDeleteAttachmentButton={this.handleDeleteAttachmentButton}
+                        />
                   </Grid>
-                  {this.state.logList ? (
+                  </Grid>
                     <Grid item xs={12} style={{marginBottom:20}}>
                       <h3>Verlauf</h3>
+                    {this.state.logList && this.state.logList.length ? (
                       <Log logList={this.state.logList}/>
+                    ) : "-"}
                     </Grid>
-                  ) : ""}
                 </Grid>
               </Grid>
               {full_name ? (

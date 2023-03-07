@@ -393,11 +393,12 @@ export default class NewTaskFormular extends React.Component {
                         <Typography>Mit einem Foto kannst du uns eventuell zeigen wo das Problem liegt. Wenn möglich lade gerne mehrere Fotos von deinem Gerät hoch. </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        
                         <Attachments
                         files={this.state.files}
                         handleUploadInputChange={this.handleUploadInputChange}
                         handleDeleteAttachmentButton={this.handleDeleteAttachmentButton}
+                        addButtonVisible={true}
+                        deleteable={true}
                         />
                     </Grid>
                     </React.Fragment>
