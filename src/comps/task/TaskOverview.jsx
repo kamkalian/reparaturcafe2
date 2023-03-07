@@ -361,9 +361,10 @@ export default class TaskOverview extends React.Component {
                   </Grid>
                     <Grid item xs={12} style={{marginBottom:20}}>
                       <h3>Verlauf</h3>
+                    {this.state.logList && this.state.logList.length ? (
                       <Log logList={this.state.logList}/>
+                    ) : "-"}
                     </Grid>
-                  ) : ""}
                 </Grid>
               </Grid>
               {full_name ? (
