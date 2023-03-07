@@ -277,6 +277,8 @@ export default class TaskOverview extends React.Component {
             deviceName={this.state.data['dev_name']}
             deviceManufacturer={this.state.data['dev_mnf_name']}
             deviceCategory={this.state.data['dev_category']}
+            deviceType={this.state.data['dev_electronic_mechanical_type']}
+            nextStep={this.state.data['tsk_next_step']}
             />
             </Badge>
             {this.state.writeable ? (
