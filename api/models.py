@@ -19,6 +19,7 @@ class Task(db.Model):
     accessory_list = db.relationship('Accessory', backref='task', lazy=True)
     hash_tokens = db.relationship('HashToken', backref='task', lazy=True)
     log_list = db.relationship('Log', backref='task', lazy=True)
+    image_list = db.relationship('Image', backref='task', lazy=True)
 
 
 class Customer(db.Model):
