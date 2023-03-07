@@ -13,6 +13,8 @@ class Attachments extends React.Component {
         super(props);
         this.state = {
             images: [],
+            addButtonVisible: this.props.addButtonVisible,
+            deleteable: this.props.deleteable,
         }
     }
 
@@ -40,10 +42,14 @@ class Attachments extends React.Component {
         this.setState({
             images: []
         }, () => {
-            this.props.files.map((tile) => {
-                this.callImageFetch(tile);
+            if(this.props.files){
+                this.props.files.map((tile) => {
+                    this.callImageFetch(tile);
+                    return null;
+                });
+            }else{ 
                 return null;
-            });
+            }
         });
     }
 
@@ -53,10 +59,14 @@ class Attachments extends React.Component {
             this.setState({
                 images: []
             }, function(){
-                this.props.files.map((tile) => {
-                    this.callImageFetch(tile);
+                if(this.props.files){
+                    this.props.files.map((tile) => {
+                        this.callImageFetch(tile);
+                        return null;
+                    });
+                }else{ 
                     return null;
-                });
+                }
             });
         }
     }
@@ -64,28 +74,32 @@ class Attachments extends React.Component {
     render(){
         const getGridListCols = () => {
         
-            return 2;
+            return 3;
           }
 
         return (
             <Grid container spacing={3}>
+                {this.state.addButtonVisible ? (
+                    <Grid item xs={12}>
+                        <FileUpload
+                            handleUploadInputChange={this.props.handleUploadInputChange}
+                        />
+                    </Grid>
+                ) : ""}
                 <Grid item xs={12}>
-                    <FileUpload
-                        handleUploadInputChange={this.props.handleUploadInputChange}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                <ImageList cellHeight={140} cols={getGridListCols()}>
+                <ImageList sx={{ width: 500, height: 250 }} rowHeight={140} cols={getGridListCols()}>
                     {this.state.images.map((tile) => (
                     <ImageListItem key={tile.filename} cols={1}>
                         <img src={tile.image} alt={tile.image}/>
-                        <ImageListItemBar                       
-                        actionIcon={
-                            <IconButton color="secondary" onClick={this.props.handleDeleteAttachmentButton.bind(this, tile.filename)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        }
-                        />
+                        {this.state.deleteable ? (
+                            <ImageListItemBar                       
+                            actionIcon={
+                                <IconButton color="secondary" onClick={this.props.handleDeleteAttachmentButton.bind(this, tile.filename)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            }
+                            />
+                        ) : ""}
                     </ImageListItem>
                     ))}
                 </ImageList>
