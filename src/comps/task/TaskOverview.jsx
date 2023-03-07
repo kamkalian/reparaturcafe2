@@ -351,9 +351,14 @@ export default class TaskOverview extends React.Component {
                   </Grid>
                   <Grid item xs={12} style={{marginBottom:20}}>
                     <h3>Fotos</h3>
-                    :)
+                    <Grid item xs={12}>
+                        <Attachments
+                        files={this.state.data['image_files']}
+                        handleUploadInputChange={this.handleUploadInputChange}
+                        handleDeleteAttachmentButton={this.handleDeleteAttachmentButton}
+                        />
                   </Grid>
-                  {this.state.logList ? (
+                  </Grid>
                     <Grid item xs={12} style={{marginBottom:20}}>
                       <h3>Verlauf</h3>
                       <Log logList={this.state.logList}/>
