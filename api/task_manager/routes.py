@@ -260,6 +260,7 @@ def task_lists():
             "deviceModel": dev_model,
             "deviceCategory": dev_category,
             "writeable": writeable,
+            "nextStep": d.tsk_next_step,
         }
         if d.tsk_state == "new":
             new_task_list.append(task)
