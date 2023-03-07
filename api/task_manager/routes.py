@@ -63,8 +63,16 @@ def new_task():
         tsk_state = "new",
         tsk_next_step = "not_set",
     )
-
     db.session.add(new_task) # pylint: disable=maybe-no-member
+    db.session.commit() # pylint: disable=maybe-no-member
+
+    # Zubehör
+    for acc in post_json["accessories"]:
+        accessory = Accessory(
+            acc_name = acc,
+            acc_tsk_id = new_task.tsk_id
+        )
+        db.session.add(accessory) # pylint: disable=maybe-no-member
     db.session.commit() # pylint: disable=maybe-no-member
 
     tk = generate_token("customer", new_task.tsk_id)
