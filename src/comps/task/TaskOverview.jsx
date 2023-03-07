@@ -327,6 +327,22 @@ export default class TaskOverview extends React.Component {
             <Grid container style={{padding:30, margin:0}}>
               <Grid item md={8} xs={12} style={{marginBottom:20, paddingRight:20}}>
                 <Grid container>
+                  <Grid item xs={6} style={{marginBottom:20}}>
+                    <h3>Modell</h3>
+                    {this.state.data['dev_model'] ? (
+                      <Typography>
+                        {this.state.data['dev_model']}
+                      </Typography>
+                    ): "-"}
+                  </Grid>
+                  <Grid item xs={6} style={{marginBottom:20}}>
+                    <h3>Zubehör</h3>
+                      {this.state.data['accessory_list'] && this.state.data['accessory_list'].length ? (
+                        <Typography>
+                          {this.state.data['accessory_list']}
+                        </Typography>
+                      ): "-"}
+                  </Grid>
                   <Grid item xs={12} style={{marginBottom:20}}>
                     <h3>Fehlerbeschreibung</h3>
                     <Typography>
