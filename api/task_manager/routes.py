@@ -323,7 +323,10 @@ def task():
             resp['dev_model'] = task.device.dev_model
             resp['dev_electronic_mechanical_type'] = task.device.dev_electronic_mechanical_type
             resp['tsk_fault_description'] = task.tsk_fault_description
-            resp['accessory_list'] = ', '.join(r.acc_name for r in task.accessory_list)
+            try:
+                resp['accessory_list'] = ', '.join(r.acc_name for r in task.accessory_list)
+            except:
+                resp['accessory_list'] = ''
             resp['image_files'] = [img.img_filename for img in task.image_list]
 
             is_exp_date_in_session_valid, tsk_auth = _is_exp_date_in_session_valid(task.tsk_id)
