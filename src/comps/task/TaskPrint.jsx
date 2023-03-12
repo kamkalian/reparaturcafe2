@@ -34,7 +34,7 @@ export default class TaskOverview extends React.Component {
             <Grid container style={{margin:0}}>
               <Grid item xs={8} style={{marginBottom:20, paddingRight:10}}>
                 <Grid container>
-                  <Grid item xs={6} style={{marginBottom:20}}>
+                  <Grid item xs={4} style={{marginBottom:20}}>
                     <h3>Modell</h3>
                     {this.state.data['dev_model'] ? (
                       <Typography>
@@ -42,13 +42,19 @@ export default class TaskOverview extends React.Component {
                       </Typography>
                     ): "-"}
                   </Grid>
-                  <Grid item xs={6} style={{marginBottom:20}}>
+                  <Grid item xs={4} style={{marginBottom:20}}>
                     <h3>Zubehör</h3>
                       {this.state.data['accessory_list'] && this.state.data['accessory_list'].length ? (
                         <Typography>
                           {this.state.data['accessory_list']}
                         </Typography>
                       ): "-"}
+                  </Grid>
+                  <Grid item xs={4} style={{marginBottom:20}}>
+                    <h3>Erstelldatum</h3>
+                    <Typography>
+                      {this.state.data['tsk_creation_date']}
+                    </Typography>
                   </Grid>
                   <Grid item xs={12} style={{marginBottom:20}}>
                     <h3>Fehlerbeschreibung</h3>

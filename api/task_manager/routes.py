@@ -323,6 +323,7 @@ def task():
             resp['dev_model'] = task.device.dev_model
             resp['dev_electronic_mechanical_type'] = task.device.dev_electronic_mechanical_type
             resp['tsk_fault_description'] = task.tsk_fault_description
+            resp['tsk_creation_date'] = task.tsk_creation_date.strftime("%d.%m.%Y")
             try:
                 resp['accessory_list'] = ', '.join(r.acc_name for r in task.accessory_list)
             except:
