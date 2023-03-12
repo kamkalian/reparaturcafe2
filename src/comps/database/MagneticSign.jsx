@@ -17,12 +17,12 @@ export default class MagneticSign extends React.Component {
                 spacing={3} 
                 className={this.props.printversion ? "task-sign-print" : "task-sign"}
             >
-                <Grid item md={4} sm={4} xs={this.props.printversion ? 1 : 12} style={{paddingTop:10}}>
+                <Grid item md={4} sm={4} xs={this.props.printversion ? 3 : 12} style={{paddingTop:10}}>
                     <TaskIdLabel 
                     taskId={this.props.taskId}
                     />
                 </Grid>
-                <Grid item md={6} sm={6} xs={this.props.printversion ? 6 : 12} style={{paddingTop:10}}>
+                <Grid item md={6} sm={6} xs={this.props.printversion ? 7 : 12} style={{paddingTop:10}}>
                     <Badge 
                     style={{width:"100%"}}
                     badgeContent={this.props.nextStep && this.props.nextStep === 'call_owner' ? (<PhoneBadge />) : ""}
