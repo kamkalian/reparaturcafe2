@@ -27,6 +27,7 @@ import Settings from './comps/settings/Settings'
 import Hidden from '@mui/material/Hidden';
 import { Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
+import SimpleList from './comps/database/SimpleList';
 
 
 function App() {
@@ -187,6 +188,7 @@ function App() {
                 }>
             </Route>
             <Route path="/scan" component={QRCodeScanner}></Route>
+            <Route path="/simple_list" component={SimpleList}></Route>
             <Route path="/">
               <h2>Hallo.</h2>
               <p style={{marginTop:50}}>Trete ein. Du stehst mitten im digitalen ReparaturCafè, der AWO Oberlar. </p>
