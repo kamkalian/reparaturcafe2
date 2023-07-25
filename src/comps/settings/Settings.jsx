@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import UserList from './UserList';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import UserDialog from '../user/UserDialog';
-import LabelPrinterSettings from './LabelPrinterSettings';
 
 
 export default class Settings extends React.Component {
@@ -106,11 +105,6 @@ export default class Settings extends React.Component {
               handleUserOpen={this.handleUserOpen}
               csrfToken={this.props.csrfToken}
               />
-            </Grid>
-
-            <Grid item xs={12}>
-              <h3>Label Drucker</h3>
-              <LabelPrinterSettings csrfToken={this.props.csrfToken}/>
             </Grid>
             
           </Grid>
