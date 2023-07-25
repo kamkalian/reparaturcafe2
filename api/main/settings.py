@@ -7,7 +7,7 @@ from api.main.auth import _is_granted
 from flask import request
 import os
 import subprocess
-test
+
 
 def settings_from_file():
     path = Path(current_app.root_path)
