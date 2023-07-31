@@ -12,6 +12,9 @@ export default class PinRequestDialog extends React.Component {
         return(
             <Dialog 
             open={this.props.pinRequest} 
+            sx={{"& .MuiDialog-container": {
+                alignItems: "flex-start"
+            }}}
             >
                 <DialogTitle id="pin-request">Pin eingeben</DialogTitle>
                 <DialogContent>
