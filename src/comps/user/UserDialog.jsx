@@ -27,7 +27,7 @@ export default class UserDialog extends React.Component {
                         fullWidth={true}
                         value={this.props.userName}
                         onChange={this.props.handleUserNameChange}
-                        style={{marginBottom:20}}
+                        style={{marginBottom:20, marginTop:10}}
                         />
                     <TextField 
                         id="userEmail"
