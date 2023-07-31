@@ -179,17 +179,12 @@ class QRCodeScanner extends React.Component{
                     variant="outlined"
                     id="qrcode_field"
                     InputProps={{
-                        style: {color:"white"},
                         startAdornment: (
                             <InputAdornment position="start" style={{cursor:"pointer"}}>
                                 <CropFreeIcon />
                             </InputAdornment>
                         ),
-                        classes: {
-                            root: classes.cssOutlinedInput,
-                            focused: classes.cssFocused,
-                            notchedOutline: classes.notchedOutline,
-                        },
+                        
                     }}
                 ></TextField>
                 <PinRequest
