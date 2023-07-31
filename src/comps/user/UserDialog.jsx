@@ -52,7 +52,7 @@ export default class UserDialog extends React.Component {
                             Admin
                         </MenuItem>
                         <MenuItem key="user" value="user">
-                            Ehrenamtlicher Reparateur
+                            Reparateur
                         </MenuItem>
                     </TextField>
                 </DialogContent>
