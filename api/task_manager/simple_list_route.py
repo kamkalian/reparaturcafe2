@@ -9,7 +9,7 @@ def simple_list():
     resp = {}
 
     tasks = Task.query
-    tasks = tasks.filter(Task.tsk_state!="close").order_by(Task.tsk_id.asc()).all()
+    tasks = tasks.filter(Task.tsk_state!="completed").order_by(Task.tsk_id.asc()).all()
     task_list = []
     for d in tasks:
 
